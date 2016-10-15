@@ -1,7 +1,7 @@
 resource "aws_alb" "concourse-web" {
   name            = "${var.team}-${var.environment}"
   internal        = false
-  security_groups = ["${var.security_groups}"]
+  security_groups = ["${aws_security_group.alb.id}"]
   subnets         = ["${var.subnets}"]
 
   enable_deletion_protection = true
@@ -37,4 +37,22 @@ resource "aws_alb_listener" "concourse-web" {
      target_group_arn = "${aws_alb_target_group.concourse-web.arn}"
      type = "forward"
    }
+}
+
+resource "aws_security_group" "alb" {
+  name = "${var.team}-${var.environment}-alb"
+  vpc_id = "${var.vpc_id}"
+  ingress {
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+  }
 }
