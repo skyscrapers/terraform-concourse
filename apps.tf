@@ -98,7 +98,7 @@ resource "aws_ecs_service" "admin" {
   deployment_minimum_healthy_percent = 0
 
   load_balancer {
-    elb_name = "${aws_elb.web.name}"
+    target_group_arn = "${aws_alb_target_group.concourse-web.arn}"
     container_name = "concourse-admin"
     container_port = 8080
   }

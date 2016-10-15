@@ -1,3 +1,4 @@
+variable vpc_id {}
 variable ecs-cluster-name {}
 variable ecs-cluster-arn {}
 variable ecs-instance-role {}
