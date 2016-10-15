@@ -46,22 +46,9 @@ resource "aws_ecs_task_definition" "admin" {
       {"name": "CONCOURSE_URL", "value": "https://${var.public_hostname}"},
       {"name": "CONCOURSE_GITHUB_CLIENT", "value": "${var.github_app_id}"},
       {"name": "CONCOURSE_GITHUB_SECRET", "value": "${var.github_app_secret}"},
-      {"name": "CONCOURSE_GITHUB_ORG", "value": "PewPew-Demonstrations"}
+      {"name": "CONCOURSE_GITHUB_ORG", "value": "${var.team}"}
     ]
-  }
-]
-EOF
-}
-
-resource "aws_ecs_task_definition" "worker" {
-  family = "${format("%s-%s-%s", var.team, "concourseworker", var.environment)}"
-  depends_on = ["aws_ecs_task_definition.admin"]
-  volume {
-    name = "worker-workdir"
-    host_path = "/ecs/opt/concourse"
-  }
-  container_definitions = <<EOF
-[
+  },
   {
     "name": "concourse-worker",
     "memory": 512,
@@ -75,7 +62,7 @@ resource "aws_ecs_task_definition" "worker" {
       }
     },
     "environment": [
-      {"name": "CONCOURSE_TSA_HOST", "value": "${aws_elb.ssh.dns_name}"}
+      {"name": "CONCOURSE_TSA_HOST", "value": "localhost"}
     ],
     "mountPoints": [
       {
@@ -87,6 +74,41 @@ resource "aws_ecs_task_definition" "worker" {
 ]
 EOF
 }
+
+//resource "aws_ecs_task_definition" "worker" {
+//  family = "${format("%s-%s-%s", var.team, "concourseworker", var.environment)}"
+//  depends_on = ["aws_ecs_task_definition.admin"]
+//  volume {
+//    name = "worker-workdir"
+//    host_path = "/ecs/opt/concourse"
+//  }
+//  container_definitions = <<EOF
+//[
+//  {
+//    "name": "concourse-worker",
+//    "memory": 512,
+//    "image": "${format("%s/%s:%s", var.team, "concourse-worker", var.ci_version)}",
+//    "privileged": true,
+//    "logConfiguration": {
+//      "logDriver": "awslogs",
+//      "options": {
+//        "awslogs-group": "${format("%s-%s.worker", var.team, var.role)}",
+//        "awslogs-region": "${var.region}"
+//      }
+//    },
+//    "environment": [
+//      {"name": "CONCOURSE_TSA_HOST", "value": "${aws_elb.ssh.dns_name}"}
+//    ],
+//    "mountPoints": [
+//      {
+//        "sourceVolume": "worker-workdir",
+//        "containerPath": "/opt/concourse"
+//      }
+//    ]
+//  }
+//]
+//EOF
+//}
 
 resource "aws_ecs_service" "admin" {
   depends_on = ["aws_iam_role.ecs-concourse-role"]
@@ -107,12 +129,12 @@ resource "aws_ecs_service" "admin" {
 
 }
 
-resource "aws_ecs_service" "worker" {
-  depends_on = ["aws_iam_role.ecs-concourse-role"]
-  name = "concourse-worker"
-  cluster = "${var.ecs-cluster-arn}"
-  task_definition = "${aws_ecs_task_definition.worker.arn}"
-  desired_count = "1" // TODO Make this configurable again
-  #iam_role = "${aws_iam_role.ecs-concourse-role.arn}"
-  deployment_minimum_healthy_percent = 0
-}
+//resource "aws_ecs_service" "worker" {
+//  depends_on = ["aws_iam_role.ecs-concourse-role"]
+//  name = "concourse-worker"
+//  cluster = "${var.ecs-cluster-arn}"
+//  task_definition = "${aws_ecs_task_definition.worker.arn}"
+//  desired_count = "1" // TODO Make this configurable again
+//  #iam_role = "${aws_iam_role.ecs-concourse-role.arn}"
+//  deployment_minimum_healthy_percent = 0
+//}
