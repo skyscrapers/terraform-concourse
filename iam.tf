@@ -1,51 +1,26 @@
-resource "aws_iam_role" "admin" {
-  name = "${var.team}-${var.role}-adminECSInstance"
-  path = "/"
-  assume_role_policy = <<EOF
+resource "aws_iam_role" "ecs-concourse-role" {
+    name = "ecsServiceRole"
+    assume_role_policy = <<EOF
 {
-  "Version": "2008-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": ["ecs.amazonaws.com", "ec2.amazonaws.com"]
-      },
-      "Effect": "Allow"
-    }
-  ]
+"Version": "2008-10-17",
+"Statement": [
+  {
+    "Sid": "",
+    "Effect": "Allow",
+    "Principal": {
+      "Service": "ecs.amazonaws.com"
+    },
+    "Action": "sts:AssumeRole"
+  }
+]
 }
 EOF
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
-resource "aws_iam_role" "worker" {
-  name = "${var.team}-${var.role}-workerECSInstance"
-  path = "/"
-  assume_role_policy = <<EOF
-{
-  "Version": "2008-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": ["ecs.amazonaws.com", "ec2.amazonaws.com"]
-      },
-      "Effect": "Allow"
-    }
-  ]
-}
-EOF
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_iam_policy" "ecs" {
+resource "aws_iam_policy" "concourse" {
   name = "ECS-${var.environment}"
   path = "${lower(format("/%s/", var.team))}"
-  description = "ELB update access"
+  description = "Cloudwatch logs access"
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -53,36 +28,11 @@ resource "aws_iam_policy" "ecs" {
     {
       "Effect": "Allow",
       "Action": [
-        "ec2:AuthorizeSecurityGroupIngress",
-        "ec2:Describe*",
-        "ecs:CreateCluster",
-        "ecs:DeregisterContainerInstance",
-        "ecs:DiscoverPollEndpoint",
-        "ecs:Poll",
-        "ecs:RegisterContainerInstance",
-        "ecs:StartTelemetrySession",
-        "ecs:Submit*",
-        "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
-        "elasticloadbalancing:Describe*",
-        "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
         "logs:CreateLogStream",
         "logs:PutLogEvents"
       ],
       "Resource": "*"
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_policy" "ecr" {
-  name = "ECR-${var.environment}"
-  path = "${lower(format("/%s/", var.team))}"
-  description = "Push-Pull access to ECR"
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
+    },
     {
       "Effect": "Allow",
       "Action": [
@@ -98,32 +48,26 @@ resource "aws_iam_policy" "ecr" {
       "Resource": [
         "*"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:AuthorizeSecurityGroupIngress",
+        "ec2:Describe*",
+        "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+        "elasticloadbalancing:DeregisterTargets",
+        "elasticloadbalancing:Describe*",
+        "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+        "elasticloadbalancing:RegisterTargets"
+      ],
+      "Resource": "*"
     }
   ]
 }
 EOF
 }
 
-resource "aws_iam_policy_attachment" "ecs" {
-  name = "${var.role}-${var.environment}-ecs"
-  roles = ["${aws_iam_role.worker.name}", "${aws_iam_role.admin.name}", "${var.ecs-instance-role}"]
-  policy_arn = "${aws_iam_policy.ecs.arn}"
-}
-
-resource "aws_iam_policy_attachment" "ecr" {
-  name = "${var.role}-${var.environment}-ecr"
-  roles = ["${aws_iam_role.admin.name}", "${aws_iam_role.worker.name}"]
-  policy_arn = "${aws_iam_policy.ecr.arn}"
-}
-
-resource "aws_iam_instance_profile" "admin" {
-  name = "${var.team}-admin-${var.environment}"
-  path = "${lower(format("/%s/", var.team))}"
-  roles = ["${aws_iam_role.admin.name}"]
-}
-
-resource "aws_iam_instance_profile" "worker" {
-  name = "${var.team}-worker-${var.environment}"
-  path = "${lower(format("/%s/", var.team))}"
-  roles = ["${aws_iam_role.worker.name}"]
+resource "aws_iam_role_policy_attachment" "ecs-concourse-role-policy-attach" {
+    role = "${aws_iam_role.ecs-concourse-role.name}"
+    policy_arn = "${aws_iam_policy.concourse.arn}"
 }

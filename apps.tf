@@ -89,12 +89,12 @@ EOF
 }
 
 resource "aws_ecs_service" "admin" {
-  depends_on = ["aws_iam_role.admin"]
+  depends_on = ["aws_iam_role.ecs-concourse-role"]
   name = "concourse-admin"
   cluster = "${var.ecs-cluster-arn}"
   task_definition = "${aws_ecs_task_definition.admin.arn}"
   desired_count = "1" // TODO Make this configurable again
-  iam_role = "${aws_iam_role.admin.arn}"
+  iam_role = "${aws_iam_role.ecs-concourse-role.arn}"
   deployment_minimum_healthy_percent = 0
 
   load_balancer {
@@ -103,15 +103,16 @@ resource "aws_ecs_service" "admin" {
     container_port = 8080
   }
 
-  depends_on = ["aws_iam_policy.ecs"]
+  depends_on = ["aws_iam_policy.concourse"]
 
 }
 
 resource "aws_ecs_service" "worker" {
-  depends_on = ["aws_iam_role.worker"]
+  depends_on = ["aws_iam_role.ecs-concourse-role"]
   name = "concourse-worker"
   cluster = "${var.ecs-cluster-arn}"
   task_definition = "${aws_ecs_task_definition.worker.arn}"
   desired_count = "1" // TODO Make this configurable again
+  iam_role = "${aws_iam_role.ecs-concourse-role.arn}"
   deployment_minimum_healthy_percent = 0
 }
