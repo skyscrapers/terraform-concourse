@@ -113,6 +113,6 @@ resource "aws_ecs_service" "worker" {
   cluster = "${var.ecs-cluster-arn}"
   task_definition = "${aws_ecs_task_definition.worker.arn}"
   desired_count = "1" // TODO Make this configurable again
-  iam_role = "${aws_iam_role.ecs-concourse-role.arn}"
+  #iam_role = "${aws_iam_role.ecs-concourse-role.arn}"
   deployment_minimum_healthy_percent = 0
 }
