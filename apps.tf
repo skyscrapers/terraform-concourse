@@ -63,12 +63,6 @@ resource "aws_ecs_task_definition" "admin" {
     },
     "environment": [
       {"name": "CONCOURSE_TSA_HOST", "value": "localhost"}
-    ],
-    "mountPoints": [
-      {
-        "sourceVolume": "worker-workdir",
-        "containerPath": "/opt/concourse"
-      }
     ]
   }
 ]
