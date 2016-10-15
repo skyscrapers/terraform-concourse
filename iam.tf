@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ecs-concourse-role" {
-    name = "ecsServiceRole"
+    name = "ecsConcourseRole"
     assume_role_policy = <<EOF
 {
 "Version": "2008-10-17",
@@ -18,7 +18,7 @@ EOF
 }
 
 resource "aws_iam_policy" "concourse" {
-  name = "ECS-${var.environment}"
+  name = "ECS-${var.environment}-concourse"
   path = "${lower(format("/%s/", var.team))}"
   description = "Cloudwatch logs access"
   policy = <<EOF
