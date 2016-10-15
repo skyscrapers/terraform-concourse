@@ -62,8 +62,9 @@ resource "aws_ecs_task_definition" "admin" {
       }
     },
     "environment": [
-      {"name": "CONCOURSE_TSA_HOST", "value": "localhost"}
-    ]
+      {"name": "CONCOURSE_TSA_HOST", "value": "admin"}
+    ],
+    "links": ["concourse-admin:admin"]
   }
 ]
 EOF
