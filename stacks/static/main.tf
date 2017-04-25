@@ -51,5 +51,8 @@ module "postgres" {
 
 module "concourse" {
   source = "../../modules/concourse-ecs"
-  
+  environment = "${terraform.env}"
+  ecs_cluster_arn = "${module.ecs_cluster.cluster_id}"
+  concourse_web_alb_target_group_arn = "${module.alb.target_group_arn}"
+  concourse_external_url = "https://test.concourse.skyscrape.rs:8080"
 }

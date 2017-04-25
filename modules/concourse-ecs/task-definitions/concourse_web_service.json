@@ -13,10 +13,10 @@
       }
     ],
     "environment": [
-      { "name": "CONCOURSE_BASIC_AUTH_USERNAME"   , "value": "${concourse_auth_password}" },
+      { "name": "CONCOURSE_BASIC_AUTH_USERNAME"   , "value": "${concourse_auth_username}" },
       { "name": "CONCOURSE_BASIC_AUTH_PASSWORD"   , "value": "${concourse_auth_password}" },
       { "name": "CONCOURSE_EXTERNAL_URL"          , "value": "${concourse_external_url}"  },
-      { "name": "CONCOURSE_POSTGRES_DATA_SOURCE"  , "value": "${concourse_db_uri}"        }
+      { "name": "CONCOURSE_POSTGRES_DATA_SOURCE"  , "value": "${concourse_db_uri}"        },
       { "name": "SESSION_SIGNING_KEY "  , "value": "-----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEAmV+RmA7I5ZoI4+PAoJdUvg/WO5/Z13YFR0aXhxGdOYfeOjVS
 cbu6jN4ZBxl3UabR3J7z7j5CPGZxAv5jN1VM0rRpPfhCJha+yq66qhBaU3KlsIcP
@@ -43,7 +43,7 @@ KbI22LUbn3EaJZWmqTfOZIVBA8omdXG7l6l/rLXKAhUPpQVp8ZmYZhIj9HmxAHuW
 4RwVAoGAJBxxujOwbhRopJ3/BfqNR56QdZD1SvRZdZjO/pvQWaDANy8oj01QX9y+
 Mc9lCl0bTLJXkmLUC20mbiAyZ/6kua0l+c3vDTVyI4OJFwd96zjKRZr2TFKK3Qth
 WiuZEgfBAHMCHgRTET6fEbJy4fWu0VgNIsQ1TrrdnGtCrR3UTPE=
------END RSA PRIVATE KEY-----"        }
+-----END RSA PRIVATE KEY-----"        },
       { "name": "TSA_HOST_KEY "  , "value": "-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEAw6KT/a3wc39pTgwLjxleILbQbo/GrpxRzVebhnjyIXC3ovYN
 u1OGvOyWC2rNl6ZZ+l1XQUGcG84IKCz2dq9R83EGpGQWal57jjre77IkRPkvXwXN
@@ -70,34 +70,8 @@ zXx+Vq4wTsAAM0ugP/ZGn7a7uvpFzownDLDS98u8abL1Ip2kAZDGxSSzy+qa425r
 FwRVIwKBgFsD1pY4LN9DF7gQNYqueqKKdTVKl9re4Y5A8A7CHyvUkESFxmJ4xlST
 XyGeYjCq4VmQT2Hui/n1SDDNK8B5RQ107ZHoOMhJv7ezrCBAB3nndsBo+mnkxgEn
 CM92h9LMsHilG3qDszJc7SyeI29BGApi2bJfqWwsOIEv6E/qf5hL
------END RSA PRIVATE KEY-----"        }
-      { "name": "WORKER_KEY  "  , "value": "-----BEGIN RSA PRIVATE KEY-----
-MIIEowIBAAKCAQEA4zFinWOoW5JdjG/r1ed7IiVV4rmegat9MqUWeFup87EGafUV
-rYdDuhSJOqccerjWzV1JVOxedjLMLKFIxCMsP9JxiMvtWrbh4qYdfwZr2ZYrAquL
-zAOceIVBkRF3oO/7f1UdZcPMafl9Y+Ckd7plPLPU72uNF6/YeObMKYEPNo4KS5qh
-wLsgFNKOiC2mlKyx3xlqf+o94CtYDgdYjLzpWbq/sdurpAaXxc6qHvmcEJ3Wz9ZR
-Y+wJpAuqGdwdYTpJwkJPodo95iXxevakKuIoIlMUxKZ97zRcUzp7IOgIXlDC0ccF
-/RaH2tTtbZSpXn+OnoSRnlGTigDS0YYiY4aIDwIDAQABAoIBAEn0KGqdJw9vzH3L
-bNQ7Poy15Igh7eO9w8o5jN/uzpqhtDnHaqAK2NP4nVb3UMDt7BX7WMSJEJKfJHEe
-qwYVgPDhes2RvBh8UXkqo41WtMKmLCf5WU82mbdtgRNMwUkk9RPUy/X1T1Prv5JE
-bKUAirXAv/6TXuEn/2oTjr+v4BjcdKGg4cH3Kmr2MKOMPCS26JPYF0neJTVT9Khx
-0VEeM9Vw+Gc6rMDMgbajLxWx1S8REsNCiUrGd19hQSp/0yxiHf9O+OF8GtzRbjB1
-g06QQmGXZqt3LQF0fvAC4hNDYdZ8+KrPU1HyLhxDv6SGrNLlsl1/Almflhb40rZT
-7Zcvh4ECgYEA8WsUaZHmKpjx1wCAWjpkm1kKI6mB6vVHiUSnR+T2TwDSS6uUnQL8
-We5ZWbjqmdnGidNsezt6Pb7jYoCMqA6yzUQFK6tOZcsNCd4X5WmTaOITJI588YZ8
-4W1q7DCdlA7eN7+XPiMB6Kh3YATXnLmDSZH1/Wbp/oq5Zsavqr2TfUECgYEA8OpY
-pm40rgiDQJNFSMoJ6ViPFtAyvf1R+Dr/05AtXHFOh1epcmep+17xDSOaQqHnUrGv
-RmdspYhK2H35XGIsi1ggaOYO5N/+KxExBW9vfwot9Xszg9VWHiqJumzxe9YFE18u
-ECZV80CyAsSGKxgVwUXOK3igW7zSsCEsp1j9oU8CgYBvK5Mbxi7KYOHE0xtH8WnQ
-y6DKqU0FSGvnvzCU/8+Ys9UjOWDXKL/SHdsRYQDPViSB5VUoLkxtUJDfFDkxTotx
-0Kfc4ybX4zge2iIA56wU+T49cEwC4J5zJHK/TufRfUNBQr2/xFklrSZDlhc/uYHG
-iCtRxGluaK1VsZrFMkVPwQKBgQDithWwoRsP/1DMrwpPQlnrbnxRIqHtqnq913+x
-rwcQ7EvTD4qU77rFpAXBsJRVShju9+kSnvdeGxEcBAhqiLSUeN0e+ghgF+4Ox0HT
-dJd+/KxdS5Ah6tv8zVkIx8bEG5ZxMWuepQTTQjmCY0BDQ4oNdExdGkoFqn62YrGr
-1hHv/wKBgDUMNkC6wYcOZ0f8r1n+J6gMFFXYjYRnNXl7oI6O/OMZ9aNG/cmvSdkL
-jNR24qrBeQpOQZDXGfzUepaozqLjnPiuh+pufMSSDy/uspt531HIBp0P5KXwSUwK
-MctbFw+8ODW4GsLaHOCy+SERvIDnf8GIrjyQndz1cO/vrwZJeaKe
------END RSA PRIVATE KEY-----"        }
+-----END RSA PRIVATE KEY-----"        },
+      { "name": "TSA_AUTHORIZED_KEYS  "  , "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDjMWKdY6hbkl2Mb+vV53siJVXiuZ6Bq30ypRZ4W6nzsQZp9RWth0O6FIk6pxx6uNbNXUlU7F52MswsoUjEIyw/0nGIy+1atuHiph1/BmvZlisCq4vMA5x4hUGREXeg7/t/VR1lw8xp+X1j4KR3umU8s9Tva40Xr9h45swpgQ82jgpLmqHAuyAU0o6ILaaUrLHfGWp/6j3gK1gOB1iMvOlZur+x26ukBpfFzqoe+ZwQndbP1lFj7AmkC6oZ3B1hOknCQk+h2j3mJfF69qQq4igiUxTEpn3vNFxTOnsg6AheUMLRxwX9Fofa1O1tlKlef46ehJGeUZOKANLRhiJjhogP iuri@Puddle-Jumper"        }
     ]
   }
 ]
