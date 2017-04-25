@@ -42,31 +42,43 @@ module "postgres" {
   environment              = "${terraform.env}"
   size                     = "db.t2.micro"
   security_groups          = ["${module.tools.bastion_sg_id}", "${aws_security_group.sg_ecs_instance.id}"]
-  rds_password             = "concoursetest" # TODO: changeme
+  rds_password             = "concoursetest"                                                               # TODO: changeme
   multi_az                 = false
   rds_parameter_group_name = "postgres-rds-${var.project}-${terraform.env}"
   rds_type                 = "postgres"
-  storage_encrypted        = false                                                 # TODO: Probably need to change this
+  storage_encrypted        = false                                                                         # TODO: Probably need to change this
 }
 
 provider "postgresql" {
-  host     = "${module.postgres.rds_address}"
+  alias    = "root"
+  host     = "localhost"
   port     = "${module.postgres.rds_port}"
   username = "root"
   password = "concoursetest"
   sslmode  = "require"
 }
 
-resource "postgresql_database" "concourse" {
-  provider = "postgresql"
-  name     = "concourse"
+provider "postgresql" {
+  alias    = "concourse"
+  host     = "localhost"
+  port     = "${module.postgres.rds_port}"
+  username = "concourse"
+  password = "changeme"
+  sslmode  = "require"
 }
 
 resource "postgresql_role" "concourse" {
-  provider = "postgresql"
+  provider        = "postgresql.root"
+  name            = "concourse"
+  login           = true
+  password        = "changeme"
+  create_database = true
+}
+
+resource "postgresql_database" "concourse" {
+  provider = "postgresql.concourse"
   name     = "concourse"
-  login    = true
-  password = "changeme"
+  owner    = "${postgresql_role.concourse.name}"
 }
 
 module "concourse" {
