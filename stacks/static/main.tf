@@ -80,4 +80,6 @@ module "concourse" {
   concourse_db_password              = "changeme"
   concourse_db_name                  = "concourse"
   ecs_service_role_arn               = "${module.ecs_cluster.ecs-service-role}"
+  concourse_auth_username            = "concourse"
+  concourse_auth_password            = "concourse"
 }

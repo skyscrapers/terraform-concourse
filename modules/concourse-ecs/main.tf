@@ -27,10 +27,10 @@ data "template_file" "concourse_web_task_template" {
 
   vars {
     image                   = "${var.concourse_docker_image}"
-    concourse_auth_username = "concourse"
-    concourse_auth_password = "changeme"
+    concourse_auth_username = "${var.concourse_auth_username}"
+    concourse_auth_password = "${var.concourse_auth_password}"
     concourse_external_url  = "${var.concourse_external_url}"
-    concourse_db_uri        = "postgres://${var.concourse_db_username}:${var.concourse_db_password}@${var.concourse_db_host}:${var.concourse_db_port}/${var.concourse_db_name}?sslmode=disable"
+    concourse_db_uri        = "postgres://${var.concourse_db_username}:${var.concourse_db_password}@${var.concourse_db_host}:${var.concourse_db_port}/${var.concourse_db_name}"
     awslog_group_name       = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
     awslog_region           = "${data.aws_region.current.name}"
   }
