@@ -1,9 +1,13 @@
+data "aws_region" "current" {
+  current = true
+}
+
 resource "aws_ecs_service" "concourse_web" {
   name            = "concourse_web_${var.environment}"
   cluster         = "${var.ecs_cluster_arn}"
   task_definition = "${aws_ecs_task_definition.concourse_web_task_definition.arn}"
   desired_count   = 1
-  iam_role        = "${aws_iam_role.concourse_web_role.arn}"
+  iam_role        = "${var.ecs_service_role_arn}"
 
   load_balancer {
     target_group_arn = "${var.concourse_web_alb_target_group_arn}"
@@ -27,24 +31,17 @@ data "template_file" "concourse_web_task_template" {
     concourse_auth_password = "changeme"
     concourse_external_url = "${var.concourse_external_url}"
     concourse_db_uri = "postgres://root:concoursetest@${var.concourse_db_host}:${var.concourse_db_port}/concourse?sslmode=disable"
+    awslog_group_name = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
+    awslog_region = "${data.aws_region.current.name}"
   }
 }
 
-resource "aws_iam_role" "concourse_web_role" {
-    name = "concourse_web_ecs_service_role_${var.environment}"
-    assume_role_policy = <<EOF
-{
-  "Version": "2008-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ecs-tasks.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
+resource "aws_cloudwatch_log_group" "concourse_web_log_group" {
+  name = "concourse_web_logs_${var.environment}"
+  retention_in_days = "7"
+
+  tags {
+    Environment = "${var.environment}"
+    Project = "concourse"
+  }
 }

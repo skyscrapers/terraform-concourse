@@ -26,3 +26,7 @@ variable "concourse_db_port" {
   description = ""
   default = "5432"
 }
+
+variable "ecs_service_role_arn" {
+  description = ""
+}
