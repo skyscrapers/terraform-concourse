@@ -41,8 +41,8 @@ module "postgres" {
   project                  = "${var.project}"
   environment              = "${terraform.env}"
   size                     = "db.t2.micro"
-  security_groups          = ["${aws_security_group.sg_ecs_instance.id}"]
-  rds_password             = "concoursetest"                                       # TODO: changeme
+  security_groups          = ["${module.tools.bastion_sg_id}", "${aws_security_group.sg_ecs_instance.id}"]
+  rds_password             = "concoursetest" # TODO: changeme
   multi_az                 = false
   rds_parameter_group_name = "postgres-rds-${var.project}-${terraform.env}"
   rds_type                 = "postgres"
