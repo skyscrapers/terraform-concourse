@@ -3,7 +3,6 @@
     "name": "concourse_web",
     "image": "${image}",
     "command": [ "web" ],
-    "links": [ "concourse-db" ],
     "cpu": 10,
     "memory": 256,
     "essential": true,
