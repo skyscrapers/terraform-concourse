@@ -35,18 +35,18 @@ module "nat" {
 }
 
 module "postgres" {
-  source                   = "github.com/skyscrapers/terraform-rds//rds?ref=1.0.0"
+  source                   = "github.com/skyscrapers/terraform-rds//rds?ref=1.0.1"
   vpc_id                   = "${module.vpc.vpc_id}"
   subnets                  = "${module.vpc.private_db_subnets}"
   project                  = "${var.project}"
   environment              = "${terraform.env}"
   size                     = "db.t2.micro"
   security_groups          = ["${aws_security_group.sg_ecs_instance.id}"]
-  rds_password             = "concoursetest"
+  rds_password             = "concoursetest" # TODO: changeme
   multi_az                 = false
   rds_parameter_group_name = "postgres-rds-${var.project}-${terraform.env}"
   rds_type = "postgres"
-  storage_encrypted = false
+  storage_encrypted = false  # TODO: Probably need to change this
 }
 
 module "concourse" {
@@ -55,4 +55,5 @@ module "concourse" {
   ecs_cluster_arn = "${module.ecs_cluster.cluster_id}"
   concourse_web_alb_target_group_arn = "${module.alb.target_group_arn}"
   concourse_external_url = "https://test.concourse.skyscrape.rs:8080"
+  concourse_db_host = "${module.postgres.rds_address}"
 }

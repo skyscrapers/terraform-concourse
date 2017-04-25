@@ -22,11 +22,11 @@ data "template_file" "concourse_web_task_template" {
   template = "${file("${path.module}/task-definitions/concourse_web_service.json")}"
 
   vars {
-    image = "concourse/concourse"
+    image = "${var.concourse_docker_image}"
     concourse_auth_username = "concourse"
     concourse_auth_password = "changeme"
     concourse_external_url = "${var.concourse_external_url}"
-    concourse_db_uri = "postgres://root:concoursetest@concourse-test-rds01.cdejtlq8mkct.eu-west-1.rds.amazonaws.com:5432/concourse?sslmode=disable"
+    concourse_db_uri = "postgres://root:concoursetest@${var.concourse_db_host}:${var.concourse_db_port}/concourse?sslmode=disable"
   }
 }
 

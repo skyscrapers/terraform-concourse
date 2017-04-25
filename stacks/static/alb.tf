@@ -6,7 +6,7 @@ module "alb" {
   project                = "${var.project}"
   environment            = "${terraform.env}"
   backend_https_port     = "3000"
-  name                   = "polpo"
+  name                   = "web"
   ssl_certificate_id     = "${var.alb_ssl_certificate["${terraform.env}"]}"
 }
 

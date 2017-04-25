@@ -13,3 +13,16 @@ variable "concourse_web_alb_target_group_arn" {
 variable "concourse_external_url" {
   description = ""
 }
+
+variable "concourse_docker_image" {
+  default = "concourse/concourse"
+}
+
+variable "concourse_db_host" {
+  description = ""
+}
+
+variable "concourse_db_port" {
+  description = ""
+  default = "5432"
+}
