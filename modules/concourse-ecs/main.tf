@@ -7,7 +7,7 @@ resource "aws_ecs_service" "concourse_web" {
 
   load_balancer {
     target_group_arn = "${var.concourse_web_alb_target_group_arn}"
-    container_name   = "concourse_web_${var.environment}"
+    container_name   = "concourse_web"
     container_port   = 8080
   }
 }
