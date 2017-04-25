@@ -27,6 +27,14 @@ variable "concourse_db_port" {
   default = "5432"
 }
 
+variable "concourse_db_username" {
+  description = ""
+}
+
+variable "concourse_db_password" {
+  description = ""
+}
+
 variable "ecs_service_role_arn" {
   description = ""
 }

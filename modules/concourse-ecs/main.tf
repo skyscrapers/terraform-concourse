@@ -30,7 +30,7 @@ data "template_file" "concourse_web_task_template" {
     concourse_auth_username = "concourse"
     concourse_auth_password = "changeme"
     concourse_external_url = "${var.concourse_external_url}"
-    concourse_db_uri = "postgres://root:concoursetest@${var.concourse_db_host}:${var.concourse_db_port}/concourse?sslmode=disable"
+    concourse_db_uri = "postgres://${var.concourse_db_username}:${var.concourse_db_password}@${var.concourse_db_host}:${var.concourse_db_port}/concourse?sslmode=disable"
     awslog_group_name = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
     awslog_region = "${data.aws_region.current.name}"
   }

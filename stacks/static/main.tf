@@ -49,6 +49,26 @@ module "postgres" {
   storage_encrypted = false  # TODO: Probably need to change this
 }
 
+provider "postgresql" {
+  host            = "${module.postgres.rds_address}"
+  port            = "${module.postgres.rds_port}"
+  username        = "root"
+  password        = "concoursetest"
+  sslmode         = "require"
+}
+
+resource "postgresql_database" "concourse" {
+  provider = "postgresql"
+  name     = "concourse"
+}
+
+resource "postgresql_role" "concourse" {
+  provider        = "postgresql"
+  name            = "concourse"
+  login           = true
+  password        = "changeme"
+}
+
 module "concourse" {
   source = "../../modules/concourse-ecs"
   environment = "${terraform.env}"
@@ -56,5 +76,7 @@ module "concourse" {
   concourse_web_alb_target_group_arn = "${module.alb.target_group_arn}"
   concourse_external_url = "https://test.concourse.skyscrape.rs"
   concourse_db_host = "${module.postgres.rds_address}"
+  concourse_db_username = "concourse"
+  concourse_db_password = "changeme"
   ecs_service_role_arn = "${module.ecs_cluster.ecs-service-role}"
 }
