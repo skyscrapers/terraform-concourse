@@ -16,7 +16,6 @@ resource "aws_security_group" "sg_ecs_instance" {
   }
 }
 
-
 resource "aws_security_group_rule" "sg_ecs_instances_alb_in" {
   security_group_id        = "${aws_security_group.sg_ecs_instance.id}"
   type                     = "ingress"
