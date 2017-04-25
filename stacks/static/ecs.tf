@@ -1,5 +1,5 @@
 module "ecs_cluster" {
-  source      = "github.com/skyscrapers/terraform-ecs//ecs-cluster?ref=1.0.0"
+  source      = "github.com/skyscrapers/terraform-ecs//ecs-cluster?ref=1.0.2"
   project     = "${var.project}"
   environment = "${terraform.env}"
 }
