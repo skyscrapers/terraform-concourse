@@ -15,7 +15,7 @@ variable "concourse_external_url" {
 }
 
 variable "concourse_docker_image" {
-  default = "concourse/concourse"
+  default = "skyscrapers/concourse"
 }
 
 variable "concourse_db_host" {
