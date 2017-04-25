@@ -48,3 +48,8 @@ module "postgres" {
   rds_type = "postgres"
   storage_encrypted = false
 }
+
+module "concourse" {
+  source = "../../modules/concourse-ecs"
+  
+}
