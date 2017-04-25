@@ -35,6 +35,10 @@ variable "concourse_db_password" {
   description = ""
 }
 
+variable "concourse_db_name" {
+  description = ""
+}
+
 variable "ecs_service_role_arn" {
   description = ""
 }

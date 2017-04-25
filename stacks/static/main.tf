@@ -78,5 +78,6 @@ module "concourse" {
   concourse_db_host                  = "${module.postgres.rds_address}"
   concourse_db_username              = "concourse"
   concourse_db_password              = "changeme"
+  concourse_db_name                  = "concourse"
   ecs_service_role_arn               = "${module.ecs_cluster.ecs-service-role}"
 }
