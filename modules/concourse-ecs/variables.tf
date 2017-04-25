@@ -24,7 +24,7 @@ variable "concourse_db_host" {
 
 variable "concourse_db_port" {
   description = ""
-  default = "5432"
+  default     = "5432"
 }
 
 variable "concourse_db_username" {
