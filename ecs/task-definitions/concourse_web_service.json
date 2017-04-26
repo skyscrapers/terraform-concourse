@@ -25,6 +25,11 @@
         "awslogs-region": "${awslog_region}",
         "awslogs-stream-prefix": "concourse_web"
       }
-    }
+    },
+    "placementConstraints": [
+      {
+        "type": "distinctInstance"
+      }
+    ]
   }
 ]
