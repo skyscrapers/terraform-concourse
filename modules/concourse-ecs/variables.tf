@@ -50,3 +50,8 @@ variable "concourse_auth_username" {
 variable "concourse_auth_password" {
   description = ""
 }
+
+variable "concourse_keys_version" {
+  description = "Change this if you want to re-generate Concourse keys"
+  default     = "1"
+}
