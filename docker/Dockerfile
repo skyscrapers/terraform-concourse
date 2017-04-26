@@ -6,4 +6,6 @@ RUN mkdir -p /concourse-keys
 
 ADD download-keys.sh /opt/download-keys.sh
 
+RUN chmod +x /opt/download-keys.sh
+
 ENTRYPOINT [ "/opt/download-keys.sh" ]
