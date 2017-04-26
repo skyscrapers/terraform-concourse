@@ -6,7 +6,7 @@ resource "aws_ecs_service" "concourse_web" {
   iam_role        = "${var.ecs_service_role_arn}"
 
   load_balancer {
-    elb_name         = "${var.concourse_web_elb}"
+    elb_name         = "${module.elb.elb_name}"
     container_name   = "concourse_web"
     container_port   = 8080
   }

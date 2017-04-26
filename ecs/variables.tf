@@ -6,10 +6,6 @@ variable "ecs_cluster_arn" {
   description = ""
 }
 
-variable "concourse_web_elb" {
-  description = ""
-}
-
 variable "concourse_external_url" {
   description = ""
 }
