@@ -12,10 +12,10 @@
       }
     ],
     "environment": [
-      { "name": "CONCOURSE_BASIC_AUTH_USERNAME"   , "value": "${concourse_auth_username}" },
-      { "name": "CONCOURSE_BASIC_AUTH_PASSWORD"   , "value": "${concourse_auth_password}" },
-      { "name": "CONCOURSE_EXTERNAL_URL"          , "value": "${concourse_external_url}"  },
-      { "name": "CONCOURSE_POSTGRES_DATA_SOURCE"  , "value": "${concourse_db_uri}"        },
+      { "name": "CONCOURSE_BASIC_AUTH_USERNAME"   , "value": "${concourse_auth_username}"           },
+      { "name": "CONCOURSE_BASIC_AUTH_PASSWORD"   , "value": "${concourse_auth_password}"           },
+      { "name": "CONCOURSE_EXTERNAL_URL"          , "value": "${concourse_external_url}"            },
+      { "name": "CONCOURSE_POSTGRES_DATA_SOURCE"  , "value": "${concourse_db_uri}"                  },
       { "name": "_CONCOURSE_KEYS_S3"              , "value": "s3://${concourse_keys_bucket_name}/"  }
     ],
     "logConfiguration": {
@@ -24,6 +24,28 @@
         "awslogs-group": "${awslog_group_name}",
         "awslogs-region": "${awslog_region}",
         "awslogs-stream-prefix": "concourse_web"
+      }
+    }
+  },
+  {
+    "name": "concourse_worker",
+    "image": "${image}",
+    "command": [ "worker" ],
+    "links": [ "concourse_web" ],
+    "privileged": true,
+    "cpu": 10,
+    "memory": 256,
+    "essential": true,
+    "environment": [
+      { "name": "CONCOURSE_TSA_HOST" , "value": "concourse_web" },
+      { "name": "_CONCOURSE_KEYS_S3" , "value": "s3://${concourse_keys_bucket_name}/"  }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${awslog_worker_group_name}",
+        "awslogs-region": "${awslog_region}",
+        "awslogs-stream-prefix": "concourse_worker"
       }
     }
   }
