@@ -39,7 +39,7 @@ module "concourse" {
   source                              = "../../ecs"
   environment                         = "${terraform.env}"
   ecs_cluster_arn                     = "${data.terraform_remote_state.static.ecs_cluster_name}"
-  concourse_web_alb_target_group_arn  = "${data.terraform_remote_state.static.target_group_arn}"
+  concourse_web_elb                   = "${data.terraform_remote_state.static.elb_id}"
   concourse_db_host                   = "${data.terraform_remote_state.static.rds_address}"
   ecs_service_role_arn                = "${data.terraform_remote_state.static.ecs-service-role}"
   concourse_external_url              = "${var.concourse_external_url["${terraform.env}"]}"
