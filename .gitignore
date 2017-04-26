@@ -4,3 +4,4 @@
 
 # Module directory
 .terraform/
+terraform.tfstate.d

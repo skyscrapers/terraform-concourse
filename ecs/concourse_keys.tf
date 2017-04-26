@@ -4,7 +4,6 @@ resource "null_resource" "generate_concourse_keys" {
   triggers {
     version                      = "${var.concourse_keys_version}"
     concourse_keys_bucket_name   = "${aws_s3_bucket.concourse_keys.bucket}"
-    concourse_keys_bucket_policy = "${aws_s3_bucket_policy.concourse_keys.policy}"
   }
 
   provisioner "local-exec" {

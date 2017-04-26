@@ -30,7 +30,7 @@ output "target_group_arn" {
   value = "${module.alb.target_group_arn}"
 }
 
-ouput "rds_password" {
+output "rds_password" {
   value ="${var.rds_password["${terraform.env}"]}"
 }
 

@@ -3,7 +3,6 @@ resource "aws_ecs_service" "concourse_worker" {
   cluster         = "${var.ecs_cluster_arn}"
   task_definition = "${aws_ecs_task_definition.concourse_worker_task_definition.arn}"
   desired_count   = "${var.concourse_worker_instance_count}"
-  iam_role        = "${var.ecs_service_role_arn}"
 
   depends_on = [ "null_resource.generate_concourse_keys" ]
 }
@@ -25,6 +24,7 @@ data "template_file" "concourse_worker_task_template" {
     awslog_group_name          = "${aws_cloudwatch_log_group.concourse_worker_log_group.name}"
     awslog_region              = "${data.aws_region.current.name}"
     concourse_keys_bucket_name = "${aws_s3_bucket.concourse_keys.bucket}"
+    concourse_external_url     = "${var.concourse_external_url}"
   }
 }
 
