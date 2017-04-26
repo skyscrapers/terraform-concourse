@@ -2,7 +2,7 @@ variable "concourse_external_url" {
   type = "map"
 
   default = {
-    test = "https://test.concourse.skyscrape.rs"
+    test = "test.concourse.skyscrape.rs"
   }
 }
 

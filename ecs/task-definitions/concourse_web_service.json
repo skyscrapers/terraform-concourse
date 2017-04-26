@@ -8,13 +8,18 @@
     "essential": true,
     "portMappings": [
       {
-        "containerPort": 8080
+        "containerPort": 8080,
+        "hostPort": 8080
+      },
+      {
+        "containerPort": 2222,
+        "hostPort": 2222
       }
     ],
     "environment": [
       ${concourse_basic_auth}
       ${concourse_github_auth}
-      { "name": "CONCOURSE_EXTERNAL_URL"          , "value": "${concourse_external_url}"            },
+      { "name": "CONCOURSE_EXTERNAL_URL"          , "value": "https://${concourse_external_url}"            },
       { "name": "CONCOURSE_POSTGRES_DATA_SOURCE"  , "value": "${concourse_db_uri}"                  },
       { "name": "_CONCOURSE_KEYS_S3"              , "value": "s3://${concourse_keys_bucket_name}/"  }
     ],
