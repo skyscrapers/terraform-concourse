@@ -42,56 +42,9 @@ module "postgres" {
   environment              = "${terraform.env}"
   size                     = "db.t2.micro"
   security_groups          = ["${module.tools.bastion_sg_id}", "${aws_security_group.sg_ecs_instance.id}"]
-  rds_password             = "concoursetest"                                                               # TODO: changeme
+  rds_password             = "${var.rds_password["${terraform.env}"]}"
   multi_az                 = false
   rds_parameter_group_name = "postgres-rds-${var.project}-${terraform.env}"
   rds_type                 = "postgres"
-  storage_encrypted        = false                                                                         # TODO: Probably need to change this
-}
-
-provider "postgresql" {
-  alias    = "root"
-  host     = "localhost"
-  port     = "${module.postgres.rds_port}"
-  username = "root"
-  password = "concoursetest"
-  sslmode  = "require"
-}
-
-provider "postgresql" {
-  alias    = "concourse"
-  host     = "localhost"
-  port     = "${module.postgres.rds_port}"
-  username = "concourse"
-  password = "changeme"
-  sslmode  = "require"
-}
-
-resource "postgresql_role" "concourse" {
-  provider        = "postgresql.root"
-  name            = "concourse"
-  login           = true
-  password        = "changeme"
-  create_database = true
-}
-
-resource "postgresql_database" "concourse" {
-  provider = "postgresql.concourse"
-  name     = "concourse"
-  owner    = "${postgresql_role.concourse.name}"
-}
-
-module "concourse" {
-  source                             = "../../modules/concourse-ecs"
-  environment                        = "${terraform.env}"
-  ecs_cluster_arn                    = "${module.ecs_cluster.cluster_id}"
-  concourse_web_alb_target_group_arn = "${module.alb.target_group_arn}"
-  concourse_external_url             = "https://test.concourse.skyscrape.rs"
-  concourse_db_host                  = "${module.postgres.rds_address}"
-  concourse_db_username              = "concourse"
-  concourse_db_password              = "changeme"
-  concourse_db_name                  = "concourse"
-  ecs_service_role_arn               = "${module.ecs_cluster.ecs-service-role}"
-  concourse_auth_username            = "concourse"
-  concourse_auth_password            = "concourse"
+  storage_encrypted        = "${var.rds_storage_encrypted["${terraform.env}"]}"
 }

@@ -29,3 +29,11 @@ output "sg_ecs_instance" {
 output "target_group_arn" {
   value = "${module.alb.target_group_arn}"
 }
+
+ouput "rds_password" {
+  value ="${var.rds_password["${terraform.env}"]}"
+}
+
+output "rds_address" {
+  value = "${module.postgres.rds_address}"
+}
