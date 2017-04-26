@@ -1,4 +1,5 @@
 resource "aws_s3_bucket" "concourse_keys" {
+  count  = "${var.generate_concourse_keys == "false" ? 0 : 1 }"
   bucket = "concourse-keys-${var.environment}"
   acl    = "private"
 
@@ -13,6 +14,7 @@ resource "aws_s3_bucket" "concourse_keys" {
 }
 
 resource "aws_s3_bucket_policy" "concourse_keys" {
+  count  = "${var.generate_concourse_keys == "false" ? 0 : 1 }"
   bucket = "${aws_s3_bucket.concourse_keys.bucket}"
 
   policy = <<EOF

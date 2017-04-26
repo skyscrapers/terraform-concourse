@@ -55,3 +55,8 @@ variable "concourse_keys_version" {
   description = "Change this if you want to re-generate Concourse keys"
   default     = "2"
 }
+
+variable "generate_concourse_keys" {
+  description = "Set to false to disable the automatic generation of Concourse keys"
+  default     = "true"
+}
