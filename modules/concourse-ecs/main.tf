@@ -14,6 +14,8 @@ resource "aws_ecs_service" "concourse_web" {
     container_name   = "concourse_web"
     container_port   = 8080
   }
+
+  depends_on = [ "null_resource.generate_concourse_keys" ]
 }
 
 resource "aws_ecs_task_definition" "concourse_web_task_definition" {

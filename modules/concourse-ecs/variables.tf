@@ -53,5 +53,5 @@ variable "concourse_auth_password" {
 
 variable "concourse_keys_version" {
   description = "Change this if you want to re-generate Concourse keys"
-  default     = "1"
+  default     = "2"
 }

@@ -1,87 +1,19 @@
-resource "aws_s3_bucket_object" "concourse_session_signing_key" {
-  key                    = "session_signing_key"
-  bucket                 = "${aws_s3_bucket.concourse_keys.bucket}"
-  source                 = "${path.module}/session_signing_key"
-  server_side_encryption = "AES256"
-
-  depends_on = ["null_resource.generate_concourse_keys"]
-
-  lifecycle {
-    ignore_changes = ["source"]
-  }
-}
-
-resource "aws_s3_bucket_object" "concourse_session_signing_key_pub" {
-  key                    = "session_signing_key.pub"
-  bucket                 = "${aws_s3_bucket.concourse_keys.bucket}"
-  source                 = "${path.module}/session_signing_key.pub"
-  server_side_encryption = "AES256"
-
-  depends_on = ["null_resource.generate_concourse_keys"]
-
-  lifecycle {
-    ignore_changes = ["source"]
-  }
-}
-
-resource "aws_s3_bucket_object" "concourse_tsa_host_key" {
-  key                    = "tsa_host_key"
-  bucket                 = "${aws_s3_bucket.concourse_keys.bucket}"
-  source                 = "${path.module}/tsa_host_key"
-  server_side_encryption = "AES256"
-
-  depends_on = ["null_resource.generate_concourse_keys"]
-
-  lifecycle {
-    ignore_changes = ["source"]
-  }
-}
-
-resource "aws_s3_bucket_object" "concourse_tsa_host_key_pub" {
-  key                    = "tsa_host_key.pub"
-  bucket                 = "${aws_s3_bucket.concourse_keys.bucket}"
-  source                 = "${path.module}/tsa_host_key.pub"
-  server_side_encryption = "AES256"
-
-  depends_on = ["null_resource.generate_concourse_keys"]
-
-  lifecycle {
-    ignore_changes = ["source"]
-  }
-}
-
-resource "aws_s3_bucket_object" "concourse_worker_key" {
-  key                    = "worker_key"
-  bucket                 = "${aws_s3_bucket.concourse_keys.bucket}"
-  source                 = "${path.module}/worker_key"
-  server_side_encryption = "AES256"
-
-  depends_on = ["null_resource.generate_concourse_keys"]
-
-  lifecycle {
-    ignore_changes = ["source"]
-  }
-}
-
-resource "aws_s3_bucket_object" "concourse_authorized_worker_keys" {
-  key                    = "authorized_worker_keys"
-  bucket                 = "${aws_s3_bucket.concourse_keys.bucket}"
-  source                 = "${path.module}/worker_key.pub"
-  server_side_encryption = "AES256"
-
-  depends_on = ["null_resource.generate_concourse_keys"]
-
-  lifecycle {
-    ignore_changes = ["source"]
-  }
-}
-
 resource "null_resource" "generate_concourse_keys" {
   triggers {
-    version = "${var.concourse_keys_version}"
+    version                      = "${var.concourse_keys_version}"
+    concourse_keys_bucket_name   = "${aws_s3_bucket.concourse_keys.bucket}"
+    concourse_keys_bucket_policy = "${aws_s3_bucket_policy.concourse_keys.policy}"
   }
 
   provisioner "local-exec" {
-    command = "ssh-keygen -t rsa -f ${path.module}/session_signing_key -N '' && ssh-keygen -t rsa -f ${path.module}/tsa_host_key -N '' && ssh-keygen -t rsa -f ${path.module}/worker_key -N ''"
+    command = <<EOF
+mkdir -p ${path.module}/concourse_keys/ &&
+rm -rf ${path.module}/concourse_keys/* &&
+ssh-keygen -q -t rsa -f ${path.module}/concourse_keys/session_signing_key -N '' &&
+ssh-keygen -q -t rsa -f ${path.module}/concourse_keys/tsa_host_key -N '' &&
+ssh-keygen -q -t rsa -f ${path.module}/concourse_keys/worker_key -N '' &&
+aws s3 mv ${path.module}/concourse_keys/ s3://${aws_s3_bucket.concourse_keys.bucket}/ --recursive --acl private --sse AES256 &&
+aws s3 cp s3://${aws_s3_bucket.concourse_keys.bucket}/worker_key.pub s3://${aws_s3_bucket.concourse_keys.bucket}/authorized_worker_keys --acl private --sse AES256
+EOF
   }
 }
