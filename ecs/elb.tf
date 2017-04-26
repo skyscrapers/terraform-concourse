@@ -36,3 +36,12 @@ resource "aws_security_group_rule" "sg_ecs_instances_elb_in_http" {
   protocol                 = "tcp"
   source_security_group_id = "${module.elb.sg_id}"
 }
+
+resource "aws_security_group_rule" "sg_ecs_instances_elb_out_ssh" {
+  security_group_id        = "${var.backend_security_group_id}"
+  type                     = "egress"
+  from_port                = 2222
+  to_port                  = 2222
+  protocol                 = "tcp"
+  cidr_blocks              = ["0.0.0.0/0"]
+}
