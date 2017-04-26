@@ -48,3 +48,7 @@ module "postgres" {
   rds_type                 = "postgres"
   storage_encrypted        = "${var.rds_storage_encrypted["${terraform.env}"]}"
 }
+
+resource "aws_kms_key" "kms_key" {
+  description = "KMS key"
+}

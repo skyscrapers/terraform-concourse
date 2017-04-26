@@ -24,17 +24,29 @@ data "terraform_remote_state" "static" {
   }
 }
 
+data "aws_kms_secret" "concourse_github_auth_client_secret" {
+  secret {
+    name    = "github_auth_client_secret"
+    payload = "${var.concourse_github_auth_client_secret_encrypted["${terraform.env}"]}"
+
+    context {
+      concourse = "gh_client_secret"
+    }
+  }
+}
+
 module "concourse" {
-  source                             = "../../ecs"
-  environment                        = "${terraform.env}"
-  ecs_cluster_arn                    = "${data.terraform_remote_state.static.ecs_cluster_name}"
-  concourse_web_alb_target_group_arn = "${data.terraform_remote_state.static.target_group_arn}"
-  concourse_db_host                  = "${data.terraform_remote_state.static.rds_address}"
-  ecs_service_role_arn               = "${data.terraform_remote_state.static.ecs-service-role}"
-  concourse_external_url             = "${var.concourse_external_url["${terraform.env}"]}"
-  concourse_db_username              = "${var.concourse_db_username["${terraform.env}"]}"
-  concourse_db_password              = "${var.concourse_db_password["${terraform.env}"]}"
-  concourse_db_name                  = "${var.concourse_db_name["${terraform.env}"]}"
-  concourse_auth_username            = "${var.concourse_auth_username["${terraform.env}"]}"
-  concourse_auth_password            = "${var.concourse_auth_password["${terraform.env}"]}"
+  source                              = "../../ecs"
+  environment                         = "${terraform.env}"
+  ecs_cluster_arn                     = "${data.terraform_remote_state.static.ecs_cluster_name}"
+  concourse_web_alb_target_group_arn  = "${data.terraform_remote_state.static.target_group_arn}"
+  concourse_db_host                   = "${data.terraform_remote_state.static.rds_address}"
+  ecs_service_role_arn                = "${data.terraform_remote_state.static.ecs-service-role}"
+  concourse_external_url              = "${var.concourse_external_url["${terraform.env}"]}"
+  concourse_db_username               = "${var.concourse_db_username["${terraform.env}"]}"
+  concourse_db_password               = "${var.concourse_db_password["${terraform.env}"]}"
+  concourse_db_name                   = "${var.concourse_db_name["${terraform.env}"]}"
+  concourse_github_auth_client_id     = "${var.concourse_github_auth_client_id["${terraform.env}"]}"
+  concourse_github_auth_client_secret = "${data.aws_kms_secret.concourse_github_auth_client_secret.github_auth_client_secret}"
+  concourse_github_auth_team          = "${var.concourse_github_auth_team["${terraform.env}"]}"
 }

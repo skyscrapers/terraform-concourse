@@ -43,12 +43,29 @@ variable "ecs_service_role_arn" {
   description = ""
 }
 
+variable "concourse_github_auth_client_id" {
+  description = ""
+  default     = ""
+}
+
+variable "concourse_github_auth_client_secret" {
+  description = ""
+  default     = ""
+}
+
+variable "concourse_github_auth_team" {
+  description = ""
+  default     = ""
+}
+
 variable "concourse_auth_username" {
   description = ""
+  default     = ""
 }
 
 variable "concourse_auth_password" {
   description = ""
+  default     = ""
 }
 
 variable "concourse_keys_version" {

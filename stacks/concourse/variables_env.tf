@@ -45,3 +45,27 @@ variable "concourse_auth_password" {
     test = "concourse"
   }
 }
+
+variable "concourse_github_auth_client_id" {
+  type = "map"
+
+  default = {
+    test = "1e30430a800c305ecffe"
+  }
+}
+
+variable "concourse_github_auth_client_secret_encrypted" {
+  type = "map"
+
+  default = {
+    test = "AQECAHgH2b5PjCRhJwn6otng6Sln2gyey9L+02YYTwotEL3JQAAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAzJbtzpQrtLut3PzaECARCAQ5n+iAUDMEDnlQ1aKuK/1P5adDJUgt4H33ABVFis4FqvEnCh7v+ZVxjgXEoYkrmMYj3E3xQYnTNlNUxB1hLCoUM485E="
+  }
+}
+
+variable "concourse_github_auth_team" {
+  type = "map"
+
+  default = {
+    test = "skyscrapers/skyscrapers"
+  }
+}
