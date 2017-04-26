@@ -6,14 +6,6 @@ variable "cidr_block" {
   }
 }
 
-variable "alb_ssl_certificate" {
-  type = "map"
-
-  default = {
-    test = "arn:aws:acm:eu-west-1:847239549153:certificate/cf89435a-0af0-49e8-a249-94e823c94d3f"
-  }
-}
-
 variable "rds_password" {
   type = "map"
 

@@ -2,6 +2,10 @@ output "private_app_subnets" {
   value = ["${module.vpc.private_app_subnets}"]
 }
 
+output "public_lb_subnets" {
+  value = "${module.vpc.public_lb_subnets}"
+}
+
 output "rds_security_group" {
   value = "${module.postgres.rds_sg_id}"
 }
@@ -26,18 +30,10 @@ output "sg_ecs_instance" {
   value = "${aws_security_group.sg_ecs_instance.id}"
 }
 
-output "target_group_arn" {
-  value = "${module.alb.target_group_arn}"
-}
-
 output "rds_password" {
   value = "${var.rds_password["${terraform.env}"]}"
 }
 
 output "rds_address" {
   value = "${module.postgres.rds_address}"
-}
-
-output "elb_id" {
-  value = "${module.elb.elb_id}"
 }

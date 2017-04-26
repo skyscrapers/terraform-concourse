@@ -87,3 +87,18 @@ variable "concourse_worker_instance_count" {
   description = "Number of containers running Concourse web"
   default     = "1"
 }
+
+variable "elb_subnets" {
+  description = ""
+  default     = []
+  type        = "list"
+}
+
+variable "backend_security_group_id" {
+  description = ""
+}
+
+variable "ssl_certificate_id" {
+  description = ""
+  default     = ""
+}

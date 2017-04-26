@@ -16,15 +16,6 @@ resource "aws_security_group" "sg_ecs_instance" {
   }
 }
 
-resource "aws_security_group_rule" "sg_ecs_instances_alb_in" {
-  security_group_id        = "${aws_security_group.sg_ecs_instance.id}"
-  type                     = "ingress"
-  from_port                = 0
-  to_port                  = 65535
-  protocol                 = "tcp"
-  source_security_group_id = "${module.alb.sg_id}"
-}
-
 resource "aws_security_group_rule" "sg_ecs_instances_postgres_out" {
   security_group_id        = "${aws_security_group.sg_ecs_instance.id}"
   type                     = "egress"
@@ -32,22 +23,4 @@ resource "aws_security_group_rule" "sg_ecs_instances_postgres_out" {
   to_port                  = 5432
   protocol                 = "tcp"
   source_security_group_id = "${module.postgres.rds_sg_id}"
-}
-
-resource "aws_security_group_rule" "sg_ecs_instances_elb_in_ssh" {
-  security_group_id        = "${aws_security_group.sg_ecs_instance.id}"
-  type                     = "ingress"
-  from_port                = 2222
-  to_port                  = 2222
-  protocol                 = "tcp"
-  source_security_group_id = "${module.elb.sg_id}"
-}
-
-resource "aws_security_group_rule" "sg_ecs_instances_elb_in_http" {
-  security_group_id        = "${aws_security_group.sg_ecs_instance.id}"
-  type                     = "ingress"
-  from_port                = 8080
-  to_port                  = 8080
-  protocol                 = "tcp"
-  source_security_group_id = "${module.elb.sg_id}"
 }

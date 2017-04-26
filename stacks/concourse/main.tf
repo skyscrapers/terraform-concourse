@@ -49,4 +49,7 @@ module "concourse" {
   concourse_github_auth_client_id     = "${var.concourse_github_auth_client_id["${terraform.env}"]}"
   concourse_github_auth_client_secret = "${data.aws_kms_secret.concourse_github_auth_client_secret.github_auth_client_secret}"
   concourse_github_auth_team          = "${var.concourse_github_auth_team["${terraform.env}"]}"
+  elb_subnets                         = "${data.terraform_remote_state.static.public_lb_subnets}"
+  backend_security_group_id           = "${data.terraform_remote_state.static.sg_ecs_instance}"
+  ssl_certificate_id                  = "${var.elb_ssl_certificate["${terraform.env}"]}"
 }
