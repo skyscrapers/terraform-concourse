@@ -3,7 +3,7 @@ module "elb" {
   name                  = "web"
   subnets               = ["${module.vpc.public_lb_subnets}"]
   project               = "${var.project}"
-  health_target         = "http:443/health_check"
+  health_target         = "http:8080/"
   backend_sg            = ["${aws_security_group.sg_ecs_instance.id}"]
   ssl_certificate_id    = "${var.alb_ssl_certificate["${terraform.env}"]}"
   environment           = "${terraform.env}"
@@ -12,9 +12,9 @@ module "elb" {
   instance_protocol     = "TCP"
   lb_port               = 2222
   lb_protocol           = "TCP"
-  instance_ssl_port     = 443
+  instance_ssl_port     = 8080
   instance_ssl_protocol = "HTTP"
-  lb_ssl_port           = 8080
+  lb_ssl_port           = 443
   lb_ssl_protocol       = "HTTPS"
   internal              = false
 }
