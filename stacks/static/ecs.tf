@@ -33,3 +33,21 @@ resource "aws_security_group_rule" "sg_ecs_instances_postgres_out" {
   protocol                 = "tcp"
   source_security_group_id = "${module.postgres.rds_sg_id}"
 }
+
+resource "aws_security_group_rule" "sg_ecs_instances_elb_in_ssh" {
+  security_group_id        = "${aws_security_group.sg_ecs_instance.id}"
+  type                     = "ingress"
+  from_port                = 2222
+  to_port                  = 2222
+  protocol                 = "tcp"
+  source_security_group_id = "${module.elb.sg_id}"
+}
+
+resource "aws_security_group_rule" "sg_ecs_instances_elb_in_http" {
+  security_group_id        = "${aws_security_group.sg_ecs_instance.id}"
+  type                     = "ingress"
+  from_port                = 8080
+  to_port                  = 8080
+  protocol                 = "tcp"
+  source_security_group_id = "${module.elb.sg_id}"
+}

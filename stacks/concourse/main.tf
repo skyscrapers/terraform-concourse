@@ -18,8 +18,8 @@ data "terraform_remote_state" "static" {
   environment = "${terraform.env}"
 
   config {
-    bucket     = "skyscraperstest-terraform"
-    key        = "concourse/main"
+    bucket = "skyscraperstest-terraform"
+    key    = "concourse/main"
     region = "eu-west-1"
   }
 }

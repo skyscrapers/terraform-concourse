@@ -31,9 +31,13 @@ output "target_group_arn" {
 }
 
 output "rds_password" {
-  value ="${var.rds_password["${terraform.env}"]}"
+  value = "${var.rds_password["${terraform.env}"]}"
 }
 
 output "rds_address" {
   value = "${module.postgres.rds_address}"
+}
+
+output "elb_id" {
+  value = "${module.elb.elb_id}"
 }

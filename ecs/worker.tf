@@ -4,7 +4,7 @@ resource "aws_ecs_service" "concourse_worker" {
   task_definition = "${aws_ecs_task_definition.concourse_worker_task_definition.arn}"
   desired_count   = "${var.concourse_worker_instance_count}"
 
-  depends_on = [ "null_resource.generate_concourse_keys" ]
+  depends_on = ["null_resource.generate_concourse_keys"]
 }
 
 resource "aws_ecs_task_definition" "concourse_worker_task_definition" {
@@ -13,7 +13,7 @@ resource "aws_ecs_task_definition" "concourse_worker_task_definition" {
   network_mode          = "bridge"
   task_role_arn         = "${aws_iam_role.concourse_task_role.arn}"
 
-  depends_on = [ "aws_ecs_task_definition.concourse_web_task_definition" ]
+  depends_on = ["aws_ecs_task_definition.concourse_web_task_definition"]
 }
 
 data "template_file" "concourse_worker_task_template" {

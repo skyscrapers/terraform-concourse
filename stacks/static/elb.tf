@@ -1,0 +1,20 @@
+module "elb" {
+  source                = "github.com/skyscrapers/terraform-loadbalancers//elb_with_ssl_no_s3logs?ref=3d4b0a682f635b9db1ef8720d5ebc1c17094f709"
+  name                  = "web"
+  subnets               = ["${module.vpc.public_lb_subnets}"]
+  project               = "${var.project}"
+  health_target         = "http:443/health_check"
+  backend_sg            = ["${aws_security_group.sg_ecs_instance.id}"]
+  ssl_certificate_id    = "${var.alb_ssl_certificate["${terraform.env}"]}"
+  environment           = "${terraform.env}"
+  backend_sg_count      = "1"
+  instance_port         = 2222
+  instance_protocol     = "TCP"
+  lb_port               = 2222
+  lb_protocol           = "TCP"
+  instance_ssl_port     = 443
+  instance_ssl_protocol = "HTTP"
+  lb_ssl_port           = 8080
+  lb_ssl_protocol       = "HTTPS"
+  internal              = false
+}

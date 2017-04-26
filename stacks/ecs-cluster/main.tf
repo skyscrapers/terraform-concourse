@@ -2,10 +2,10 @@ terraform {
   required_version = ">= 0.9.0"
 
   backend "s3" {
-    bucket     = "skyscraperstest-terraform"
-    key        = "concourse/ecs-cluster"
-    region     = "eu-west-1"
-    encrypt    = true
+    bucket  = "skyscraperstest-terraform"
+    key     = "concourse/ecs-cluster"
+    region  = "eu-west-1"
+    encrypt = true
   }
 }
 
@@ -18,8 +18,8 @@ data "terraform_remote_state" "static" {
   environment = "${terraform.env}"
 
   config {
-    bucket     = "skyscraperstest-terraform"
-    key        = "concourse/main"
+    bucket = "skyscraperstest-terraform"
+    key    = "concourse/main"
     region = "eu-west-1"
   }
 }
