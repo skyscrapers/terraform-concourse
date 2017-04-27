@@ -13,7 +13,7 @@ This setups the following resources:
 
 ### Available variables:
  * [`environment`]: String(required): the name of the environment these subnets belong to (prod,stag,dev)
- * [`ecs_cluster_arn`]: String(required): name of the ecs cluster
+ * [`ecs_cluster`]: String(required): name of the ecs cluster
  * [`concourse_hostname`]: String(required): hostname on what concourse will be available, this hostname needs to point to the ELB.
  * [`concourse_docker_image`]: String(optional): docker image to use to start concourse. Default is [skyscrapers/concourse](https://hub.docker.com/r/skyscrapers/concourse/)
  * [`concourse_db_host`]: String(required): postgresql hostname or IP
