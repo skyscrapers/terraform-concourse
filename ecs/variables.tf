@@ -12,7 +12,7 @@ variable "concourse_hostname" {
 
 variable "concourse_docker_image" {
   description = "docker image to use to start concourse"
-  default = "skyscrapers/concourse"
+  default     = "skyscrapers/concourse"
 }
 
 variable "concourse_db_host" {

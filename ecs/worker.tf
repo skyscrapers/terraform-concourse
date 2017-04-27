@@ -24,7 +24,7 @@ data "template_file" "concourse_worker_task_template" {
     awslog_group_name          = "${aws_cloudwatch_log_group.concourse_worker_log_group.name}"
     awslog_region              = "${data.aws_region.current.name}"
     concourse_keys_bucket_name = "${aws_s3_bucket.concourse_keys.bucket}"
-    concourse_hostname     = "${var.concourse_hostname}"
+    concourse_hostname         = "${var.concourse_hostname}"
   }
 }
 

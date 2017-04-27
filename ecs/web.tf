@@ -6,9 +6,9 @@ resource "aws_ecs_service" "concourse_web" {
   iam_role        = "${var.ecs_service_role_arn}"
 
   load_balancer {
-    elb_name         = "${module.elb.elb_name}"
-    container_name   = "concourse_web"
-    container_port   = 8080
+    elb_name       = "${module.elb.elb_name}"
+    container_name = "concourse_web"
+    container_port = 8080
   }
 
   depends_on = ["null_resource.generate_concourse_keys"]
@@ -26,7 +26,7 @@ data "template_file" "concourse_web_task_template" {
 
   vars {
     image                      = "${var.concourse_docker_image}"
-    concourse_hostname     = "${var.concourse_hostname}"
+    concourse_hostname         = "${var.concourse_hostname}"
     concourse_db_uri           = "postgres://${var.concourse_db_username}:${var.concourse_db_password}@${var.concourse_db_host}:${var.concourse_db_port}/${var.concourse_db_name}"
     awslog_group_name          = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
     awslog_region              = "${data.aws_region.current.name}"
@@ -57,9 +57,9 @@ data "template_file" "concourse_github_auth" {
 EOF
 
   vars {
-    concourse_github_auth_client_id = "${var.concourse_github_auth_client_id}"
+    concourse_github_auth_client_id     = "${var.concourse_github_auth_client_id}"
     concourse_github_auth_client_secret = "${var.concourse_github_auth_client_secret}"
-    concourse_github_auth_team = "${var.concourse_github_auth_team}"
+    concourse_github_auth_team          = "${var.concourse_github_auth_team}"
   }
 }
 
