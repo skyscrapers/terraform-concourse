@@ -41,7 +41,7 @@ module "concourse" {
   ecs_cluster                         = "${data.terraform_remote_state.static.ecs_cluster_name}"
   concourse_db_host                   = "${data.terraform_remote_state.static.rds_address}"
   ecs_service_role_arn                = "${data.terraform_remote_state.static.ecs-service-role}"
-  concourse_hostname              = "${var.concourse_hostname["${terraform.env}"]}"
+  concourse_hostname                  = "${var.concourse_hostname["${terraform.env}"]}"
   concourse_db_username               = "${var.concourse_db_username["${terraform.env}"]}"
   concourse_db_password               = "${var.concourse_db_password["${terraform.env}"]}"
   concourse_db_name                   = "${var.concourse_db_name["${terraform.env}"]}"

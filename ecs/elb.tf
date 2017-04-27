@@ -37,6 +37,7 @@ resource "aws_security_group_rule" "sg_ecs_instances_elb_in_http" {
   source_security_group_id = "${module.elb.sg_id}"
 }
 
+## No idea why this is here
 resource "aws_security_group_rule" "sg_ecs_instances_elb_out_ssh" {
   security_group_id        = "${var.backend_security_group_id}"
   type                     = "egress"

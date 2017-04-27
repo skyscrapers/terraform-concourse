@@ -28,7 +28,7 @@ This setups the following resources:
  * [`concourse_worker_instance_count`]: Integer(optional): Number of containers running Concourse web
  * [`elb_subnets`]: List(required): Subnets to deploy the ELB in
  * [`ssl_certificate_id`]: String(required): SSL certificate arn to attach to the ELB
- * [`backend_security_group_id`]: String(required): ????
+ * [`backend_security_group_id`]: String(required): Security groups of the ECS servers
 
 Depending on if you want standard Github authentication or standard authentication, you need to fill in the following variables. We advise to use Github as there you can enforce 2 factor authentication. More information about teams can be found on the [concourse website](http://concourse.ci/teams.html).
 
