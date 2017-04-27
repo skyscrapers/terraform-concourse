@@ -1,6 +1,6 @@
 resource "aws_ecs_service" "concourse_worker" {
   name            = "concourse_worker_${var.environment}"
-  cluster         = "${var.ecs_cluser}"
+  cluster         = "${var.ecs_cluster}"
   task_definition = "${aws_ecs_task_definition.concourse_worker_task_definition.arn}"
   desired_count   = "${var.concourse_worker_instance_count}"
 

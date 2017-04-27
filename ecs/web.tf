@@ -1,6 +1,6 @@
 resource "aws_ecs_service" "concourse_web" {
   name            = "concourse_web_${var.environment}"
-  cluster         = "${var.ecs_cluser}"
+  cluster         = "${var.ecs_cluster}"
   task_definition = "${aws_ecs_task_definition.concourse_web_task_definition.arn}"
   desired_count   = "${var.concourse_web_instance_count}"
   iam_role        = "${var.ecs_service_role_arn}"
