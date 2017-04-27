@@ -19,6 +19,7 @@ module "elb" {
   internal              = false
 }
 
+# Allow TSA from ELB to ECS on ECS security group
 resource "aws_security_group_rule" "sg_ecs_instances_elb_in_ssh" {
   security_group_id        = "${var.backend_security_group_id}"
   type                     = "ingress"
@@ -28,6 +29,7 @@ resource "aws_security_group_rule" "sg_ecs_instances_elb_in_ssh" {
   source_security_group_id = "${module.elb.sg_id}"
 }
 
+# Allow ATC from ELB to ECS on ECS security group
 resource "aws_security_group_rule" "sg_ecs_instances_elb_in_http" {
   security_group_id        = "${var.backend_security_group_id}"
   type                     = "ingress"
@@ -37,7 +39,7 @@ resource "aws_security_group_rule" "sg_ecs_instances_elb_in_http" {
   source_security_group_id = "${module.elb.sg_id}"
 }
 
-## No idea why this is here
+# Allow traffic to TSA from the ECS security group
 resource "aws_security_group_rule" "sg_ecs_instances_elb_out_ssh" {
   security_group_id        = "${var.backend_security_group_id}"
   type                     = "egress"
