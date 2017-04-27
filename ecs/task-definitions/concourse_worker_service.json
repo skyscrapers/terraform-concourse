@@ -8,7 +8,7 @@
     "memory": 256,
     "essential": true,
     "environment": [
-      { "name": "CONCOURSE_TSA_HOST" , "value": "${concourse_external_url}" },
+      { "name": "CONCOURSE_TSA_HOST" , "value": "${concourse_hostname}" },
       { "name": "_CONCOURSE_KEYS_S3" , "value": "s3://${concourse_keys_bucket_name}/"  }
     ],
     "logConfiguration": {

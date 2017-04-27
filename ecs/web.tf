@@ -1,6 +1,6 @@
 resource "aws_ecs_service" "concourse_web" {
   name            = "concourse_web_${var.environment}"
-  cluster         = "${var.ecs_cluster_arn}"
+  cluster         = "${var.ecs_cluser}"
   task_definition = "${aws_ecs_task_definition.concourse_web_task_definition.arn}"
   desired_count   = "${var.concourse_web_instance_count}"
   iam_role        = "${var.ecs_service_role_arn}"
@@ -26,7 +26,7 @@ data "template_file" "concourse_web_task_template" {
 
   vars {
     image                      = "${var.concourse_docker_image}"
-    concourse_external_url     = "${var.concourse_external_url}"
+    concourse_hostname     = "${var.concourse_hostname}"
     concourse_db_uri           = "postgres://${var.concourse_db_username}:${var.concourse_db_password}@${var.concourse_db_host}:${var.concourse_db_port}/${var.concourse_db_name}"
     awslog_group_name          = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
     awslog_region              = "${data.aws_region.current.name}"

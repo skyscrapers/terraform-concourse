@@ -1,72 +1,73 @@
 variable "environment" {
-  description = ""
+  description = "the name of the environment these subnets belong to (prod,stag,dev)"
 }
 
-variable "ecs_cluster_arn" {
-  description = ""
+variable "ecs_cluster" {
+  description = "name of the ecs cluster"
 }
 
-variable "concourse_external_url" {
-  description = ""
+variable "concourse_hostname" {
+  description = " hostname on what concourse will be available, this hostname needs to point to the ELB."
 }
 
 variable "concourse_docker_image" {
+  description = "docker image to use to start concourse"
   default = "skyscrapers/concourse"
 }
 
 variable "concourse_db_host" {
-  description = ""
+  description = "postgresql hostname or IP"
 }
 
 variable "concourse_db_port" {
-  description = ""
+  description = "port of the postgresql server"
   default     = "5432"
 }
 
 variable "concourse_db_username" {
-  description = ""
+  description = "db user to logon to postgresql"
 }
 
 variable "concourse_db_password" {
-  description = ""
+  description = "password to logon to postgresql"
 }
 
 variable "concourse_db_name" {
-  description = ""
+  description = "db name to use on the postgresql server"
 }
 
 variable "ecs_service_role_arn" {
-  description = ""
+  description = "IAM role to use for the service to be able to let it register to the ELB"
 }
 
 variable "concourse_github_auth_client_id" {
-  description = ""
+  description = "Github client id"
   default     = ""
 }
 
 variable "concourse_github_auth_client_secret" {
-  description = ""
+  description = "Github client secret"
   default     = ""
 }
 
 variable "concourse_github_auth_team" {
-  description = ""
+  description = "Github team that can login"
   default     = ""
 }
 
 variable "concourse_auth_username" {
-  description = ""
+  description = "Basic authentication username"
   default     = ""
 }
 
 variable "concourse_auth_password" {
-  description = ""
+  description = "Basic authentication password"
   default     = ""
 }
 
 variable "concourse_keys_version" {
   description = "Change this if you want to re-generate Concourse keys"
-  default     = "2"
+  default     = "1"
 }
 
 variable "generate_concourse_keys" {
@@ -85,8 +86,7 @@ variable "concourse_worker_instance_count" {
 }
 
 variable "elb_subnets" {
-  description = ""
-  default     = []
+  description = "Subnets to deploy the ELB in"
   type        = "list"
 }
 
@@ -95,6 +95,5 @@ variable "backend_security_group_id" {
 }
 
 variable "ssl_certificate_id" {
-  description = ""
-  default     = ""
+  description = "SSL certificate arn to attach to the ELB"
 }

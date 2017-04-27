@@ -1,4 +1,4 @@
-variable "concourse_external_url" {
+variable "concourse_hostname" {
   type = "map"
 
   default = {
