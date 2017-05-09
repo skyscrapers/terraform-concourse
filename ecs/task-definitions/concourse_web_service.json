@@ -1,0 +1,40 @@
+[
+  {
+    "name": "concourse_web",
+    "image": "${image}",
+    "command": [ "web" ],
+    "cpu": 10,
+    "memory": 256,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 8080
+      },
+      {
+        "containerPort": 2222,
+        "hostPort": 2222
+      }
+    ],
+    "environment": [
+      ${concourse_basic_auth}
+      ${concourse_github_auth}
+      { "name": "CONCOURSE_EXTERNAL_URL"          , "value": "https://${concourse_hostname}"            },
+      { "name": "CONCOURSE_POSTGRES_DATA_SOURCE"  , "value": "${concourse_db_uri}"                  },
+      { "name": "_CONCOURSE_KEYS_S3"              , "value": "s3://${concourse_keys_bucket_name}/"  }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${awslog_group_name}",
+        "awslogs-region": "${awslog_region}",
+        "awslogs-stream-prefix": "concourse_web"
+      }
+    },
+    "placementConstraints": [
+      {
+        "type": "distinctInstance"
+      }
+    ]
+  }
+]
