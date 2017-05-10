@@ -80,11 +80,6 @@ variable "concourse_web_instance_count" {
   default     = "1"
 }
 
-variable "concourse_worker_instance_count" {
-  description = "Number of containers running Concourse web"
-  default     = "1"
-}
-
 variable "elb_subnets" {
   description = "Subnets to deploy the ELB in"
   type        = "list"
