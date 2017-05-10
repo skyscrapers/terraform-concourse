@@ -15,17 +15,9 @@ variable "concourse_docker_image" {
   default     = "skyscrapers/concourse"
 }
 
-variable "ecs_service_role_arn" {
-  description = "IAM role to use for the service to be able to let it register to the ELB"
-}
-
 variable "concourse_worker_instance_count" {
   description = "Number of containers running Concourse web"
   default     = "1"
-}
-
-variable "backend_security_group_id" {
-  description = ""
 }
 
 variable "keys_bucket_id" {
