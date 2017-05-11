@@ -13,9 +13,9 @@ module "elb" {
   lb_port               = 2222
   lb_protocol           = "TCP"
   instance_ssl_port     = 8080
-  instance_ssl_protocol = "HTTP"
+  instance_ssl_protocol = "TCP"
   lb_ssl_port           = 443
-  lb_ssl_protocol       = "HTTPS"
+  lb_ssl_protocol       = "SSL"
   internal              = false
 }
 
