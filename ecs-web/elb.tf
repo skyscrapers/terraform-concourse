@@ -17,6 +17,7 @@ module "elb" {
   lb_ssl_port           = 443
   lb_ssl_protocol       = "SSL"
   internal              = false
+  ingoing_allowed_ips   = ["${var.allowed_incoming_cidr_blocks}"]
 }
 
 # Allow TSA from ELB to ECS on ECS security group

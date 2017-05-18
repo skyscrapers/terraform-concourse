@@ -92,3 +92,9 @@ variable "backend_security_group_id" {
 variable "ssl_certificate_id" {
   description = "SSL certificate arn to attach to the ELB"
 }
+
+variable "allowed_incoming_cidr_blocks" {
+  type        = "list"
+  description = "Allowed CIDR blocks in Concourse ATC+TSA. Defaults to 0.0.0.0/0"
+  default     = ["0.0.0.0/0"]
+}

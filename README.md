@@ -34,6 +34,7 @@ The following resources are created:
  * [`elb_subnets`]: List(required): Subnets to deploy the ELB in
  * [`ssl_certificate_id`]: String(required): SSL certificate arn to attach to the ELB
  * [`backend_security_group_id`]: String(required): Security groups of the ECS servers
+ * [`allowed_incoming_cidr_blocks`]: List(optional): Allowed CIDR blocks in Concourse ATC+TSA. Defaults to 0.0.0.0/0
 
 Depending on if you want standard Github authentication or standard authentication,
 you need to fill in the following variables. We advise to use Github as there you can enforce 2 factor
