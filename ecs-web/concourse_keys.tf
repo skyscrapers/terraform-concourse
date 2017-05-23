@@ -7,14 +7,25 @@ resource "null_resource" "generate_concourse_keys" {
   }
 
   provisioner "local-exec" {
-    command = <<EOF
-mkdir -p ${path.module}/concourse_keys/ &&
-rm -rf ${path.module}/concourse_keys/* &&
-ssh-keygen -q -t rsa -f ${path.module}/concourse_keys/session_signing_key -N '' &&
-ssh-keygen -q -t rsa -f ${path.module}/concourse_keys/tsa_host_key -N '' &&
-ssh-keygen -q -t rsa -f ${path.module}/concourse_keys/worker_key -N '' &&
-aws s3 mv ${path.module}/concourse_keys/ s3://${aws_s3_bucket.concourse_keys.bucket}/ --recursive --acl private --sse AES256 &&
-aws s3 cp s3://${aws_s3_bucket.concourse_keys.bucket}/worker_key.pub s3://${aws_s3_bucket.concourse_keys.bucket}/authorized_worker_keys --acl private --sse AES256
+    command = "${data.template_file.keys_generator_cmd.rendered}"
+  }
+}
+
+data "template_file" "keys_generator_cmd" {
+  template = <<EOF
+mkdir -p $${base_path}/concourse_keys/ &&
+rm -rf $${base_path}/concourse_keys/* &&
+ssh-keygen -q -t rsa -f $${base_path}/concourse_keys/session_signing_key -N '' -C 'concourse_keys_$${environment}' &&
+ssh-keygen -q -t rsa -f $${base_path}/concourse_keys/tsa_host_key -N '' -C 'concourse_keys_$${environment}' &&
+ssh-keygen -q -t rsa -f $${base_path}/concourse_keys/worker_key -N '' -C 'concourse_keys_$${environment}' &&
+aws $${aws_opts} s3 mv $${base_path}/concourse_keys/ s3://$${bucket_name}/ --recursive --acl private --sse AES256 &&
+aws $${aws_opts} s3 cp s3://$${bucket_name}/worker_key.pub s3://$${bucket_name}/authorized_worker_keys --acl private --sse AES256
 EOF
+
+  vars {
+    aws_opts    = "${length(var.aws_profile) > 0 ? "--profile ${var.aws_profile}" : ""}"
+    base_path   = "${path.module}"
+    bucket_name = "${aws_s3_bucket.concourse_keys.bucket}"
+    environment = "${var.environment}"
   }
 }

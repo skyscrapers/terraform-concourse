@@ -1,5 +1,5 @@
 variable "environment" {
-  description = "the name of the environment these subnets belong to (prod,stag,dev)"
+  description = "The name of the environment these subnets belong to (prod,stag,dev)"
 }
 
 variable "ecs_cluster" {
@@ -97,4 +97,9 @@ variable "allowed_incoming_cidr_blocks" {
   type        = "list"
   description = "Allowed CIDR blocks in Concourse ATC+TSA. Defaults to 0.0.0.0/0"
   default     = ["0.0.0.0/0"]
+}
+
+variable "aws_profile" {
+  description = "This is the AWS profile name as set in the shared credentials file. Used to upload the Concourse keys to S3. Omit this if you're using environment variables."
+  default     = ""
 }
