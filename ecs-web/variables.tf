@@ -2,6 +2,10 @@ variable "environment" {
   description = "The name of the environment these subnets belong to (prod,stag,dev)"
 }
 
+variable "name" {
+  description = "The name of the Concourse deployment, used to distinguish different Concourse setups"
+}
+
 variable "ecs_cluster" {
   description = "name of the ecs cluster"
 }

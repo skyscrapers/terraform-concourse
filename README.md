@@ -19,6 +19,7 @@ The following resources are created:
 
 ### Available variables:
  * [`environment`]: String(required): the name of the environment these subnets belong to (prod,stag,dev)
+ * [`name`]: String(required): The name of the Concourse deployment, used to distinguish different Concourse setups
  * [`aws_profile`]: String(optional): This is the AWS profile name as set in the shared credentials file. Used to upload the Concourse keys to S3. Omit this if you're using environment variables.
  * [`ecs_cluster`]: String(required): name of the ecs cluster
  * [`concourse_hostname`]: String(required): hostname on what concourse will be available, this hostname needs to point to the ELB.

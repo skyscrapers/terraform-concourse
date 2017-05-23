@@ -26,6 +26,6 @@ EOF
     aws_opts    = "${length(var.aws_profile) > 0 ? "--profile ${var.aws_profile}" : ""}"
     base_path   = "${path.module}"
     bucket_name = "${aws_s3_bucket.concourse_keys.bucket}"
-    environment = "${var.environment}"
+    environment = "${var.name}_${var.environment}"
   }
 }
