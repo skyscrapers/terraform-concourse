@@ -147,6 +147,7 @@ The following resources will be created:
 | Name | Description |
 |------|-------------|
 | worker_instances_sg_id | Security group ID used for the worker instances |
+| worker_iam_role | Role name of the worker instance |
 
 ### Example
   ```
