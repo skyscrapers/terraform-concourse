@@ -70,7 +70,6 @@ variable "concourse_worker_instance_count" {
 
 variable "concourse_version" {
   description = "Concourse CI version to use"
-  default     = "v2.7.7"
 }
 
 variable "keys_bucket_id" {
