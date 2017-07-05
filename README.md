@@ -24,6 +24,7 @@ The following resources are created:
  * [`ecs_cluster`]: String(required): name of the ecs cluster
  * [`concourse_hostname`]: String(required): hostname on what concourse will be available, this hostname needs to point to the ELB.
  * [`concourse_docker_image`]: String(optional): docker image to use to start concourse. Default is [skyscrapers/concourse](https://hub.docker.com/r/skyscrapers/concourse/)
+ * [`concourse_version`]: String(required): the Concourse CI version to use
  * [`concourse_db_host`]: String(required): postgresql hostname or IP
  * [`concourse_db_port`]: String(optional): port of the postgresql server
  * [`concourse_db_username`]: String(required): db user to logon to postgresql
@@ -61,6 +62,7 @@ the [concourse website](http://concourse.ci/teams.html).
     ecs_cluster                         = "test-ecs"
     ecs_service_role_arn                = "${data.terraform_remote_state.static.ecs-service-role}"
     concourse_hostname                  = "concourse.staging.client.company"
+    concourse_version                   = "3.2.1"
     concourse_db_host                   = "hostname.rds.test"
     concourse_db_username               = "concourse"
     concourse_db_password               = "concourse"
@@ -86,6 +88,7 @@ This setups the following resources:
  * [`ecs_cluster`]: String(required): name of the ecs cluster
  * [`concourse_hostname`]: String(required): hostname on what concourse will be available, this hostname needs to point to the ELB.
  * [`concourse_docker_image`]: String(optional): docker image to use to start concourse. Default is [skyscrapers/concourse](https://hub.docker.com/r/skyscrapers/concourse/)
+ * [`concourse_version`]: String(required): the Concourse CI version to use
  * [`ecs_service_role_arn`]: String(required): IAM role to use for the service to be able to let it register to the ELB
  * [`concourse_worker_instance_count`]: Integer(optional): Number of containers running Concourse web
  * [`backend_security_group_id`]: String(required): Security groups of the ECS servers
@@ -103,6 +106,7 @@ None
     ecs_cluster                         = "test-ecs"
     ecs_service_role_arn                = "${data.terraform_remote_state.static.ecs-service-role}"
     concourse_hostname                  = "concourse.staging.client.company"
+    concourse_version                   = "3.2.1"
     backend_security_group_id           = "${data.terraform_remote_state.static.sg_ecs_instance}"
     keys_bucket_id                      = "${module.concourse.keys_bucket_id}"
     keys_bucket_arn                     = "${module.concourse.keys_bucket_arn}"
@@ -125,7 +129,7 @@ The following resources will be created:
 |------|-------------|:-----:|:-----:|
 | additional_security_group_ids | Additional security group ids to attach to the worker instances | [ ] | no |
 | concourse_hostname | Hostname on what concourse will be available, this hostname needs to point to the ELB. | - | yes |
-| concourse_version | Concourse CI version to use | `v2.7.7` | no |
+| concourse_version | Concourse CI version to use | `v3.2.1` | yes |
 | concourse_worker_instance_count | Number of Concourse worker instances | `1` | no |
 | custom_ami | Use a custom AMI for the worker instances. | latest Ubuntu 16.04 AMI | no |
 | environment | The name of the environment these subnets belong to (prod,stag,dev) | - | yes |
@@ -156,6 +160,7 @@ The following resources will be created:
     environment                   = "${terraform.env}"
     name                          = "default"
     concourse_hostname            = "concourse.staging.client.company"
+    concourse_version             = "v3.2.1"
     keys_bucket_id                = "${module.concourse.keys_bucket_id}"
     keys_bucket_arn               = "${module.concourse.keys_bucket_arn}"
     ssh_key_name                  = "default"

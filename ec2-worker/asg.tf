@@ -116,7 +116,7 @@ EOF
     content = <<EOF
 fs_setup:
   - label: concourseworkdir
-    filesystem: 'btrfs'
+    filesystem: 'ext4'
     device: '${var.work_disk_device_name}'
 EOF
   }
@@ -127,7 +127,7 @@ EOF
 
     content = <<EOF
 mounts:
-  - [ ${var.work_disk_device_name}, /opt/concourse, btrfs, "defaults", "0", "2" ]
+  - [ ${var.work_disk_device_name}, /opt/concourse, ext4, "defaults", "0", "2" ]
 EOF
   }
 

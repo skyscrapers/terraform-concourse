@@ -25,7 +25,7 @@ data "template_file" "concourse_web_task_template" {
   template = "${file("${path.module}/task-definitions/concourse_web_service.json")}"
 
   vars {
-    image                      = "${var.concourse_docker_image}"
+    image                      = "${var.concourse_docker_image}:${var.concourse_version}"
     concourse_hostname         = "${var.concourse_hostname}"
     concourse_db_uri           = "postgres://${var.concourse_db_username}:${var.concourse_db_password}@${var.concourse_db_host}:${var.concourse_db_port}/${var.concourse_db_name}"
     awslog_group_name          = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"

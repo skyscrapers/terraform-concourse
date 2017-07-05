@@ -19,6 +19,11 @@ variable "concourse_docker_image" {
   default     = "skyscrapers/concourse"
 }
 
+variable "concourse_version" {
+  # No default version set here to make sure a version is locked for a customer setup.
+  description = "Concourse CI version to use"
+}
+
 variable "concourse_db_host" {
   description = "postgresql hostname or IP"
 }

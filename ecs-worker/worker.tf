@@ -16,7 +16,7 @@ data "template_file" "concourse_worker_task_template" {
   template = "${file("${path.module}/task-definitions/concourse_worker_service.json")}"
 
   vars {
-    image                      = "${var.concourse_docker_image}"
+    image                      = "${var.concourse_docker_image}:${var.concourse_version}"
     awslog_group_name          = "${aws_cloudwatch_log_group.concourse_worker_log_group.name}"
     awslog_region              = "${data.aws_region.current.name}"
     concourse_keys_bucket_name = "${var.keys_bucket_id}"
