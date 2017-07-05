@@ -70,11 +70,6 @@ variable "concourse_auth_password" {
   default     = ""
 }
 
-variable "generate_concourse_keys" {
-  description = "Set to false to disable the automatic generation of Concourse keys"
-  default     = "true"
-}
-
 variable "concourse_web_instance_count" {
   description = "Number of containers running Concourse web"
   default     = "1"
