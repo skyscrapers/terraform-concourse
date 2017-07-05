@@ -153,7 +153,7 @@ The following resources will be created:
 |------|-------------|:-----:|:-----:|
 | additional_security_group_ids | Additional security group ids to attach to the worker instances | [ ] | no |
 | concourse_hostname | Hostname on what concourse will be available, this hostname needs to point to the ELB. | - | yes |
-| concourse_version | Concourse CI version to use | `v3.2.1` | yes |
+| concourse_version | Concourse CI version to use | `3.2.1` | yes |
 | concourse_worker_instance_count | Number of Concourse worker instances | `1` | no |
 | custom_ami | Use a custom AMI for the worker instances. | latest Ubuntu 16.04 AMI | no |
 | environment | The name of the environment these subnets belong to (prod,stag,dev) | - | yes |
@@ -184,7 +184,7 @@ module "concourse-worker" {
   environment                   = "${terraform.env}"
   name                          = "default"
   concourse_hostname            = "concourse.staging.client.company"
-  concourse_version             = "v3.2.1"
+  concourse_version             = "3.2.1"
   keys_bucket_id                = "${module.keys.keys_bucket_id}"
   keys_bucket_arn               = "${module.keys.keys_bucket_arn}"
   ssh_key_name                  = "default"
