@@ -1,6 +1,4 @@
 resource "null_resource" "generate_concourse_keys" {
-  count = "${var.generate_concourse_keys == "false" ? 0 : 1 }"
-
   triggers {
     version                    = "${var.concourse_keys_version}"
     concourse_keys_bucket_name = "${aws_s3_bucket.concourse_keys.bucket}"
