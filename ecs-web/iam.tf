@@ -33,8 +33,8 @@ resource "aws_iam_role_policy" "concourse_task_policy" {
         "s3:List*"
       ],
       "Resource": [
-        "${aws_s3_bucket.concourse_keys.arn}",
-        "${aws_s3_bucket.concourse_keys.arn}/*"
+        "${var.keys_bucket_arn}",
+        "${var.keys_bucket_arn}/*"
       ]
     }
   ]

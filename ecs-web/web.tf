@@ -10,8 +10,6 @@ resource "aws_ecs_service" "concourse_web" {
     container_name = "concourse_web"
     container_port = 8080
   }
-
-  depends_on = ["null_resource.generate_concourse_keys"]
 }
 
 resource "aws_ecs_task_definition" "concourse_web_task_definition" {
@@ -30,7 +28,7 @@ data "template_file" "concourse_web_task_template" {
     concourse_db_uri           = "postgres://${var.concourse_db_username}:${var.concourse_db_password}@${var.concourse_db_host}:${var.concourse_db_port}/${var.concourse_db_name}"
     awslog_group_name          = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
     awslog_region              = "${data.aws_region.current.name}"
-    concourse_keys_bucket_name = "${aws_s3_bucket.concourse_keys.bucket}"
+    concourse_keys_bucket_name = "${var.keys_bucket_id}"
     concourse_basic_auth       = "${length(var.concourse_auth_username) > 0 && length(var.concourse_auth_password) > 0 ? data.template_file.concourse_basic_auth.rendered : ""}"
     concourse_github_auth      = "${length(var.concourse_github_auth_client_id) > 0 && length(var.concourse_github_auth_client_secret) > 0 && length(var.concourse_github_auth_team) > 0 ? data.template_file.concourse_github_auth.rendered : ""}"
   }

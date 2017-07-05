@@ -74,16 +74,6 @@ variable "concourse_auth_password" {
   default     = ""
 }
 
-variable "concourse_keys_version" {
-  description = "Change this if you want to re-generate Concourse keys"
-  default     = "1"
-}
-
-variable "generate_concourse_keys" {
-  description = "Set to false to disable the automatic generation of Concourse keys"
-  default     = "true"
-}
-
 variable "concourse_web_instance_count" {
   description = "Number of containers running Concourse web"
   default     = "1"
@@ -108,7 +98,10 @@ variable "allowed_incoming_cidr_blocks" {
   default     = ["0.0.0.0/0"]
 }
 
-variable "aws_profile" {
-  description = "This is the AWS profile name as set in the shared credentials file. Used to upload the Concourse keys to S3. Omit this if you're using environment variables."
-  default     = ""
+variable "keys_bucket_id" {
+  description = "The S3 bucket id which contains the SSH keys to connect to the TSA"
+}
+
+variable "keys_bucket_arn" {
+  description = "The S3 bucket ARN which contains the SSH keys to connect to the TSA"
 }
