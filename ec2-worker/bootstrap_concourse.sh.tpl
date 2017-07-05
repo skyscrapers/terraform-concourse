@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Install concourse
 curl -L -f -o /usr/local/bin/concourse https://github.com/concourse/concourse/releases/download/${concourse_version}/concourse_linux_amd64
 chmod +x /usr/local/bin/concourse

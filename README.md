@@ -27,7 +27,7 @@ The following resources are created:
 
 ### Example
 ```
-module "concourse-web" {
+module "concourse-keys" {
   source      = "github.com/skyscrapers/terraform-concourse//keys"
   environment = "${terraform.env}"
 }
