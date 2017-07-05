@@ -2,12 +2,16 @@ variable "environment" {
   description = "the name of the environment these subnets belong to (prod,stag,dev)"
 }
 
+variable "name" {
+  description = "The name of the Concourse deployment, used to distinguish different Concourse setups"
+}
+
 variable "ecs_cluster" {
   description = "name of the ecs cluster"
 }
 
 variable "concourse_hostname" {
-  description = " hostname on what concourse will be available, this hostname needs to point to the ELB."
+  description = "Hostname on what concourse will be available, this hostname needs to point to the ELB."
 }
 
 variable "concourse_docker_image" {
