@@ -1,5 +1,5 @@
 resource "aws_iam_role" "concourse_task_role" {
-  name = "concourse_task_role"
+  name = "concourse_web_${var.name}_${var.environment}_task_role"
 
   assume_role_policy = <<EOF
 {
@@ -19,7 +19,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "concourse_task_policy" {
-  name = "concourse_task_policy"
+  name = "concourse_web_${var.name}_${var.environment}_task_policy"
   role = "${aws_iam_role.concourse_task_role.id}"
 
   policy = <<EOF

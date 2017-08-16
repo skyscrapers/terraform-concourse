@@ -1,5 +1,5 @@
 resource "aws_ecs_service" "concourse_web" {
-  name            = "concourse_web_${var.environment}"
+  name            = "concourse_web_${var.name}_${var.environment}"
   cluster         = "${var.ecs_cluster}"
   task_definition = "${aws_ecs_task_definition.concourse_web_task_definition.arn}"
   desired_count   = "${var.concourse_web_instance_count}"
@@ -13,7 +13,7 @@ resource "aws_ecs_service" "concourse_web" {
 }
 
 resource "aws_ecs_task_definition" "concourse_web_task_definition" {
-  family                = "concourse_web_${var.environment}"
+  family                = "concourse_web_${var.name}_${var.environment}"
   container_definitions = "${data.template_file.concourse_web_task_template.rendered}"
   network_mode          = "bridge"
   task_role_arn         = "${aws_iam_role.concourse_task_role.arn}"
@@ -61,10 +61,11 @@ EOF
 }
 
 resource "aws_cloudwatch_log_group" "concourse_web_log_group" {
-  name              = "concourse_web_logs_${var.environment}"
+  name              = "concourse_web_${var.name}_${var.environment}_logs"
   retention_in_days = "7"
 
   tags {
+    Name        = "${var.name}"
     Environment = "${var.environment}"
     Project     = "concourse"
   }

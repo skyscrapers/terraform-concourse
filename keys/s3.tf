@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "concourse_keys" {
-  bucket = "concourse-keys-${var.environment}"
+  bucket = "concourse-keys-${var.name}-${var.environment}"
   acl    = "private"
 
   versioning {
@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "concourse_keys" {
   }
 
   tags {
-    Name        = "concourse keys"
+    Name        = "concourse keys for ${var.name}"
     Environment = "${var.environment}"
   }
 }

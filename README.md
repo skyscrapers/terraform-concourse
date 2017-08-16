@@ -18,6 +18,7 @@ The following resources are created:
 
 ### Available variables
 * [`environment`]: String(required): the name of the environment these subnets belong to (prod,stag,dev)
+* [`name`]: String(required): The name of the Concourse deployment, used to distinguish different Concourse setups
 * [`concourse_keys_version`]: Integer(optional): Change this if you want to re-generate the Concourse keys
 * [`aws_profile`]: String(optional): This is the AWS profile name as set in the shared credentials file. Used to upload the Concourse keys to S3. Omit this if you're using environment variables.
 
@@ -30,6 +31,7 @@ The following resources are created:
 module "concourse-keys" {
   source      = "github.com/skyscrapers/terraform-concourse//keys"
   environment = "${terraform.env}"
+  name        = "internal"
 }
 ```
 
@@ -42,6 +44,7 @@ The following resources are created:
 
 ### Available variables
  * [`environment`]: String(required): the name of the environment these subnets belong to (prod,stag,dev)
+ * [`name`]: String(required): The name of the Concourse deployment, used to distinguish different Concourse setups
  * [`ecs_cluster`]: String(required): name of the ecs cluster
  * [`concourse_hostname`]: String(required): hostname on what concourse will be available, this hostname needs to point to the ELB.
  * [`concourse_docker_image`]: String(optional): docker image to use to start concourse. Default is [skyscrapers/concourse](https://hub.docker.com/r/skyscrapers/concourse/)
@@ -81,6 +84,7 @@ the [concourse website](http://concourse.ci/teams.html).
 module "concourse-web" {
   source                              = "github.com/skyscrapers/terraform-concourse//ecs-web"
   environment                         = "${terraform.env}"
+  name                                = "internal"
   ecs_cluster                         = "test-ecs"
   ecs_service_role_arn                = "${data.terraform_remote_state.static.ecs-service-role}"
   concourse_hostname                  = "concourse.staging.client.company"
@@ -109,6 +113,7 @@ This setups the following resources:
 
 ### Available variables
  * [`environment`]: String(required): the name of the environment these subnets belong to (prod,stag,dev)
+ * [`name`]: String(required): The name of the Concourse deployment, used to distinguish different Concourse setups
  * [`ecs_cluster`]: String(required): name of the ecs cluster
  * [`concourse_hostname`]: String(required): hostname on what concourse will be available, this hostname needs to point to the ELB.
  * [`concourse_docker_image`]: String(optional): docker image to use to start concourse. Default is [skyscrapers/concourse](https://hub.docker.com/r/skyscrapers/concourse/)
@@ -127,6 +132,7 @@ None
 module "concourse-worker" {
   source                              = "github.com/skyscrapers/terraform-concourse//ecs-worker"
   environment                         = "${terraform.env}"
+  name                                = "internal"
   ecs_cluster                         = "test-ecs"
   ecs_service_role_arn                = "${data.terraform_remote_state.static.ecs-service-role}"
   concourse_hostname                  = "concourse.staging.client.company"
@@ -182,7 +188,7 @@ The following resources will be created:
 module "concourse-worker" {
   source                        = "github.com/skyscrapers/terraform-concourse//ec2-worker"
   environment                   = "${terraform.env}"
-  name                          = "default"
+  name                          = "internal"
   concourse_hostname            = "concourse.staging.client.company"
   concourse_version             = "3.2.1"
   keys_bucket_id                = "${module.keys.keys_bucket_id}"
