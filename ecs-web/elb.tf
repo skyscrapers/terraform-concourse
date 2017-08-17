@@ -1,5 +1,5 @@
 module "elb" {
-  source                = "github.com/skyscrapers/terraform-loadbalancers//elb_with_ssl_no_s3logs?ref=3d4b0a682f635b9db1ef8720d5ebc1c17094f709"
+  source                = "github.com/skyscrapers/terraform-loadbalancers//elb_with_ssl_no_s3logs?ref=1.0.0"
   name                  = "${var.name}"
   subnets               = ["${var.elb_subnets}"]
   project               = "concourse-web"
