@@ -5,7 +5,7 @@ variable "name_suffix" {
 
 variable "additional_vault_policies" {
   description = "Additional Vault policies to attach to the Concourse role. Defaults to empty list"
-  default = []
+  default     = []
 }
 
 variable "concourse_iam_role_arn" {
@@ -14,7 +14,7 @@ variable "concourse_iam_role_arn" {
 
 variable "vault_aws_auth_backend_path" {
   description = "The path the AWS auth backend being configured was mounted at. Defaults to aws."
-  default = "aws"
+  default     = "aws"
 }
 
 variable "vault_server_url" {

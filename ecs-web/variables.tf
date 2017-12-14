@@ -108,10 +108,10 @@ variable "keys_bucket_arn" {
 
 variable "vault_server_url" {
   description = "The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration."
-  default = ""
+  default     = ""
 }
 
 variable "vault_auth_concourse_role_name" {
   description = "The Vault role that Concourse will use. This is normally fetched from the `vault-auth` terraform module."
-  default = ""
+  default     = ""
 }

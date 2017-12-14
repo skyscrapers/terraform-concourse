@@ -43,9 +43,9 @@ data "template_file" "concourse_vault_variables" {
 EOF
 
   vars {
-    concourse_vault_url = "${var.vault_server_url}"
+    concourse_vault_url          = "${var.vault_server_url}"
     concourse_vault_auth_backend = "aws"
-    concourse_vault_auth_param = "header_value=${replace(replace(var.vault_server_url, "/^http(s)?:\/\//", ""), "/", "")},role=${var.vault_auth_concourse_role_name}"
+    concourse_vault_auth_param   = "header_value=${replace(replace(var.vault_server_url, "/^http(s)?:///", ""), "/", "")},role=${var.vault_auth_concourse_role_name}"
   }
 }
 
