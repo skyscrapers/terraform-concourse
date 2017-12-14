@@ -200,3 +200,37 @@ module "concourse-worker" {
   additional_security_group_ids = ["${data.terraform_remote_state.static.sg_all_id}"]
 }
 ```
+
+## vault-auth
+
+This module sets up the needed Vault resources for Concourse:
+
+- It creates a Vault policy that allows read-only access to `/concourse/*`
+- It creates a Vault role in the aws auth backend (which should be previously created) for Concourse and attaches the previously mentioned policy
+
+### Available variables
+
+| Name | Description | Default | Required |
+|------|-------------|:-----:|:-----:|
+| name_suffix | Name suffix to append to the policy name, to differentiate different concourse policies. | `default` | no |
+| additional_vault_policies | Additional Vault policies to attach to the Concourse role. | [] | no |
+| concourse_iam_role_arn | IAM role ARN of the Concourse ATC server. | - | yes |
+| vault_aws_auth_backend_path | The path the AWS auth backend being configured was mounted at. | `aws` | no |
+| vault_server_url | The Vault server url. | - | yes |
+
+### Output
+
+| Name | Description |
+|------|-------------|
+| concourse_vault_policy_name | Name of the Vault policy created for Concourse |
+| concourse_vault_role_name | Name of the Vault role created for Concourse |
+
+### Example
+
+```
+module "concourse-vault-auth" {
+  source                 = "github.com/skyscrapers/terraform-concourse//vault-auth"
+  concourse_iam_role_arn = "${module.concourse-web.iam_role_arn}"
+  vault_server_url       = "https://vault.example.com"
+}
+```
