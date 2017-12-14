@@ -62,6 +62,8 @@ The following resources are created:
  * [`allowed_incoming_cidr_blocks`]: List(optional): Allowed CIDR blocks in Concourse ATC+TSA. Defaults to 0.0.0.0/0
  * [`keys_bucket_id`]: String(required): The id (name) of the bucket where the concourse keys are stored.
  * [`keys_bucket_arn`]: String(required): The ARN of the bucket where the concourse keys. Used to allow access to the bucket.
+ * [`vault_server_url`]: String(optional): The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration. Defaults to ""
+ * [`vault_auth_concourse_role_name`]: String(optional): The Vault role that Concourse will use. This is normally fetched from the `vault-auth` terraform module. Defaults to "".
 
 Depending on if you want standard Github authentication or standard authentication,
 you need to fill in the following variables. We advise to use Github as there you can enforce 2 factor
@@ -78,6 +80,7 @@ the [concourse website](http://concourse.ci/teams.html).
 ### Output
  * [`elb_dns_name`]: String: DNS name of the loadbalancer
  * [`elb_sg_id`]: String: Security group id of the loadbalancer
+ * [`iam_role_arn`]: String: ARN of the IAM role created for the Concourse ECS task
 
 ### Example
 ```
@@ -101,6 +104,8 @@ module "concourse-web" {
   ssl_certificate_id                  = "${var.elb_ssl_certificate}"
   keys_bucket_id                      = "${module.keys.keys_bucket_id}"
   keys_bucket_arn                     = "${module.keys.keys_bucket_arn}"
+  vault_server_url                    = "https://vault.example.com"
+  vault_auth_concourse_role_name      = "${module.concourse-vault-auth.concourse_vault_role_name}"
 }
 ```
 

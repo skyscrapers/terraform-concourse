@@ -31,6 +31,21 @@ data "template_file" "concourse_web_task_template" {
     concourse_keys_bucket_name = "${var.keys_bucket_id}"
     concourse_basic_auth       = "${length(var.concourse_auth_username) > 0 && length(var.concourse_auth_password) > 0 ? data.template_file.concourse_basic_auth.rendered : ""}"
     concourse_github_auth      = "${length(var.concourse_github_auth_client_id) > 0 && length(var.concourse_github_auth_client_secret) > 0 && length(var.concourse_github_auth_team) > 0 ? data.template_file.concourse_github_auth.rendered : ""}"
+    concourse_vault_variables  = "${length(var.vault_server_url) > 0 ? data.template_file.concourse_vault_variables.rendered : ""}"
+  }
+}
+
+data "template_file" "concourse_vault_variables" {
+  template = <<EOF
+{ "name": "CONCOURSE_VAULT_URL", "value": "$${concourse_vault_url}" },
+{ "name": "CONCOURSE_VAULT_AUTH_BACKEND", "value": "$${concourse_vault_auth_backend}" },
+{ "name": "CONCOURSE_VAULT_AUTH_PARAM", "value": "$${concourse_vault_auth_param}" },
+EOF
+
+  vars {
+    concourse_vault_url = "${var.vault_server_url}"
+    concourse_vault_auth_backend = "aws"
+    concourse_vault_auth_param = "header_value=${replace(replace(var.vault_server_url, "/^http(s)?:\/\//", ""), "/", "")},role=${var.vault_auth_concourse_role_name}"
   }
 }
 

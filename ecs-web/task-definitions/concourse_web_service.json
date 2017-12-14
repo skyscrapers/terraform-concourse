@@ -21,6 +21,7 @@
       ${concourse_github_auth}
       { "name": "CONCOURSE_EXTERNAL_URL"          , "value": "https://${concourse_hostname}"            },
       { "name": "CONCOURSE_POSTGRES_DATA_SOURCE"  , "value": "${concourse_db_uri}"                  },
+      ${concourse_vault_variables}
       { "name": "_CONCOURSE_KEYS_S3"              , "value": "s3://${concourse_keys_bucket_name}/"  }
     ],
     "logConfiguration": {
