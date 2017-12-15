@@ -3,5 +3,5 @@ resource "vault_aws_auth_backend_role" "concourse" {
   role               = "concourse-${var.name_suffix}"
   auth_type          = "iam"
   bound_iam_role_arn = "${var.concourse_iam_role_arn}"
-  policies           = "${concat(list(vault_policy.concourse.name), var.additional_vault_policies)}"
+  policies           = ["${concat(list(vault_policy.concourse.name), var.additional_vault_policies)}"]
 }
