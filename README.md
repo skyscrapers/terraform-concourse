@@ -62,6 +62,8 @@ The following resources are created:
  * [`allowed_incoming_cidr_blocks`]: List(optional): Allowed CIDR blocks in Concourse ATC+TSA. Defaults to 0.0.0.0/0
  * [`keys_bucket_id`]: String(required): The id (name) of the bucket where the concourse keys are stored.
  * [`keys_bucket_arn`]: String(required): The ARN of the bucket where the concourse keys. Used to allow access to the bucket.
+ * [`vault_server_url`]: String(optional): The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration. Defaults to ""
+ * [`vault_auth_concourse_role_name`]: String(optional): The Vault role that Concourse will use. This is normally fetched from the `vault-auth` terraform module. Defaults to "".
 
 Depending on if you want standard Github authentication or standard authentication,
 you need to fill in the following variables. We advise to use Github as there you can enforce 2 factor
@@ -78,6 +80,7 @@ the [concourse website](http://concourse.ci/teams.html).
 ### Output
  * [`elb_dns_name`]: String: DNS name of the loadbalancer
  * [`elb_sg_id`]: String: Security group id of the loadbalancer
+ * [`iam_role_arn`]: String: ARN of the IAM role created for the Concourse ECS task
 
 ### Example
 ```
@@ -101,6 +104,8 @@ module "concourse-web" {
   ssl_certificate_id                  = "${var.elb_ssl_certificate}"
   keys_bucket_id                      = "${module.keys.keys_bucket_id}"
   keys_bucket_arn                     = "${module.keys.keys_bucket_arn}"
+  vault_server_url                    = "https://vault.example.com"
+  vault_auth_concourse_role_name      = "${module.concourse-vault-auth.concourse_vault_role_name}"
 }
 ```
 
@@ -198,5 +203,39 @@ module "concourse-worker" {
   subnet_ids                    = "${data.terraform_remote_state.static.private_app_subnets}"
   vpc_id                        = "${data.terraform_remote_state.static.vpc_id}"
   additional_security_group_ids = ["${data.terraform_remote_state.static.sg_all_id}"]
+}
+```
+
+## vault-auth
+
+This module sets up the needed Vault resources for Concourse:
+
+- It creates a Vault policy that allows read-only access to `/concourse/*`
+- It creates a Vault role in the aws auth backend (which should be previously created) for Concourse and attaches the previously mentioned policy
+
+### Available variables
+
+| Name | Description | Default | Required |
+|------|-------------|:-----:|:-----:|
+| name_suffix | Name suffix to append to the policy name, to differentiate different concourse policies. | `default` | no |
+| additional_vault_policies | Additional Vault policies to attach to the Concourse role. | [] | no |
+| concourse_iam_role_arn | IAM role ARN of the Concourse ATC server. | - | yes |
+| vault_aws_auth_backend_path | The path the AWS auth backend being configured was mounted at. | `aws` | no |
+| vault_server_url | The Vault server url. | - | yes |
+
+### Output
+
+| Name | Description |
+|------|-------------|
+| concourse_vault_policy_name | Name of the Vault policy created for Concourse |
+| concourse_vault_role_name | Name of the Vault role created for Concourse |
+
+### Example
+
+```
+module "concourse-vault-auth" {
+  source                 = "github.com/skyscrapers/terraform-concourse//vault-auth"
+  concourse_iam_role_arn = "${module.concourse-web.iam_role_arn}"
+  vault_server_url       = "https://vault.example.com"
 }
 ```
