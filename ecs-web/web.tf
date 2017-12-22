@@ -10,6 +10,11 @@ resource "aws_ecs_service" "concourse_web" {
     container_name = "concourse_web"
     container_port = 8080
   }
+
+  placement_strategy {
+    type  = "spread"
+    field = "instanceId"
+  }
 }
 
 resource "aws_ecs_task_definition" "concourse_web_task_definition" {
