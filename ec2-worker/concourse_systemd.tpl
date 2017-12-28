@@ -2,7 +2,8 @@
 Description=Concourse CI Worker
 
 [Service]
-ExecStart=CONCOURSE_TAG=${concourse_tag} /usr/local/bin/concourse worker \
+Environment=CONCOURSE_TAG=${concourse_tag}
+ExecStart=/usr/local/bin/concourse worker \
        --work-dir /opt/concourse \
        --tsa-host ${concourse_hostname} \
        --tsa-public-key /etc/concourse/tsa_host_key.pub \
