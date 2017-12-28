@@ -2,6 +2,7 @@
 Description=Concourse CI Worker
 
 [Service]
+Environment=CONCOURSE_TAG=${concourse_tag}
 ExecStart=/usr/local/bin/concourse worker \
        --work-dir /opt/concourse \
        --tsa-host ${concourse_hostname} \
