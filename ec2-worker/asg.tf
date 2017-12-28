@@ -74,6 +74,7 @@ data "template_file" "concourse_systemd" {
 
   vars {
     concourse_hostname = "${var.concourse_hostname}"
+    concourse_tag      = "${var.concourse_tag}"
   }
 }
 

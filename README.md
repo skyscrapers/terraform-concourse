@@ -180,6 +180,7 @@ The following resources will be created:
 | work_disk_device_name | Device name of the external EBS volume | `/dev/xvdf` | no |
 | work_disk_volume_size | Size of the external EBS volume | `100` | no |
 | work_disk_volume_type | Volume type of the external EBS volume | `standard` | no |
+| concourse_tag | Tag to add to the worker to use for assigning jobs and tasks | "" | no | 
 
 ### Output
 
