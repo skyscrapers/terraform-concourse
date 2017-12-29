@@ -84,3 +84,8 @@ variable "concourse_tag" {
   description = "Tag to add to the worker to use for assigning jobs and tasks"
   default     = ""
 }
+
+variable "tsa_account_id" {
+  description = "AWS Account ID of the TSA when remote"
+  default     = ""
+}
