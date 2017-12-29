@@ -107,6 +107,7 @@ data "template_cloudinit_config" "concourse_bootstrap" {
     content = <<EOF
 packages:
   - awscli
+  - jq
 EOF
   }
 
