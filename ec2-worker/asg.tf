@@ -84,7 +84,7 @@ data "template_file" "concourse_bootstrap" {
   vars {
     concourse_version = "${var.concourse_version}"
     keys_bucket_id    = "${var.keys_bucket_id}"
-    TSA_ACCOUNT_ID    = "${var.tsa_account_id}
+    TSA_ACCOUNT_ID    = "${var.tsa_account_id}"
   }
 }
 
