@@ -115,3 +115,11 @@ variable "vault_auth_concourse_role_name" {
   description = "The Vault role that Concourse will use. This is normally fetched from the `vault-auth` terraform module."
   default     = ""
 }
+
+variable "container_memory" {
+  default = 256
+}
+
+variable "container_cpu" {
+  default = 256
+}

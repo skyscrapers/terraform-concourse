@@ -64,6 +64,8 @@ The following resources are created:
  * [`keys_bucket_arn`]: String(required): The ARN of the bucket where the concourse keys. Used to allow access to the bucket.
  * [`vault_server_url`]: String(optional): The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration. Defaults to ""
  * [`vault_auth_concourse_role_name`]: String(optional): The Vault role that Concourse will use. This is normally fetched from the `vault-auth` terraform module. Defaults to "".
+ * [`container_cpu`]: Int(optional): The number of cpu units to reserve for the container. This parameter maps to CpuShares in the Create a container section of the Docker Remote API. Defaults to 256.
+ * [`container_memory`]: Int(optional): The amount of memory (in MiB) used by the task. Defaults to 256.
 
 Depending on if you want standard Github authentication or standard authentication,
 you need to fill in the following variables. We advise to use Github as there you can enforce 2 factor
@@ -180,7 +182,7 @@ The following resources will be created:
 | work_disk_device_name | Device name of the external EBS volume | `/dev/xvdf` | no |
 | work_disk_volume_size | Size of the external EBS volume | `100` | no |
 | work_disk_volume_type | Volume type of the external EBS volume | `standard` | no |
-| concourse_tag | Tag to add to the worker to use for assigning jobs and tasks | - | no | 
+| concourse_tag | Tag to add to the worker to use for assigning jobs and tasks | - | no |
 | tsa_account_id | AWS Account ID of the TSA when remote | - | no |
 
 ### Output
