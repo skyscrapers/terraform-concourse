@@ -37,6 +37,8 @@ data "template_file" "concourse_web_task_template" {
     concourse_basic_auth       = "${length(var.concourse_auth_username) > 0 && length(var.concourse_auth_password) > 0 ? data.template_file.concourse_basic_auth.rendered : ""}"
     concourse_github_auth      = "${length(var.concourse_github_auth_client_id) > 0 && length(var.concourse_github_auth_client_secret) > 0 && length(var.concourse_github_auth_team) > 0 ? data.template_file.concourse_github_auth.rendered : ""}"
     concourse_vault_variables  = "${length(var.vault_server_url) > 0 ? data.template_file.concourse_vault_variables.rendered : ""}"
+    memory                     = "${var.container_memory}"
+    cpu                        = "${var.container_cpu}"
   }
 }
 

@@ -3,8 +3,8 @@
     "name": "concourse_web",
     "image": "${image}",
     "command": [ "web" ],
-    "cpu": 10,
-    "memory": 256,
+    "cpu": ${cpu},
+    "memory": ${memory},
     "essential": true,
     "portMappings": [
       {
