@@ -112,6 +112,20 @@ packages:
 EOF
   }
 
+  # Wait for the EBS volume to become ready
+  # And format and mount the drive
+  part {
+    content_type = "text/x-shellscript"
+
+    content = <<EOF
+#!/bin/bash
+aws --region $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//') ec2 wait volume-in-use --filters Name=attachment.instance-id,Values=$(curl -s http://169.254.169.254/latest/meta-data/instance-id) Name=attachment.device,Values=${var.work_disk_device_name}
+mkfs.ext4 ${var.work_disk_device_name}
+mkdir -p /opt/concourse
+mount ${var.work_disk_device_name} /opt/concourse
+EOF
+  }
+
   # Format external volume as btrfs
   part {
     content_type = "text/cloud-config"
