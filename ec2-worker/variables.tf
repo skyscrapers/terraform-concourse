@@ -49,6 +49,12 @@ variable "work_disk_device_name" {
   default     = "/dev/xvdf"
 }
 
+variable "work_disk_internal_device_name" {
+  description = "Device name of the internal volume"
+  default     = "/dev/xvdf"
+}
+
+
 variable "work_disk_volume_type" {
   description = "Volume type of the external EBS volume"
   default     = "standard"
