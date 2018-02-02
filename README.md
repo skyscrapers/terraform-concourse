@@ -180,6 +180,7 @@ The following resources will be created:
 | subnet_ids | List of subnet ids where to deploy the worker instances | - | yes |
 | vpc_id | The VPC id where to deploy the worker instances | - | yes |
 | work_disk_device_name | Device name of the external EBS volume | `/dev/xvdf` | no |
+| work_disk_internal_device_name | Device name of the internal EBS volume | `/dev/xvdf` | no |
 | work_disk_volume_size | Size of the external EBS volume | `100` | no |
 | work_disk_volume_type | Volume type of the external EBS volume | `standard` | no |
 | concourse_tag | Tag to add to the worker to use for assigning jobs and tasks | - | no |
