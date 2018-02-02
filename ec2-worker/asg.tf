@@ -112,7 +112,7 @@ packages:
 EOF
   }
 
-    # Wait for the EBS volume to become ready
+  # Wait for the EBS volume to become ready
   # And format and mount the drive
   part {
     content_type = "text/x-shellscript"
