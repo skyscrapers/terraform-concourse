@@ -86,9 +86,10 @@ variable "keys_bucket_arn" {
   description = "The S3 bucket ARN which contains the SSH keys to connect to the TSA"
 }
 
-variable "concourse_tag" {
-  description = "Tag to add to the worker to use for assigning jobs and tasks"
-  default     = ""
+variable "concourse_tags" {
+  description = "List of tags to add to the worker to use for assigning jobs and tasks"
+  type        = "list"
+  default     = []
 }
 
 variable "tsa_account_id" {
