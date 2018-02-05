@@ -2,12 +2,11 @@
 Description=Concourse CI Worker
 
 [Service]
-Environment=CONCOURSE_TAG=${concourse_tag}
 ExecStart=/usr/local/bin/concourse worker \
        --work-dir /opt/concourse \
        --tsa-host ${concourse_hostname} \
        --tsa-public-key /etc/concourse/tsa_host_key.pub \
-       --tsa-worker-private-key /etc/concourse/worker_key
+       --tsa-worker-private-key /etc/concourse/worker_key ${tags}
 
 User=root
 Group=root

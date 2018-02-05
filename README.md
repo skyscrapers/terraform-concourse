@@ -183,7 +183,7 @@ The following resources will be created:
 | work_disk_internal_device_name | Device name of the internal EBS volume | `/dev/xvdf` | no |
 | work_disk_volume_size | Size of the external EBS volume | `100` | no |
 | work_disk_volume_type | Volume type of the external EBS volume | `standard` | no |
-| concourse_tag | Tag to add to the worker to use for assigning jobs and tasks | - | no |
+| concourse_tags | List of tags to add to the worker to use for assigning jobs and tasks | [ ] | no |
 | tsa_account_id | AWS Account ID of the TSA when remote | - | no |
 
 ### Output
