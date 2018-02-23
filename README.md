@@ -39,7 +39,7 @@ module "concourse-keys" {
 This sets up Concourse Web on an ECS cluster and a Postgresql database for concourse.
 
 Before running `Plan` you will need setup an SSH tunnel through the jumphost to the RDS instance to create the database:
-ssh [jumbhost] -L 5432:[RDS Endpoint]:5432
+ssh [jumbhost] -L 5432:[Database Endpoint]:5432
 
 The following resources are created:
 - ELB
