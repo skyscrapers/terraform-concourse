@@ -13,3 +13,7 @@ output "elb_sg_id" {
 output "iam_role_arn" {
   value = "${aws_iam_role.concourse_task_role.arn}"
 }
+
+output "concourse_rds_address" {
+  value = "${module.concourse_rds.rds_address}"
+}
