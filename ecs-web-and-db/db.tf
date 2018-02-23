@@ -1,7 +1,7 @@
 data "aws_kms_secret" "concourse_db_passwords" {
   secret {
     name    = "root_password"
-    payload = "${var.rds_root_password}"
+    payload = "${var.db_root_password}"
 
     context {
       postgresql = "password"

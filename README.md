@@ -58,6 +58,7 @@ The following resources are created:
  * [`concourse_db_username`]: String(optional): db user to logon to postgresql. Defaults to "concourse".
  * [`concourse_db_password`]: String(required): password to logon to postgresql
  * [`concourse_db_name`]: String(optional): db name to use on the postgresql server. Defaults to "concourse".
+ * [`db_root_password`]: String(required): password to logon to postgresql as root
  * [`ecs_service_role_arn`]: String(required): IAM role to use for the service to be able to let it register to the ELB
  * [`concourse_web_instance_count`]: Integer(optional): Number of containers running Concourse web
  * [`elb_subnets`]: List(required): Subnets to deploy the ELB in
