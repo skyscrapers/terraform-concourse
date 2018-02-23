@@ -35,6 +35,7 @@ variable "concourse_db_port" {
 
 variable "concourse_db_username" {
   description = "db user to logon to postgresql"
+  default = "concourse"
 }
 
 variable "concourse_db_password" {
@@ -43,6 +44,7 @@ variable "concourse_db_password" {
 
 variable "concourse_db_name" {
   description = "db name to use on the postgresql server"
+  default = "concourse"
 }
 
 variable "ecs_service_role_arn" {
@@ -122,4 +124,8 @@ variable "container_memory" {
 
 variable "container_cpu" {
   default = 256
+}
+
+variable "db_root_password" {
+  description = "Encrypted password to be used for the RDS instnace as root"
 }
