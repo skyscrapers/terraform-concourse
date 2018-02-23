@@ -35,12 +35,16 @@ module "concourse-keys" {
 }
 ```
 
-## ecs-web
-This sets up Concourse Web on an ECS cluster.
+## ecs-web-and-db
+This sets up Concourse Web on an ECS cluster and a Postgresql database for concourse.
+
+Before running `Plan` you will need setup an SSH tunnel through the jumphost to the RDS instance to create the database:
+ssh [jumbhost] -L 5432:[RDS Endpoint]:5432
 
 The following resources are created:
 - ELB
 - Web concourse ECS service
+- Postgresql Databse in RDS
 
 ### Available variables
  * [`environment`]: String(required): the name of the environment these subnets belong to (prod,stag,dev)
@@ -51,9 +55,9 @@ The following resources are created:
  * [`concourse_version`]: String(required): the Concourse CI version to use
  * [`concourse_db_host`]: String(required): postgresql hostname or IP
  * [`concourse_db_port`]: String(optional): port of the postgresql server
- * [`concourse_db_username`]: String(required): db user to logon to postgresql
+ * [`concourse_db_username`]: String(optional): db user to logon to postgresql. Defaults to "concourse".
  * [`concourse_db_password`]: String(required): password to logon to postgresql
- * [`concourse_db_name`]: String(required): db name to use on the postgresql server
+ * [`concourse_db_name`]: String(optional): db name to use on the postgresql server. Defaults to "concourse".
  * [`ecs_service_role_arn`]: String(required): IAM role to use for the service to be able to let it register to the ELB
  * [`concourse_web_instance_count`]: Integer(optional): Number of containers running Concourse web
  * [`elb_subnets`]: List(required): Subnets to deploy the ELB in
