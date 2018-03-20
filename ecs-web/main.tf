@@ -1,3 +1,6 @@
+data "aws_region" "current" {
+}
+
 resource "aws_ecs_service" "concourse_web" {
   name            = "concourse_web_${var.name}_${var.environment}"
   cluster         = "${var.ecs_cluster}"
@@ -30,7 +33,7 @@ data "template_file" "concourse_web_task_template" {
   vars {
     image                      = "${var.concourse_docker_image}:${var.concourse_version}"
     concourse_hostname         = "${var.concourse_hostname}"
-    concourse_db_uri           = "postgres://${var.concourse_db_username}:${data.aws_kms_secret.concourse_db_passwords.concourse_password}@${var.concourse_db_host}:${var.concourse_db_port}/${var.concourse_db_name}"
+    concourse_db_uri           = "postgres://${var.concourse_db_username}:${var.concourse_db_password}@${var.concourse_db_host}:${var.concourse_db_port}/${var.concourse_db_name}"
     awslog_group_name          = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
     awslog_region              = "${data.aws_region.current.name}"
     concourse_keys_bucket_name = "${var.keys_bucket_id}"
