@@ -36,7 +36,7 @@ module "concourse-keys" {
 ```
 
 ## ecs-web
-This sets up Concourse Web on an ECS cluster .
+This sets up Concourse Web on an ECS cluster.
 
 The following resources are created:
 - ELB
