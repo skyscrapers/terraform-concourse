@@ -125,7 +125,3 @@ variable "container_memory" {
 variable "container_cpu" {
   default = 256
 }
-
-variable "db_root_password" {
-  description = "Encrypted password to be used for the RDS instnace as root"
-}
