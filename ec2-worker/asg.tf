@@ -15,6 +15,11 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
+module "is_ebs_optimised" {
+  source        = "github.com/skyscrapers/terraform-instances//is_ebs_optimised?ref=2.3.0"
+  instance_type = "${var.instance_type}"
+}
+
 resource "aws_launch_configuration" "concourse_worker_launchconfig" {
   image_id             = "${length(var.custom_ami) == 0 ? data.aws_ami.ubuntu.id : var.custom_ami}"
   instance_type        = "${var.instance_type}"
@@ -22,6 +27,7 @@ resource "aws_launch_configuration" "concourse_worker_launchconfig" {
   security_groups      = ["${concat(list(aws_security_group.worker_instances_sg.id), var.additional_security_group_ids)}"]
   iam_instance_profile = "${aws_iam_instance_profile.concourse_worker_instance_profile.id}"
   user_data            = "${data.template_cloudinit_config.concourse_bootstrap.rendered}"
+  ebs_optimized        = "${module.is_ebs_optimised.is_ebs_optimised}"
 
   root_block_device {
     volume_type           = "${var.root_disk_volume_type}"
