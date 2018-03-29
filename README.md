@@ -47,6 +47,7 @@ The following resources are created:
  * [`name`]: String(required): The name of the Concourse deployment, used to distinguish different Concourse setups
  * [`ecs_cluster`]: String(required): name of the ecs cluster
  * [`concourse_hostname`]: String(required): hostname on what concourse will be available, this hostname needs to point to the ELB.
+ * [`worker_tsa_port`]: String(optional): tsa port that the worker can use to connect to the web. Defaults to ["2222"](https://concourse-ci.org/components.html#component-tsa)
  * [`concourse_docker_image`]: String(optional): docker image to use to start concourse. Default is [skyscrapers/concourse](https://hub.docker.com/r/skyscrapers/concourse/)
  * [`concourse_version`]: String(required): the Concourse CI version to use
  * [`concourse_db_host`]: String(required): postgresql hostname or IP
