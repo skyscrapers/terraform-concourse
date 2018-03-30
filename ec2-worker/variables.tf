@@ -54,7 +54,6 @@ variable "work_disk_internal_device_name" {
   default     = "/dev/xvdf"
 }
 
-
 variable "work_disk_volume_type" {
   description = "Volume type of the external EBS volume"
   default     = "standard"
@@ -67,6 +66,11 @@ variable "work_disk_volume_size" {
 
 variable "concourse_hostname" {
   description = "Hostname on what concourse will be available, this hostname needs to point to the ELB."
+}
+
+variable "worker_tsa_port" {
+  description = "tsa port that the worker can use to connect to the web"
+  default     = "2222"
 }
 
 variable "concourse_worker_instance_count" {

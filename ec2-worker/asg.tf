@@ -79,7 +79,7 @@ data "template_file" "concourse_systemd" {
   template = "${file("${path.module}/concourse_systemd.tpl")}"
 
   vars {
-    concourse_hostname = "${var.concourse_hostname}"
+    concourse_hostname = "${var.concourse_hostname}:${var.worker_tsa_port}"
     tags               = "${join(" ", formatlist("--tag=%s", var.concourse_tags))}"
   }
 }
