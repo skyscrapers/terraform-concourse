@@ -217,7 +217,7 @@ module "concourse-worker" {
 This module sets up the needed Vault resources for Concourse:
 
 - It creates a Vault policy that allows read-only access to `/concourse/*`
-- It creates a Vault role in the aws auth backend (which should be previously created) for Concourse and attaches the previously mentioned policy
+- It creates a Vault role in the aws auth method (which should be previously created - explained below) for Concourse and attaches the previously mentioned policy
 
 ### Available variables
 
@@ -226,7 +226,7 @@ This module sets up the needed Vault resources for Concourse:
 | name_suffix | Name suffix to append to the policy name, to differentiate different concourse policies. | `default` | no |
 | additional_vault_policies | Additional Vault policies to attach to the Concourse role. | [] | no |
 | concourse_iam_role_arn | IAM role ARN of the Concourse ATC server. | - | yes |
-| vault_aws_auth_backend_path | The path the AWS auth backend being configured was mounted at. | `aws` | no |
+| vault_aws_auth_backend_path | The path the AWS auth method being configured was mounted at. | `aws` | no |
 | vault_server_url | The Vault server url. | - | yes |
 
 ### Output
@@ -245,3 +245,10 @@ module "concourse-vault-auth" {
   vault_server_url       = "https://vault.example.com"
 }
 ```
+
+### How to enable and configure the AWS auth method
+
+If the AWS auth method is not previously enabled, you'll need to do it before applying this module. To do that you'll need to follow the first two steps described in the official Vault documentation: https://www.vaultproject.io/docs/auth/aws.html#via-the-cli
+
+- Enable the auth method
+- Configure the AWS credentials so Vault can make calls to the AWS API. Note that you can skip this step if you're going to use Vault's IAM EC2 instance role to access the AWS API.
