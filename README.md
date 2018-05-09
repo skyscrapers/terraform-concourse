@@ -6,8 +6,8 @@ Terraform module to setup Concourse CI. This repository contains the following m
   the combination of the ATC and TSA.
   (See the [Concourse Architecture](http://concourse.ci/architecture.html)
   documentation what these acronyms mean)
-* `ecs-worker`: ECS based setup for a (pool of) Concourse worker(s).
 * `ec2-worker`: EC2 based setup for a (pool of) Concourse worker(s).
+* `vault-auth`: Sets up the required resources in Vault so it can be integrated in Concourse
 
 ## keys
 Creates an S3 bucket and uploads an auto-generated set of keys for concourse.
@@ -109,45 +109,6 @@ module "concourse-web" {
   keys_bucket_arn                     = "${module.keys.keys_bucket_arn}"
   vault_server_url                    = "https://vault.example.com"
   vault_auth_concourse_role_name      = "${module.concourse-vault-auth.concourse_vault_role_name}"
-}
-```
-
-## ecs-worker
-This setups Concourse CI workers on an ECS cluster.
-This setups the following resources:
-- Concourse Worker ECS service
-
-**Warning**: due to an [issue with Concourse](https://github.com/concourse/concourse/issues/544), it's recommended to run the workers on a `btrfs` formatted volume. This module **won't** setup that volume on the ECS instances for you, so unless the EC2 instances forming your ECS cluster already have their root disks formatted as `btrfs`, we advise to use the [`ec2-worker`](#ec2-worker) module instead.
-
-### Available variables
- * [`environment`]: String(required): the name of the environment these subnets belong to (prod,stag,dev)
- * [`name`]: String(required): The name of the Concourse deployment, used to distinguish different Concourse setups
- * [`ecs_cluster`]: String(required): name of the ecs cluster
- * [`concourse_hostname`]: String(required): hostname on what concourse will be available, this hostname needs to point to the ELB.
- * [`concourse_docker_image`]: String(optional): docker image to use to start concourse. Default is [skyscrapers/concourse](https://hub.docker.com/r/skyscrapers/concourse/)
- * [`concourse_version`]: String(required): the Concourse CI version to use
- * [`ecs_service_role_arn`]: String(required): IAM role to use for the service to be able to let it register to the ELB
- * [`concourse_worker_instance_count`]: Integer(optional): Number of containers running Concourse web
- * [`backend_security_group_id`]: String(required): Security groups of the ECS servers
- * [`keys_bucket_id`]: String(required): The id of the bucket where the concourse keys are stored for connecting to the TSA.
- * [`keys_bucket_arn`]: String(required): The ARN of the bucket where the concourse keys. Used to allow access to the bucket.
-
-### Output
-None
-
-### Example
-```
-module "concourse-worker" {
-  source                              = "github.com/skyscrapers/terraform-concourse//ecs-worker"
-  environment                         = "${terraform.env}"
-  name                                = "internal"
-  ecs_cluster                         = "test-ecs"
-  ecs_service_role_arn                = "${data.terraform_remote_state.static.ecs-service-role}"
-  concourse_hostname                  = "concourse.staging.client.company"
-  concourse_version                   = "3.2.1"
-  backend_security_group_id           = "${data.terraform_remote_state.static.sg_ecs_instance}"
-  keys_bucket_id                      = "${module.concourse.keys_bucket_id}"
-  keys_bucket_arn                     = "${module.concourse.keys_bucket_arn}"
 }
 ```
 
