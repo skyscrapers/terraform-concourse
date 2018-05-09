@@ -138,7 +138,7 @@ The following resources will be created:
 | name | A descriptive name of the purpose of this Concourse worker pool | - | yes |
 | root_disk_volume_size | Size of the worker instances root disk | `10` | no |
 | root_disk_volume_type | Volume type of the worker instances root disk | `standard` | no |
-| ssh_key_name | The key name to use for the instance | - | yes |
+| ssh_key_name | The key name to use for the instance | "" | no |
 | subnet_ids | List of subnet ids where to deploy the worker instances | - | yes |
 | vpc_id | The VPC id where to deploy the worker instances | - | yes |
 | work_disk_device_name | Device name of the external EBS volume | `/dev/xvdf` | no |

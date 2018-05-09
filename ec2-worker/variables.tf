@@ -21,6 +21,7 @@ variable "instance_type" {
 
 variable "ssh_key_name" {
   description = "The key name to use for the instance"
+  default     = ""
 }
 
 variable "custom_ami" {
