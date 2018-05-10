@@ -8,7 +8,7 @@ resource "null_resource" "generate_concourse_keys" {
     command = "${data.template_file.keys_generator_cmd.rendered}"
   }
 
-  depends_on = ["aws_s3_bucket.concourse_keys.bucket"]
+  depends_on = ["aws_s3_bucket.concourse_keys"]
 }
 
 data "template_file" "keys_generator_cmd" {
