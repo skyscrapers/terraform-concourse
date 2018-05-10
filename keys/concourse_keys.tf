@@ -7,6 +7,8 @@ resource "null_resource" "generate_concourse_keys" {
   provisioner "local-exec" {
     command = "${data.template_file.keys_generator_cmd.rendered}"
   }
+
+  depends_on = ["aws_s3_bucket.concourse_keys.bucket"]
 }
 
 data "template_file" "keys_generator_cmd" {
