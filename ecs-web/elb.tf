@@ -1,8 +1,8 @@
 module "elb" {
-  source                = "github.com/skyscrapers/terraform-loadbalancers//elb_with_ssl_no_s3logs?ref=1.0.0"
+  source                = "github.com/skyscrapers/terraform-loadbalancers//elb_with_ssl_no_s3logs?ref=short-name"
   name                  = "${var.name}"
   subnets               = ["${var.elb_subnets}"]
-  project               = "concourse-web"
+  project               = "concourse"
   health_target         = "http:8080/"
   backend_sg            = ["${var.backend_security_group_id}"]
   ssl_certificate_id    = "${var.ssl_certificate_id}"
