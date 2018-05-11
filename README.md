@@ -182,28 +182,26 @@ This module sets up the needed Vault resources for Concourse:
 
 ### Available variables
 
-| Name | Description | Default | Required |
-|------|-------------|:-----:|:-----:|
-| name_suffix | Name suffix to append to the policy name, to differentiate different concourse policies. | `default` | no |
-| additional_vault_policies | Additional Vault policies to attach to the Concourse role. | [] | no |
-| concourse_iam_role_arn | IAM role ARN of the Concourse ATC server. | - | yes |
-| vault_aws_auth_backend_path | The path the AWS auth method being configured was mounted at. | `aws` | no |
-| vault_server_url | The Vault server url. | - | yes |
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| additional_vault_policies | Additional Vault policies to attach to the Concourse role. Defaults to empty list | string | `<list>` | no |
+| concourse_iam_role_arn | IAM role ARN of the Concourse ATC server | string | - | yes |
+| vault_aws_auth_backend_path | The path the AWS auth backend being configured was mounted at. Defaults to aws. | string | `aws` | no |
+| vault_concourse_role_name | Name to give to the Vault role and policy for Concourse | string | - | yes |
+| vault_server_url | The Vault server url | string | - | yes |
 
 ### Output
 
-| Name | Description |
-|------|-------------|
-| concourse_vault_policy_name | Name of the Vault policy created for Concourse |
-| concourse_vault_role_name | Name of the Vault role created for Concourse |
+--
 
 ### Example
 
 ```
 module "concourse-vault-auth" {
-  source                 = "github.com/skyscrapers/terraform-concourse//vault-auth"
-  concourse_iam_role_arn = "${module.concourse-web.iam_role_arn}"
-  vault_server_url       = "https://vault.example.com"
+  source                    = "github.com/skyscrapers/terraform-concourse//vault-auth"
+  concourse_iam_role_arn    = "${module.concourse-web.iam_role_arn}"
+  vault_server_url          = "https://vault.example.com"
+  vault_concourse_role_name = "concourse-default"
 }
 ```
 
