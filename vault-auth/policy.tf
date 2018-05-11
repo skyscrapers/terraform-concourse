@@ -1,5 +1,5 @@
 resource "vault_policy" "concourse" {
-  name = "concourse-${var.name_suffix}"
+  name = "${var.vault_concourse_role_name}"
 
   policy = <<EOT
 path "concourse/*" {
