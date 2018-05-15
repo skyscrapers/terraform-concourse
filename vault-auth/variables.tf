@@ -1,6 +1,5 @@
-variable "name_suffix" {
-  description = "Name suffix to append to the policy name, to differentiate different concourse policies. Defaults to 'default'"
-  default     = "default"
+variable "vault_concourse_role_name" {
+  description = "Name to give to the Vault role and policy for Concourse"
 }
 
 variable "additional_vault_policies" {
