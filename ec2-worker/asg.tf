@@ -88,9 +88,9 @@ data "template_file" "concourse_bootstrap" {
   template = "${file("${path.module}/bootstrap_concourse.sh.tpl")}"
 
   vars {
-    concourse_version = "${var.concourse_version}"
-    keys_bucket_id    = "${var.keys_bucket_id}"
-    TSA_ACCOUNT_ID    = "${var.tsa_account_id}"
+    concourse_version             = "${var.concourse_version}"
+    keys_bucket_id                = "${var.keys_bucket_id}"
+    cross_account_worker_role_arn = "${var.cross_account_worker_role_arn}"
   }
 }
 
