@@ -15,3 +15,9 @@ variable "concourse_keys_version" {
   description = "Change this if you want to re-generate Concourse keys"
   default     = "1"
 }
+
+variable "concourse_keys_cross_account_principals" {
+  type        = "list"
+  default     = []
+  description = "AWS Principals that can assume the role to access the concourse keys. Intended to setup Concourse workers on other AWS accounts"
+}

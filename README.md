@@ -17,14 +17,23 @@ The following resources are created:
 - Uploads concourse keys to bucket
 
 ### Available variables
-* [`environment`]: String(required): the name of the environment these subnets belong to (prod,stag,dev)
-* [`name`]: String(required): The name of the Concourse deployment, used to distinguish different Concourse setups
-* [`concourse_keys_version`]: Integer(optional): Change this if you want to re-generate the Concourse keys
-* [`aws_profile`]: String(optional): This is the AWS profile name as set in the shared credentials file. Used to upload the Concourse keys to S3. Omit this if you're using environment variables.
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| aws_profile | This is the AWS profile name as set in the shared credentials file. Used to upload the Concourse keys to S3. Omit this if you're using environment variables. | string | `` | no |
+| concourse_keys_cross_account_principals | AWS Principals that can assume the role to access the concourse keys. Intended to setup Concourse workers on other AWS accounts | list | `<list>` | no |
+| concourse_keys_version | Change this if you want to re-generate Concourse keys | string | `1` | no |
+| environment | The name of the environment these subnets belong to (prod,stag,dev) | string | - | yes |
+| name | The name of the Concourse deployment, used to distinguish different Concourse setups | string | - | yes |
 
 ### Outputs
-* [`keys_bucket_id`]: String: The id (name) of the S3 bucket where the concourse keys are stored.
-* [`keys_bucket_arn`]: String: The ARN of the S3 bucket where the concourse keys are stored.
+
+| Name | Description |
+|------|-------------|
+| concourse_keys_cross_account_role_arn | IAM role ARN that Concourse workers on other AWS accounts will need to assume to access the Concourse keys bucket |
+| keys_bucket_arn | The ARN of the S3 bucket where the concourse keys are stored |
+| keys_bucket_id | The id (name) of the S3 bucket where the concourse keys are stored |
+
 
 ### Example
 ```
