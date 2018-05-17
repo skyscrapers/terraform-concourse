@@ -19,8 +19,9 @@ EOF
 }
 
 resource "aws_iam_role_policy" "concourse_worker_policy" {
-  name = "concourse_worker_${var.environment}_${var.name}_policy"
-  role = "${aws_iam_role.concourse_worker_role.id}"
+  count = "${length(var.cross_account_worker_role_arn) > 0 ? 0 : 1}" # Disable if accessing another AWS account through an assume role
+  name  = "concourse_worker_${var.environment}_${var.name}_policy"
+  role  = "${aws_iam_role.concourse_worker_role.id}"
 
   policy = <<EOF
 {
@@ -35,6 +36,29 @@ resource "aws_iam_role_policy" "concourse_worker_policy" {
       "Resource": [
         "${var.keys_bucket_arn}",
         "${var.keys_bucket_arn}/*"
+      ]
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "concourse_worker_cross_account_policy" {
+  count = "${length(var.cross_account_worker_role_arn) > 0 ? 1 : 0}"      # Enable if accessing another AWS account through an assume role
+  name  = "concourse_worker_cross_account_${var.environment}_${var.name}"
+  role  = "${aws_iam_role.concourse_worker_role.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sts:AssumeRole"
+      ],
+      "Resource": [
+        "${var.cross_account_worker_role_arn}"
       ]
     }
   ]

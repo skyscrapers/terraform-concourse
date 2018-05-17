@@ -17,14 +17,23 @@ The following resources are created:
 - Uploads concourse keys to bucket
 
 ### Available variables
-* [`environment`]: String(required): the name of the environment these subnets belong to (prod,stag,dev)
-* [`name`]: String(required): The name of the Concourse deployment, used to distinguish different Concourse setups
-* [`concourse_keys_version`]: Integer(optional): Change this if you want to re-generate the Concourse keys
-* [`aws_profile`]: String(optional): This is the AWS profile name as set in the shared credentials file. Used to upload the Concourse keys to S3. Omit this if you're using environment variables.
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| aws_profile | This is the AWS profile name as set in the shared credentials file. Used to upload the Concourse keys to S3. Omit this if you're using environment variables. | string | `` | no |
+| concourse_keys_cross_account_principals | AWS Principals that can assume the role to access the concourse keys. Intended to setup Concourse workers on other AWS accounts | list | `<list>` | no |
+| concourse_keys_version | Change this if you want to re-generate Concourse keys | string | `1` | no |
+| environment | The name of the environment these subnets belong to (prod,stag,dev) | string | - | yes |
+| name | The name of the Concourse deployment, used to distinguish different Concourse setups | string | - | yes |
 
 ### Outputs
-* [`keys_bucket_id`]: String: The id (name) of the S3 bucket where the concourse keys are stored.
-* [`keys_bucket_arn`]: String: The ARN of the S3 bucket where the concourse keys are stored.
+
+| Name | Description |
+|------|-------------|
+| concourse_keys_cross_account_role_arn | IAM role ARN that Concourse workers on other AWS accounts will need to assume to access the Concourse keys bucket |
+| keys_bucket_arn | The ARN of the S3 bucket where the concourse keys are stored |
+| keys_bucket_id | The id (name) of the S3 bucket where the concourse keys are stored |
+
 
 ### Example
 ```
@@ -124,29 +133,30 @@ The following resources will be created:
 
 ### Available variables
 
-| Name | Description | Default | Required |
-|------|-------------|:-----:|:-----:|
-| additional_security_group_ids | Additional security group ids to attach to the worker instances | [ ] | no |
-| concourse_hostname | Hostname on what concourse will be available, this hostname needs to point to the ELB. | - | yes |
-| concourse_version | Concourse CI version to use | `3.2.1` | yes |
-| concourse_worker_instance_count | Number of Concourse worker instances | `1` | no |
-| custom_ami | Use a custom AMI for the worker instances. | latest Ubuntu 16.04 AMI | no |
-| environment | The name of the environment these subnets belong to (prod,stag,dev) | - | yes |
-| instance_type | EC2 instance type for the worker instances | - | yes |
-| keys_bucket_arn | The S3 bucket ARN which contains the SSH keys to connect to the TSA | - | yes |
-| keys_bucket_id | The S3 bucket id which contains the SSH keys to connect to the TSA | - | yes |
-| name | A descriptive name of the purpose of this Concourse worker pool | - | yes |
-| root_disk_volume_size | Size of the worker instances root disk | `10` | no |
-| root_disk_volume_type | Volume type of the worker instances root disk | `standard` | no |
-| ssh_key_name | The key name to use for the instance | - | yes |
-| subnet_ids | List of subnet ids where to deploy the worker instances | - | yes |
-| vpc_id | The VPC id where to deploy the worker instances | - | yes |
-| work_disk_device_name | Device name of the external EBS volume | `/dev/xvdf` | no |
-| work_disk_internal_device_name | Device name of the internal EBS volume | `/dev/xvdf` | no |
-| work_disk_volume_size | Size of the external EBS volume | `100` | no |
-| work_disk_volume_type | Volume type of the external EBS volume | `standard` | no |
-| concourse_tags | List of tags to add to the worker to use for assigning jobs and tasks | [ ] | no |
-| tsa_account_id | AWS Account ID of the TSA when remote | - | no |
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| additional_security_group_ids | Additional security group ids to attach to the worker instances | list | `<list>` | no |
+| concourse_hostname | Hostname on what concourse will be available, this hostname needs to point to the ELB. | string | - | yes |
+| concourse_tags | List of tags to add to the worker to use for assigning jobs and tasks | list | `<list>` | no |
+| concourse_version | Concourse CI version to use | string | - | yes |
+| concourse_worker_instance_count | Number of Concourse worker instances | string | `1` | no |
+| cross_account_worker_role_arn | IAM role ARN to assume to access the Concourse keys bucket in another AWS account | string | `` | no |
+| custom_ami | Use a custom AMI for the worker instances. If omitted the latest Ubuntu 16.04 AMI will be used. | string | `` | no |
+| environment | The name of the environment these subnets belong to (prod,stag,dev) | string | - | yes |
+| instance_type | EC2 instance type for the worker instances | string | - | yes |
+| keys_bucket_arn | The S3 bucket ARN which contains the SSH keys to connect to the TSA | string | - | yes |
+| keys_bucket_id | The S3 bucket id which contains the SSH keys to connect to the TSA | string | - | yes |
+| name | A descriptive name of the purpose of this Concourse worker pool | string | - | yes |
+| root_disk_volume_size | Size of the worker instances root disk | string | `10` | no |
+| root_disk_volume_type | Volume type of the worker instances root disk | string | `standard` | no |
+| ssh_key_name | The key name to use for the instance | string | - | yes |
+| subnet_ids | List of subnet ids where to deploy the worker instances | list | - | yes |
+| vpc_id | The VPC id where to deploy the worker instances | string | - | yes |
+| work_disk_device_name | Device name of the external EBS volume | string | `/dev/xvdf` | no |
+| work_disk_internal_device_name | Device name of the internal volume | string | `/dev/xvdf` | no |
+| work_disk_volume_size | Size of the external EBS volume | string | `100` | no |
+| work_disk_volume_type | Volume type of the external EBS volume | string | `standard` | no |
+| worker_tsa_port | tsa port that the worker can use to connect to the web | string | `2222` | no |
 
 ### Output
 

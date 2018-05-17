@@ -96,7 +96,7 @@ variable "concourse_tags" {
   default     = []
 }
 
-variable "tsa_account_id" {
-  description = "AWS Account ID of the TSA when remote"
+variable "cross_account_worker_role_arn" {
+  description = "IAM role ARN to assume to access the Concourse keys bucket in another AWS account"
   default     = ""
 }
