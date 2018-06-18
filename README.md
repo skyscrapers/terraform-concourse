@@ -38,9 +38,10 @@ The following resources are created:
 ### Example
 ```
 module "concourse-keys" {
-  source      = "github.com/skyscrapers/terraform-concourse//keys"
-  environment = "${terraform.env}"
-  name        = "internal"
+  source                          = "github.com/skyscrapers/terraform-concourse//keys"
+  environment                     = "${terraform.env}"
+  name                            = "internal"
+  concourse_workers_iam_role_arns = ["${module.concourse-worker.worker_iam_role_arn}"]
 }
 ```
 
