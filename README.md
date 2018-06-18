@@ -21,7 +21,7 @@ The following resources are created:
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | aws_profile | This is the AWS profile name as set in the shared credentials file. Used to upload the Concourse keys to S3. Omit this if you're using environment variables. | string | `` | no |
-| concourse_keys_cross_account_principals | AWS Principals that can assume the role to access the concourse keys. Intended to setup Concourse workers on other AWS accounts | list | `<list>` | no |
+| concourse_workers_iam_role_arns | List of ARNs for the IAM roles that will be able to assume the role to access concourse keys in S3. Normally you'll include the Concourse worker IAM role here | list | - | yes |
 | concourse_keys_version | Change this if you want to re-generate Concourse keys | string | `1` | no |
 | environment | The name of the environment these subnets belong to (prod,stag,dev) | string | - | yes |
 | name | The name of the Concourse deployment, used to distinguish different Concourse setups | string | - | yes |
@@ -163,7 +163,8 @@ The following resources will be created:
 | Name | Description |
 |------|-------------|
 | worker_instances_sg_id | Security group ID used for the worker instances |
-| worker_iam_role | Role name of the worker instance |
+| worker_iam_role | Role name of the worker instances |
+| worker_iam_role_arn | Role ARN of the worker instances |
 
 ### Example
 ```

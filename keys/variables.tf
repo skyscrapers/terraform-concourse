@@ -16,8 +16,7 @@ variable "concourse_keys_version" {
   default     = "1"
 }
 
-variable "concourse_keys_cross_account_principals" {
+variable "concourse_workers_iam_role_arns" {
   type        = "list"
-  default     = []
-  description = "AWS Principals that can assume the role to access the concourse keys. Intended to setup Concourse workers on other AWS accounts"
+  description = "List of ARNs for the IAM roles that will be able to assume the role to access concourse keys in S3. Normally you'll include the Concourse worker IAM role here"
 }
