@@ -5,3 +5,7 @@ output "worker_instances_sg_id" {
 output "worker_iam_role" {
   value = "${aws_iam_role.concourse_worker_role.name}"
 }
+
+output "worker_iam_role_arn" {
+  value = "${aws_iam_role.concourse_worker_role.arn}"
+}

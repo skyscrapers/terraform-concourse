@@ -9,6 +9,6 @@ output "keys_bucket_arn" {
 }
 
 output "concourse_keys_cross_account_role_arn" {
-  value       = "${join("", aws_iam_role.concourse_keys_cross_account.*.arn)}"
+  value       = "${aws_iam_role.concourse_keys_cross_account.arn}"
   description = "IAM role ARN that Concourse workers on other AWS accounts will need to assume to access the Concourse keys bucket"
 }

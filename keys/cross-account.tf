@@ -5,7 +5,7 @@ data "aws_iam_policy_document" "concourse_keys_cross_account_assume_role_policy"
 
     principals {
       type        = "AWS"
-      identifiers = "${var.concourse_keys_cross_account_principals}"
+      identifiers = ["${var.concourse_workers_iam_role_arns}"]
     }
   }
 }
