@@ -75,6 +75,7 @@ The following resources are created:
  * [`keys_bucket_arn`]: String(required): The ARN of the bucket where the concourse keys. Used to allow access to the bucket.
  * [`vault_server_url`]: String(optional): The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration. Defaults to ""
  * [`vault_auth_concourse_role_name`]: String(optional): The Vault role that Concourse will use. This is normally fetched from the `vault-auth` terraform module. Defaults to "".
+ * [`concourse_vault_auth_backend_max_ttl`]: String(optional): The Vault max-ttl that Concourse will use. Defaults to "2592000" (30 days).
  * [`container_cpu`]: Int(optional): The number of cpu units to reserve for the container. This parameter maps to CpuShares in the Create a container section of the Docker Remote API. Defaults to 256.
  * [`container_memory`]: Int(optional): The amount of memory (in MiB) used by the task. Defaults to 256.
 

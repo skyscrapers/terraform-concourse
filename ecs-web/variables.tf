@@ -35,7 +35,7 @@ variable "concourse_db_port" {
 
 variable "concourse_db_username" {
   description = "db user to logon to postgresql"
-  default = "concourse"
+  default     = "concourse"
 }
 
 variable "concourse_db_password" {
@@ -44,7 +44,7 @@ variable "concourse_db_password" {
 
 variable "concourse_db_name" {
   description = "db name to use on the postgresql server"
-  default = "concourse"
+  default     = "concourse"
 }
 
 variable "ecs_service_role_arn" {
@@ -116,6 +116,10 @@ variable "vault_server_url" {
 variable "vault_auth_concourse_role_name" {
   description = "The Vault role that Concourse will use. This is normally fetched from the `vault-auth` terraform module."
   default     = ""
+}
+
+variable "concourse_vault_auth_backend_max_ttl" {
+  default = "2592000"
 }
 
 variable "container_memory" {
