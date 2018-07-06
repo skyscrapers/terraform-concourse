@@ -118,6 +118,9 @@ variable "vault_auth_concourse_role_name" {
   default     = ""
 }
 
+variable "concourse_vault_auth_backend_max_ttl" {
+  default = "2592000"
+}
 variable "container_memory" {
   default = 256
 }
