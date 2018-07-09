@@ -159,7 +159,7 @@ The following resources will be created:
 | work_disk_volume_size | Size of the external EBS volume | string | `100` | no |
 | work_disk_volume_type | Volume type of the external EBS volume | string | `standard` | no |
 | worker_tsa_port | tsa port that the worker can use to connect to the web | string | `2222` | no |
-| teleport_auth_token_encrypted | Teleport server node token encrypted with context teleport=tokens | string | `` | no |
+| teleport_auth_token | Teleport server node token  | string | `` | no |
 | teleport_version | teleport version for the client | string | `2.5.8` | no |
 | teleport_sg | Teleport server security group id | string | `` | no |
 
