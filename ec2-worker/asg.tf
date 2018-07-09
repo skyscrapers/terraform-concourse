@@ -157,11 +157,13 @@ EOF
 
     content = <<EOF
 write_files:
-  - encoding: b64
-    content: ${base64encode(data.template_file.concourse_systemd.rendered)}
-    owner: root:root
-    path: /etc/systemd/system/concourse_worker.service
-    permissions: '0755'
+- encoding: b64
+  content: ${base64encode(data.template_file.concourse_systemd.rendered)}
+  owner: root:root
+  path: /etc/systemd/system/concourse_worker.service
+  permissions: '0755'
+${module.teleport_bootstrap_script.teleport_config_cloudinit}
+${module.teleport_bootstrap_script.teleport_service_cloudinit}
 EOF
   }
 
@@ -170,4 +172,42 @@ EOF
     content_type = "text/x-shellscript"
     content      = "${data.template_file.concourse_bootstrap.rendered}"
   }
+
+  part {
+    content_type = "text/x-shellscript"
+    content = <<EOF
+#!/bin/bash
+cd /tmp
+curl -L "https://get.gravitational.com/teleport-v${var.teleport_version}-linux-amd64-bin.tar.gz" > ./teleport.tar.gz
+sudo tar -xzf ./teleport.tar.gz
+sudo ./teleport/install
+EOF
+  }
+
+  part {
+    content_type = "text/x-shellscript"
+
+    content = "${module.teleport_bootstrap_script.teleport_bootstrap_script}"
+  }
+}
+
+module "teleport_bootstrap_script" {
+  source      = "github.com/skyscrapers/terraform-teleport//teleport-bootstrap-script?ref=3.2.0"
+  auth_server = "${var.teleport_server}"
+  auth_token  = "${var.teleport_auth_token}"
+  function    = "concourse"
+  environment = "${var.environment}"
+}
+
+output "test"{
+  value =<<EOF
+write_files:
+- encoding: b64
+  content: ${base64encode(data.template_file.concourse_systemd.rendered)}
+  owner: root:root
+  path: /etc/systemd/system/concourse_worker.service
+  permissions: '0755'
+${module.teleport_bootstrap_script.teleport_config_cloudinit}
+${module.teleport_bootstrap_script.teleport_service_cloudinit}
+EOF
 }
