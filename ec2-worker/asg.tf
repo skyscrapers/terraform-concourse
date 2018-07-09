@@ -198,16 +198,3 @@ module "teleport_bootstrap_script" {
   function    = "concourse"
   environment = "${var.environment}"
 }
-
-output "test"{
-  value =<<EOF
-write_files:
-- encoding: b64
-  content: ${base64encode(data.template_file.concourse_systemd.rendered)}
-  owner: root:root
-  path: /etc/systemd/system/concourse_worker.service
-  permissions: '0755'
-${module.teleport_bootstrap_script.teleport_config_cloudinit}
-${module.teleport_bootstrap_script.teleport_service_cloudinit}
-EOF
-}
