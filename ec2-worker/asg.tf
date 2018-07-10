@@ -175,6 +175,7 @@ EOF
 
   part {
     content_type = "text/x-shellscript"
+
     content = <<EOF
 #!/bin/bash
 cd /tmp
@@ -197,4 +198,5 @@ module "teleport_bootstrap_script" {
   auth_token  = "${var.teleport_auth_token}"
   function    = "concourse"
   environment = "${var.environment}"
+  project     = "${var.project}"
 }

@@ -149,19 +149,20 @@ The following resources will be created:
 | keys_bucket_arn | The S3 bucket ARN which contains the SSH keys to connect to the TSA | string | - | yes |
 | keys_bucket_id | The S3 bucket id which contains the SSH keys to connect to the TSA | string | - | yes |
 | name | A descriptive name of the purpose of this Concourse worker pool | string | - | yes |
+| project | Project where the concourse claster belongs to. This is mainly used to identify it in teleport | string | `` | no |
 | root_disk_volume_size | Size of the worker instances root disk | string | `10` | no |
 | root_disk_volume_type | Volume type of the worker instances root disk | string | `standard` | no |
 | ssh_key_name | The key name to use for the instance | string | - | yes |
 | subnet_ids | List of subnet ids where to deploy the worker instances | list | - | yes |
+| teleport_auth_token | Teleport server node token  | string | `` | no |
+| teleport_sg | Teleport server security group id | string | `` | no |
+| teleport_version | teleport version for the client | string | `2.5.8` | no |
 | vpc_id | The VPC id where to deploy the worker instances | string | - | yes |
 | work_disk_device_name | Device name of the external EBS volume | string | `/dev/xvdf` | no |
 | work_disk_internal_device_name | Device name of the internal volume | string | `/dev/xvdf` | no |
 | work_disk_volume_size | Size of the external EBS volume | string | `100` | no |
 | work_disk_volume_type | Volume type of the external EBS volume | string | `standard` | no |
 | worker_tsa_port | tsa port that the worker can use to connect to the web | string | `2222` | no |
-| teleport_auth_token | Teleport server node token  | string | `` | no |
-| teleport_version | teleport version for the client | string | `2.5.8` | no |
-| teleport_sg | Teleport server security group id | string | `` | no |
 
 ### Output
 
