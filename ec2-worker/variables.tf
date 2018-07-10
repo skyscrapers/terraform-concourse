@@ -6,6 +6,11 @@ variable "name" {
   description = "A descriptive name of the purpose of this Concourse worker pool"
 }
 
+variable "project" {
+  description = "Project where the concourse claster belongs to. This is mainly used to identify it in teleport ''"
+  default     = ""
+}
+
 variable "vpc_id" {
   description = "The VPC id where to deploy the worker instances"
 }
@@ -99,4 +104,16 @@ variable "concourse_tags" {
 variable "cross_account_worker_role_arn" {
   description = "IAM role ARN to assume to access the Concourse keys bucket in another AWS account"
   default     = ""
+}
+
+variable "teleport_server" {
+  default = ""
+}
+
+variable "teleport_auth_token" {
+  default = ""
+}
+
+variable "teleport_version" {
+  default = "2.5.8"
 }
