@@ -4,7 +4,7 @@ Terraform module to setup Concourse CI. This repository contains the following m
 * `keys`: Creates an S3 bucket and uploads an auto-generated set of keys for concourse.
 * `ecs-web`: ECS based setup for the Concourse web service, which is currently
   the combination of the ATC and TSA.
-  (See the [Concourse Architecture](http://concourse.ci/architecture.html)
+  (See the [Concourse Concepts](https://concourse-ci.org/concepts.html)
   documentation what these acronyms mean)
 * `ec2-worker`: EC2 based setup for a (pool of) Concourse worker(s).
 * `vault-auth`: Sets up the required resources in Vault so it can be integrated in Concourse
