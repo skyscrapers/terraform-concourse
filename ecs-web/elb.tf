@@ -49,3 +49,23 @@ resource "aws_security_group_rule" "sg_ecs_instances_elb_out_ssh" {
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
 }
+
+# Allow traffic to Prometheus metrics from the ECS security group
+resource "aws_security_group_rule" "sg_ecs_instances_out_metrics" {
+  security_group_id = "${var.backend_security_group_id}"
+  type              = "egress"
+  from_port         = "${var.concourse_prometheus_bind_port}"
+  to_port           = "${var.concourse_prometheus_bind_port}"
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+# Allow Prometheus metrics from to ECS on ECS security group
+resource "aws_security_group_rule" "sg_ecs_instances_in_metrics" {
+  security_group_id = "${var.backend_security_group_id}"
+  type              = "ingress"
+  from_port         = "${var.concourse_prometheus_bind_port}"
+  to_port           = "${var.concourse_prometheus_bind_port}"
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
