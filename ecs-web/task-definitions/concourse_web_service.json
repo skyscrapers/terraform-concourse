@@ -24,7 +24,7 @@
       ${concourse_vault_variables}
       { "name": "_CONCOURSE_KEYS_S3"              , "value": "s3://${concourse_keys_bucket_name}/"  },
       { "name": "CONCOURSE_PROMETHEUS_BIND_IP"  , "value": "${concourse_prometheus_bind_ip}"        },
-      { "name": "CONCOURSE_PROMETHEUS_BIND_PORT"  , "value": "${concourse_prometheus_bind_port}"        }
+      { "name": "CONCOURSE_PROMETHEUS_BIND_PORT"  , "value": "${concourse_prometheus_bind_port}"    }
 
     ],
     "logConfiguration": {
