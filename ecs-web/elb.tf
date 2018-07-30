@@ -60,7 +60,7 @@ resource "aws_security_group_rule" "sg_ecs_instances_out_metrics" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-# Allow Prometheus metrics from to ECS on ECS security group
+# Allow trrafic from Prometheus metrics to the ECS security group
 resource "aws_security_group_rule" "sg_ecs_instances_in_metrics" {
   security_group_id = "${var.backend_security_group_id}"
   type              = "ingress"
