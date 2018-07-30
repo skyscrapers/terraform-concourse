@@ -30,17 +30,19 @@ data "template_file" "concourse_web_task_template" {
   template = "${file("${path.module}/task-definitions/concourse_web_service.json")}"
 
   vars {
-    image                      = "${var.concourse_docker_image}:${var.concourse_version}"
-    concourse_hostname         = "${var.concourse_hostname}"
-    concourse_db_uri           = "postgres://${var.concourse_db_username}:${var.concourse_db_password}@${var.concourse_db_host}:${var.concourse_db_port}/${var.concourse_db_name}"
-    awslog_group_name          = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
-    awslog_region              = "${data.aws_region.current.name}"
-    concourse_keys_bucket_name = "${var.keys_bucket_id}"
-    concourse_basic_auth       = "${length(var.concourse_auth_username) > 0 && length(var.concourse_auth_password) > 0 ? data.template_file.concourse_basic_auth.rendered : ""}"
-    concourse_github_auth      = "${length(var.concourse_github_auth_client_id) > 0 && length(var.concourse_github_auth_client_secret) > 0 && length(var.concourse_github_auth_team) > 0 ? data.template_file.concourse_github_auth.rendered : ""}"
-    concourse_vault_variables  = "${length(var.vault_server_url) > 0 ? data.template_file.concourse_vault_variables.rendered : ""}"
-    memory                     = "${var.container_memory}"
-    cpu                        = "${var.container_cpu}"
+    image                          = "${var.concourse_docker_image}:${var.concourse_version}"
+    concourse_hostname             = "${var.concourse_hostname}"
+    concourse_db_uri               = "postgres://${var.concourse_db_username}:${var.concourse_db_password}@${var.concourse_db_host}:${var.concourse_db_port}/${var.concourse_db_name}"
+    awslog_group_name              = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
+    awslog_region                  = "${data.aws_region.current.name}"
+    concourse_keys_bucket_name     = "${var.keys_bucket_id}"
+    concourse_basic_auth           = "${length(var.concourse_auth_username) > 0 && length(var.concourse_auth_password) > 0 ? data.template_file.concourse_basic_auth.rendered : ""}"
+    concourse_github_auth          = "${length(var.concourse_github_auth_client_id) > 0 && length(var.concourse_github_auth_client_secret) > 0 && length(var.concourse_github_auth_team) > 0 ? data.template_file.concourse_github_auth.rendered : ""}"
+    concourse_vault_variables      = "${length(var.vault_server_url) > 0 ? data.template_file.concourse_vault_variables.rendered : ""}"
+    memory                         = "${var.container_memory}"
+    cpu                            = "${var.container_cpu}"
+    concourse_prometheus_bind_ip   = "${var.concourse_prometheus_bind_ip}"
+    concourse_prometheus_bind_port = "${var.concourse_prometheus_bind_port}"
   }
 }
 

@@ -129,3 +129,14 @@ variable "container_memory" {
 variable "container_cpu" {
   default = 256
 }
+
+variable "concourse_prometheus_bind_ip" {
+  description = "IP to listen on to expose Prometheus metrics"
+  default = "0.0.0.0"
+}
+
+variable "concourse_prometheus_bind_port" {
+  description = "Port to listen on to expose Prometheus metrics"
+  default = "9391"
+}
+

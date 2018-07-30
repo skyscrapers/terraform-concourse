@@ -90,6 +90,8 @@ the [concourse website](http://concourse.ci/teams.html).
 
  * [`concourse_auth_username`]: String(optional): Basic authentication username
  * [`concourse_auth_password`]: String(optional): Basic authentication password
+ * [`concourse_prometheus_bind_ip`]: String(optional) default 0.0.0.0: IP to listen on to expose Prometheus metrics 
+ * [`concourse_prometheus_bind_port`]: String(optional) default 9391: Port to listen on to expose Prometheus metrics 
 
 ### Output
  * [`elb_dns_name`]: String: DNS name of the loadbalancer
@@ -120,6 +122,8 @@ module "concourse-web" {
   keys_bucket_arn                     = "${module.keys.keys_bucket_arn}"
   vault_server_url                    = "https://vault.example.com"
   vault_auth_concourse_role_name      = "${module.concourse-vault-auth.concourse_vault_role_name}"
+  concourse_prometheus_bind_ip        = "0.0.0.0"
+  concourse_prometheus_bind_port      = "9391"
 }
 ```
 
