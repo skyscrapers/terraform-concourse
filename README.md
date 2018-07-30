@@ -78,6 +78,8 @@ The following resources are created:
  * [`concourse_vault_auth_backend_max_ttl`]: String(optional): The Vault max-ttl that Concourse will use. Defaults to "2592000" (30 days).
  * [`container_cpu`]: Int(optional): The number of cpu units to reserve for the container. This parameter maps to CpuShares in the Create a container section of the Docker Remote API. Defaults to 256.
  * [`container_memory`]: Int(optional): The amount of memory (in MiB) used by the task. Defaults to 256.
+ * [`concourse_prometheus_bind_ip`]: String(optional) default 0.0.0.0: IP to listen on to expose Prometheus metrics
+ * [`concourse_prometheus_bind_port`]: String(optional) default 9391: Port to listen on to expose Prometheus metrics
 
 Depending on if you want standard Github authentication or standard authentication,
 you need to fill in the following variables. We advise to use Github as there you can enforce 2 factor
@@ -90,8 +92,6 @@ the [concourse website](http://concourse.ci/teams.html).
 
  * [`concourse_auth_username`]: String(optional): Basic authentication username
  * [`concourse_auth_password`]: String(optional): Basic authentication password
- * [`concourse_prometheus_bind_ip`]: String(optional) default 0.0.0.0: IP to listen on to expose Prometheus metrics 
- * [`concourse_prometheus_bind_port`]: String(optional) default 9391: Port to listen on to expose Prometheus metrics 
 
 ### Output
  * [`elb_dns_name`]: String: DNS name of the loadbalancer
