@@ -67,6 +67,5 @@ resource "aws_security_group_rule" "sg_ecs_instances_in_metrics" {
   from_port         = "${var.concourse_prometheus_bind_port}"
   to_port           = "${var.concourse_prometheus_bind_port}"
   protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  source_security_group_id = "${module.elb.sg_id}"
+  self              = true
 }
