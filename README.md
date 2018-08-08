@@ -190,6 +190,12 @@ module "concourse-worker" {
 }
 ```
 
+### NOTE on the external EBS volume
+
+The EC2 instances created by this module will include an external EBS volume that will automatically be attached and mounted. You should pay special attention to the device name that those volumes will have inside the OS once attached, as that name can vary depending on the instance type you selected. For example, in general for `t2` instances, if you attach the EBS volume as `/dev/xvdf` it'll have the same device name inside the OS, but on `m5` or `c4` instances that's not the case, as it'll be named `/dev/nvme1n1`.
+
+As of now, this situation is not being handled automatically by the module, so depending on the instance type you select, you might have to change the internal device name via the variable `work_disk_internal_device_name`.
+
 ## vault-auth
 
 This module sets up the needed Vault resources for Concourse:
