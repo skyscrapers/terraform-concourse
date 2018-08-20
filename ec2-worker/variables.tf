@@ -49,23 +49,28 @@ variable "root_disk_volume_size" {
   default     = "10"
 }
 
+variable "work_disk_ephemeral" {
+  description = "Whether to use ephemeral volumes as Concourse worker storage. You must use an `instance_type` that supports this (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames)"
+  default     = false
+}
+
 variable "work_disk_device_name" {
-  description = "Device name of the external EBS volume"
+  description = "Device name of the external EBS volume to use as Concourse worker storage"
   default     = "/dev/xvdf"
 }
 
 variable "work_disk_internal_device_name" {
-  description = "Device name of the internal volume"
+  description = "Device name of the internal volume as identified by the Linux kernel, which can differ from `work_disk_device_name` depending on used AMI. Make sure this is set according the `instance_type`, eg. `/dev/nvme0n1` when using NVMe ephemeral storage"
   default     = "/dev/xvdf"
 }
 
 variable "work_disk_volume_type" {
-  description = "Volume type of the external EBS volume"
+  description = "Volume type of the external EBS volume to use as Concourse worker storage"
   default     = "standard"
 }
 
 variable "work_disk_volume_size" {
-  description = "Size of the external EBS volume"
+  description = "Size of the external EBS volume to use as Concourse worker storage"
   default     = "100"
 }
 

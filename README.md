@@ -158,10 +158,11 @@ The following resources will be created:
 | teleport_sg | Teleport server security group id | string | `` | no |
 | teleport_version | teleport version for the client | string | `2.5.8` | no |
 | vpc_id | The VPC id where to deploy the worker instances | string | - | yes |
-| work_disk_device_name | Device name of the external EBS volume | string | `/dev/xvdf` | no |
-| work_disk_internal_device_name | Device name of the internal volume | string | `/dev/xvdf` | no |
-| work_disk_volume_size | Size of the external EBS volume | string | `100` | no |
-| work_disk_volume_type | Volume type of the external EBS volume | string | `standard` | no |
+| work_disk_ephemeral | Whether to use ephemeral volumes as Concourse worker storage. You must use an `instance_type` that supports this (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames) | bool | false | no
+| work_disk_device_name | Device name of the external EBS volume to use as Concourse worker storage | string | `/dev/xvdf` | no |
+| work_disk_internal_device_name | Device name of the internal volume as identified by the Linux kernel, which can differ from `work_disk_device_name` depending on used AMI. Make sure this is set according the `instance_type`, eg. `/dev/nvme0n1` when using NVMe ephemeral storage | string | `/dev/xvdf` | no |
+| work_disk_volume_size | Size of the external EBS volume to use as Concourse worker storage | string | `100` | no |
+| work_disk_volume_type | Volume type of the external EBS volume to use as Concourse worker storage | string | `standard` | no |
 | worker_tsa_port | tsa port that the worker can use to connect to the web | string | `2222` | no |
 
 ### Output
