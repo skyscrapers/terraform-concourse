@@ -16,7 +16,7 @@ data "aws_ami" "ubuntu" {
 }
 
 module "is_ebs_optimised" {
-  source        = "github.com/skyscrapers/terraform-instances//is_ebs_optimised?ref=2.3.0"
+  source        = "github.com/skyscrapers/terraform-instances//is_ebs_optimised?ref=2.3.4"
   instance_type = "${var.instance_type}"
 }
 
@@ -67,7 +67,7 @@ resource "aws_launch_configuration" "concourse_worker_launchconfig_ephemeral" {
 
   # This is the work dir for concourse
   ephemeral_block_device {
-    device_name  = "${var.work_disk_internal_device_name}"
+    device_name  = "${var.work_disk_device_name}"
     virtual_name = "ephemeral0"
   }
 
