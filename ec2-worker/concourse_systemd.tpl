@@ -13,5 +13,7 @@ Group=root
 
 Type=simple
 
+LimitNOFILE=20000
+
 [Install]
 WantedBy=default.target
