@@ -96,3 +96,16 @@ resource "aws_cloudwatch_log_group" "concourse_web_log_group" {
     Project     = "concourse"
   }
 }
+
+resource "aws_cloudwatch_log_metric_filter" "concourse_errors" {
+  name           = "ConcourseErrors"
+  pattern        = "{ $.log_level > 1 }"
+  log_group_name = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
+
+  metric_transformation {
+    name          = "ConcourseErrors"
+    namespace     = "LogMetrics"
+    value         = "1"
+    default_value = "0"
+  }
+}
