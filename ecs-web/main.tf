@@ -97,26 +97,13 @@ resource "aws_cloudwatch_log_group" "concourse_web_log_group" {
   }
 }
 
-resource "aws_cloudwatch_log_metric_filter" "atc_errors" {
-  name           = "ConcourseATCErrors"
-  pattern        = "{ $.log_level > 1 && $.source = atc }"
+resource "aws_cloudwatch_log_metric_filter" "concourse_errors" {
+  name           = "ConcourseErrors"
+  pattern        = "{ $.log_level > 1 }"
   log_group_name = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
 
   metric_transformation {
-    name          = "ConcourseATCErrors"
-    namespace     = "LogMetrics"
-    value         = "1"
-    default_value = "0"
-  }
-}
-
-resource "aws_cloudwatch_log_metric_filter" "tsa_errors" {
-  name           = "ConcourseTSAErrors"
-  pattern        = "{ $.log_level > 1 && $.source = tsa }"
-  log_group_name = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
-
-  metric_transformation {
-    name          = "ConcourseTSAErrors"
+    name          = "ConcourseErrors"
     namespace     = "LogMetrics"
     value         = "1"
     default_value = "0"
