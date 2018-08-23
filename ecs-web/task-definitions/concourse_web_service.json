@@ -16,6 +16,13 @@
         "hostPort": 2222
       }
     ],
+    "ulimits": [
+      {
+        "softLimit": 20000,
+        "hardLimit": 20000,
+        "name": "nofile"
+      }
+    ],
     "environment": [
       ${concourse_basic_auth}
       ${concourse_github_auth}
