@@ -48,8 +48,6 @@ data "template_file" "concourse_web_task_template" {
   }
 }
 
-
-
 data "template_file" "concourse_vault_variables" {
   template = <<EOF
 { "name": "CONCOURSE_VAULT_URL", "value": "$${concourse_vault_url}" },
