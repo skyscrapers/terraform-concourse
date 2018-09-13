@@ -32,7 +32,11 @@ data "template_file" "concourse_web_task_template" {
   vars {
     image                      = "${var.concourse_docker_image}:${var.concourse_version}"
     concourse_hostname         = "${var.concourse_hostname}"
-    concourse_db_uri           = "postgres://${var.concourse_db_username}:${var.concourse_db_password}@${var.concourse_db_host}:${var.concourse_db_port}/${var.concourse_db_name}"
+    concourse_db_host          = "${var.concourse_db_host}"
+    concourse_db_port          = "${var.concourse_db_port}"
+    concourse_db_user          = "${var.concourse_db_username}"
+    concourse_db_password      = "${var.concourse_db_password}"
+    concourse_db_name          = "${var.concourse_db_name}"
     awslog_group_name          = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
     awslog_region              = "${data.aws_region.current.name}"
     concourse_keys_bucket_name = "${var.keys_bucket_id}"
@@ -43,6 +47,8 @@ data "template_file" "concourse_web_task_template" {
     cpu                        = "${var.container_cpu}"
   }
 }
+
+
 
 data "template_file" "concourse_vault_variables" {
   template = <<EOF
@@ -62,8 +68,8 @@ EOF
 
 data "template_file" "concourse_basic_auth" {
   template = <<EOF
-{ "name": "CONCOURSE_BASIC_AUTH_USERNAME", "value": "$${concourse_auth_username}" },
-{ "name": "CONCOURSE_BASIC_AUTH_PASSWORD", "value": "$${concourse_auth_password}" },
+{ "name": "CONCOURSE_ADD_LOCAL_USER", "value": "$${concourse_auth_username}:$${concourse_auth_password}" },
+{ "name": "CONCOURSE_MAIN_TEAM_LOCAL_USER", "value": "$${concourse_auth_username}" },
 EOF
 
   vars {
@@ -74,9 +80,9 @@ EOF
 
 data "template_file" "concourse_github_auth" {
   template = <<EOF
-{ "name": "CONCOURSE_GITHUB_AUTH_CLIENT_ID", "value": "$${concourse_github_auth_client_id}" },
-{ "name": "CONCOURSE_GITHUB_AUTH_CLIENT_SECRET", "value": "$${concourse_github_auth_client_secret}" },
-{ "name": "CONCOURSE_GITHUB_AUTH_TEAM", "value": "$${concourse_github_auth_team}" },
+{ "name": "CONCOURSE_GITHUB_CLIENT_ID", "value": "$${concourse_github_auth_client_id}" },
+{ "name": "CONCOURSE_GITHUB_CLIENT_SECRET", "value": "$${concourse_github_auth_client_secret}" },
+{ "name": "CONCOURSE_MAIN_TEAM_GITHUB_TEAM", "value": "$${concourse_github_auth_team}" },
 EOF
 
   vars {
