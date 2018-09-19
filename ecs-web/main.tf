@@ -67,6 +67,7 @@ EOF
 data "template_file" "concourse_basic_auth" {
   template = <<EOF
 { "name": "CONCOURSE_ADD_LOCAL_USER", "value": "$${concourse_auth_username}:$${concourse_auth_password}" },
+{ "name": "CONCOURSE_MAIN_TEAM_ALLOW_ALL_USERS", "value": "true" },
 EOF
 
   vars {
