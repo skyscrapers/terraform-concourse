@@ -30,21 +30,22 @@ data "template_file" "concourse_web_task_template" {
   template = "${file("${path.module}/task-definitions/concourse_web_service.json")}"
 
   vars {
-    image                      = "${var.concourse_docker_image}:${var.concourse_version}"
-    concourse_hostname         = "${var.concourse_hostname}"
-    concourse_db_host          = "${var.concourse_db_host}"
-    concourse_db_port          = "${var.concourse_db_port}"
-    concourse_db_user          = "${var.concourse_db_username}"
-    concourse_db_password      = "${var.concourse_db_password}"
-    concourse_db_name          = "${var.concourse_db_name}"
-    awslog_group_name          = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
-    awslog_region              = "${data.aws_region.current.name}"
-    concourse_keys_bucket_name = "${var.keys_bucket_id}"
-    concourse_basic_auth       = "${length(var.concourse_auth_username) > 0 && length(var.concourse_auth_password) > 0 ? data.template_file.concourse_basic_auth.rendered : ""}"
-    concourse_github_auth      = "${length(var.concourse_github_auth_client_id) > 0 && length(var.concourse_github_auth_client_secret) > 0 && length(var.concourse_github_auth_team) > 0 ? data.template_file.concourse_github_auth.rendered : ""}"
-    concourse_vault_variables  = "${length(var.vault_server_url) > 0 ? data.template_file.concourse_vault_variables.rendered : ""}"
-    memory                     = "${var.container_memory}"
-    cpu                        = "${var.container_cpu}"
+    image                          = "${var.concourse_docker_image}:${var.concourse_version}"
+    concourse_hostname             = "${var.concourse_hostname}"
+    concourse_db_host              = "${var.concourse_db_host}"
+    concourse_db_port              = "${var.concourse_db_port}"
+    concourse_db_user              = "${var.concourse_db_username}"
+    concourse_db_password          = "${var.concourse_db_password}"
+    concourse_db_name              = "${var.concourse_db_name}"
+    awslog_group_name              = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
+    awslog_region                  = "${data.aws_region.current.name}"
+    concourse_keys_bucket_name     = "${var.keys_bucket_id}"
+    concourse_basic_auth           = "${length(var.concourse_auth_username) > 0 && length(var.concourse_auth_password) > 0 ? data.template_file.concourse_basic_auth.rendered : ""}"
+    concourse_basic_auth_main_team = "${length(var.concourse_auth_main_team_local_user) > 0 ? data.template_file.concourse_basic_auth_main_team_local_user.rendered : ""}"
+    concourse_github_auth          = "${length(var.concourse_github_auth_client_id) > 0 && length(var.concourse_github_auth_client_secret) > 0 && length(var.concourse_github_auth_team) > 0 ? data.template_file.concourse_github_auth.rendered : ""}"
+    concourse_vault_variables      = "${length(var.vault_server_url) > 0 ? data.template_file.concourse_vault_variables.rendered : ""}"
+    memory                         = "${var.container_memory}"
+    cpu                            = "${var.container_cpu}"
   }
 }
 
@@ -67,12 +68,21 @@ EOF
 data "template_file" "concourse_basic_auth" {
   template = <<EOF
 { "name": "CONCOURSE_ADD_LOCAL_USER", "value": "$${concourse_auth_username}:$${concourse_auth_password}" },
-{ "name": "CONCOURSE_MAIN_TEAM_ALLOW_ALL_USERS", "value": "true" },
 EOF
 
   vars {
     concourse_auth_username = "${var.concourse_auth_username}"
     concourse_auth_password = "${var.concourse_auth_password}"
+  }
+}
+
+data "template_file" "concourse_basic_auth_main_team_local_user" {
+  template = <<EOF
+{ "name": "CONCOURSE_MAIN_TEAM_LOCAL_USERS", "value": "$${concourse_auth_username}" },
+EOF
+
+  vars {
+    concourse_auth_username = "${var.concourse_auth_main_team_local_user}"
   }
 }
 

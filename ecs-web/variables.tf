@@ -76,6 +76,11 @@ variable "concourse_auth_password" {
   default     = ""
 }
 
+variable "concourse_auth_main_team_local_user" {
+  description = "Local user to allow access to the main team"
+  default     = ""
+}
+
 variable "concourse_web_instance_count" {
   description = "Number of containers running Concourse web"
   default     = "1"
