@@ -90,6 +90,7 @@ the [concourse website](http://concourse.ci/teams.html).
 
  * [`concourse_auth_username`]: String(optional): Basic authentication username
  * [`concourse_auth_password`]: String(optional): Basic authentication password
+ * [`concourse_auth_main_team_local_user`]: String(optional): Local user who needs to be granted access to the main team
 
 ### Output
  * [`elb_dns_name`]: String: DNS name of the loadbalancer
