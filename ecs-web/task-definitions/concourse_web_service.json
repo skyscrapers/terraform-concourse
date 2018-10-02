@@ -1,37 +1,49 @@
 [
   {
-    "name": "concourse_web",
-    "image": "${image}",
-    "command": [ "web" ],
-    "cpu": ${cpu},
-    "memory": ${memory},
-    "essential": true,
+    "name"        : "concourse_web",
+    "image"       : "${image}",
+    "command"     : [ "web" ],
+    "cpu"         : ${cpu},
+    "memory"      : ${memory},
+    "essential"   : true,
     "portMappings": [
       {
         "containerPort": 8080,
-        "hostPort": 8080
+        "hostPort"     : 8080
       },
       {
         "containerPort": 2222,
-        "hostPort": 2222
+        "hostPort"     : 2222
+      }
+    ],
+    "ulimits": [
+      {
+        "softLimit": 20000,
+        "hardLimit": 20000,
+        "name"     : "nofile"
       }
     ],
     "environment": [
       ${concourse_basic_auth}
+      ${concourse_basic_auth_main_team}
       ${concourse_github_auth}
-      { "name": "CONCOURSE_EXTERNAL_URL"          , "value": "https://${concourse_hostname}"        },
-      { "name": "CONCOURSE_POSTGRES_DATA_SOURCE"  , "value": "${concourse_db_uri}"                  },
+      { "name": "CONCOURSE_EXTERNAL_URL"      , "value": "https://${concourse_hostname}" },
+      { "name": "CONCOURSE_POSTGRES_HOST"     , "value": "${concourse_db_host}" },
+      { "name": "CONCOURSE_POSTGRES_PORT"     , "value": "${concourse_db_port}" },
+      { "name": "CONCOURSE_POSTGRES_USER"     , "value": "${concourse_db_user}" },
+      { "name": "CONCOURSE_POSTGRES_PASSWORD" , "value": "${concourse_db_password}" },
+      { "name": "CONCOURSE_POSTGRES_DATABASE" , "value": "${concourse_db_name}" },
       ${concourse_vault_variables}
-      { "name": "_CONCOURSE_KEYS_S3"              , "value": "s3://${concourse_keys_bucket_name}/"  },
-      { "name": "CONCOURSE_PROMETHEUS_BIND_IP"  , "value": "${concourse_prometheus_bind_ip}"        },
-      { "name": "CONCOURSE_PROMETHEUS_BIND_PORT"  , "value": "${concourse_prometheus_bind_port}"    }
+      { "name": "_CONCOURSE_KEYS_S3"          , "value": "s3://${concourse_keys_bucket_name}/"  },
+      { "name": "CONCOURSE_PROMETHEUS_BIND_IP", "value": "${concourse_prometheus_bind_ip}"        },
+      { "name": "CONCOURSE_PROMETHEUS_BIND_PORT","value": "${concourse_prometheus_bind_port}"    }
 
     ],
     "logConfiguration": {
       "logDriver": "awslogs",
-      "options": {
-        "awslogs-group": "${awslog_group_name}",
-        "awslogs-region": "${awslog_region}",
+      "options"  : {
+        "awslogs-group"        : "${awslog_group_name}",
+        "awslogs-region"       : "${awslog_region}",
         "awslogs-stream-prefix": "concourse_web"
       }
     },

@@ -16,11 +16,12 @@ data "aws_ami" "ubuntu" {
 }
 
 module "is_ebs_optimised" {
-  source        = "github.com/skyscrapers/terraform-instances//is_ebs_optimised?ref=2.3.0"
+  source        = "github.com/skyscrapers/terraform-instances//is_ebs_optimised?ref=2.3.4"
   instance_type = "${var.instance_type}"
 }
 
 resource "aws_launch_configuration" "concourse_worker_launchconfig" {
+  count                = "${var.work_disk_ephemeral ? 0 : 1}"
   image_id             = "${length(var.custom_ami) == 0 ? data.aws_ami.ubuntu.id : var.custom_ami}"
   instance_type        = "${var.instance_type}"
   key_name             = "${var.ssh_key_name}"
@@ -48,9 +49,36 @@ resource "aws_launch_configuration" "concourse_worker_launchconfig" {
   }
 }
 
+resource "aws_launch_configuration" "concourse_worker_launchconfig_ephemeral" {
+  count                = "${var.work_disk_ephemeral ? 1 : 0}"
+  image_id             = "${length(var.custom_ami) == 0 ? data.aws_ami.ubuntu.id : var.custom_ami}"
+  instance_type        = "${var.instance_type}"
+  key_name             = "${var.ssh_key_name}"
+  security_groups      = ["${concat(list(aws_security_group.worker_instances_sg.id), var.additional_security_group_ids)}"]
+  iam_instance_profile = "${aws_iam_instance_profile.concourse_worker_instance_profile.id}"
+  user_data            = "${data.template_cloudinit_config.concourse_bootstrap.rendered}"
+  ebs_optimized        = "${module.is_ebs_optimised.is_ebs_optimised}"
+
+  root_block_device {
+    volume_type           = "${var.root_disk_volume_type}"
+    volume_size           = "${var.root_disk_volume_size}"
+    delete_on_termination = "true"
+  }
+
+  # This is the work dir for concourse
+  ephemeral_block_device {
+    device_name  = "${var.work_disk_device_name}"
+    virtual_name = "ephemeral0"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 resource "aws_autoscaling_group" "concourse_worker_asg" {
   name                 = "concourse_worker_${var.environment}_${var.name}_asg"
-  launch_configuration = "${aws_launch_configuration.concourse_worker_launchconfig.id}"
+  launch_configuration = "${element(concat(aws_launch_configuration.concourse_worker_launchconfig.*.id, aws_launch_configuration.concourse_worker_launchconfig_ephemeral.*.id), 0)}"
   vpc_zone_identifier  = ["${var.subnet_ids}"]
   max_size             = "${var.concourse_worker_instance_count}"
   min_size             = "${var.concourse_worker_instance_count}"
@@ -94,6 +122,14 @@ data "template_file" "concourse_bootstrap" {
   }
 }
 
+data "template_file" "check_attachment" {
+  template = "${file("${path.module}/check_attachment.sh.tpl")}"
+
+  vars {
+    work_disk_device_name = "${var.work_disk_device_name}"
+  }
+}
+
 data "template_cloudinit_config" "concourse_bootstrap" {
   gzip          = true
   base64_encode = true
@@ -122,11 +158,7 @@ EOF
   # And format and mount the drive
   part {
     content_type = "text/x-shellscript"
-
-    content = <<EOF
-#!/bin/bash
-aws --region $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/[a-z]$//') ec2 wait volume-in-use --filters Name=attachment.instance-id,Values=$(curl -s http://169.254.169.254/latest/meta-data/instance-id) Name=attachment.device,Values=${var.work_disk_device_name}
-EOF
+    content      = "${var.work_disk_ephemeral ? "" : data.template_file.check_attachment.rendered}"
   }
 
   # Format external volume as btrfs

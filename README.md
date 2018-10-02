@@ -4,7 +4,7 @@ Terraform module to setup Concourse CI. This repository contains the following m
 * `keys`: Creates an S3 bucket and uploads an auto-generated set of keys for concourse.
 * `ecs-web`: ECS based setup for the Concourse web service, which is currently
   the combination of the ATC and TSA.
-  (See the [Concourse Architecture](http://concourse.ci/architecture.html)
+  (See the [Concourse Concepts](https://concourse-ci.org/concepts.html)
   documentation what these acronyms mean)
 * `ec2-worker`: EC2 based setup for a (pool of) Concourse worker(s).
 * `vault-auth`: Sets up the required resources in Vault so it can be integrated in Concourse
@@ -92,6 +92,7 @@ the [concourse website](http://concourse.ci/teams.html).
 
  * [`concourse_auth_username`]: String(optional): Basic authentication username
  * [`concourse_auth_password`]: String(optional): Basic authentication password
+ * [`concourse_auth_main_team_local_user`]: String(optional): Local user who needs to be granted access to the main team
 
 ### Output
  * [`elb_dns_name`]: String: DNS name of the loadbalancer
@@ -162,10 +163,11 @@ The following resources will be created:
 | teleport_sg | Teleport server security group id | string | `` | no |
 | teleport_version | teleport version for the client | string | `2.5.8` | no |
 | vpc_id | The VPC id where to deploy the worker instances | string | - | yes |
-| work_disk_device_name | Device name of the external EBS volume | string | `/dev/xvdf` | no |
-| work_disk_internal_device_name | Device name of the internal volume | string | `/dev/xvdf` | no |
-| work_disk_volume_size | Size of the external EBS volume | string | `100` | no |
-| work_disk_volume_type | Volume type of the external EBS volume | string | `standard` | no |
+| work_disk_ephemeral | Whether to use ephemeral volumes as Concourse worker storage. You must use an `instance_type` that supports this (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames) | bool | false | no
+| work_disk_device_name | Device name of the external EBS volume to use as Concourse worker storage | string | `/dev/xvdf` | no |
+| work_disk_internal_device_name | Device name of the internal volume as identified by the Linux kernel, which can differ from `work_disk_device_name` depending on used AMI. Make sure this is set according the `instance_type`, eg. `/dev/nvme0n1` when using NVMe ephemeral storage | string | `/dev/xvdf` | no |
+| work_disk_volume_size | Size of the external EBS volume to use as Concourse worker storage | string | `100` | no |
+| work_disk_volume_type | Volume type of the external EBS volume to use as Concourse worker storage | string | `standard` | no |
 | worker_tsa_port | tsa port that the worker can use to connect to the web | string | `2222` | no |
 
 ### Output
@@ -193,6 +195,12 @@ module "concourse-worker" {
   additional_security_group_ids = ["${data.terraform_remote_state.static.sg_all_id}"]
 }
 ```
+
+### NOTE on the external EBS volume
+
+The EC2 instances created by this module will include an external EBS volume that will automatically be attached and mounted. You should pay special attention to the device name that those volumes will have inside the OS once attached, as that name can vary depending on the instance type you selected. For example, in general for `t2` instances, if you attach the EBS volume as `/dev/xvdf` it'll have the same device name inside the OS, but on `m5` or `c4` instances that's not the case, as it'll be named `/dev/nvme1n1`.
+
+As of now, this situation is not being handled automatically by the module, so depending on the instance type you select, you might have to change the internal device name via the variable `work_disk_internal_device_name`.
 
 ## vault-auth
 
