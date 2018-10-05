@@ -209,11 +209,12 @@ This module sets up the needed Vault resources for Concourse:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| additional_vault_policies | Additional Vault policies to attach to the Concourse role. Defaults to empty list | string | `<list>` | no |
-| concourse_iam_role_arn | IAM role ARN of the Concourse ATC server | string | - | yes |
-| vault_aws_auth_backend_path | The path the AWS auth backend being configured was mounted at. Defaults to aws. | string | `aws` | no |
+| additional_vault_policies | Additional Vault policies to attach to the Concourse role | string | `<list>` | no |
+| concourse_iam_role_arn | IAM role ARN of the Concourse ATC server. You can get this from the concourse web module outputs | string | - | yes |
+| vault_aws_auth_backend_path | The path the AWS auth backend being configured was mounted at | string | `aws` | no |
 | vault_concourse_role_name | Name to give to the Vault role and policy for Concourse | string | - | yes |
 | vault_server_url | The Vault server url | string | - | yes |
+| vault_token_period | Vault token renewal period, in seconds. This make the token to never expire, but still has to be renewed within the duration specified by this value | string | `43200` | no |
 
 ### Output
 
