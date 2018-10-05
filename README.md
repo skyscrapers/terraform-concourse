@@ -214,7 +214,7 @@ This module sets up the needed Vault resources for Concourse:
 | vault_aws_auth_backend_path | The path the AWS auth backend being configured was mounted at | string | `aws` | no |
 | vault_concourse_role_name | Name to give to the Vault role and policy for Concourse | string | - | yes |
 | vault_server_url | The Vault server url | string | - | yes |
-| vault_token_period | Vault token renewal period, in seconds. This make the token to never expire, but still has to be renewed within the duration specified by this value | string | `43200` | no |
+| vault_token_period | Vault token renewal period, in seconds. This sets the token to never expire, but it still has to be renewed within the duration specified by this value | string | `43200` | no |
 
 ### Output
 

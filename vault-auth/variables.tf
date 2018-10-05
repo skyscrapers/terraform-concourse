@@ -21,6 +21,6 @@ variable "vault_server_url" {
 }
 
 variable "vault_token_period" {
-  description = "Vault token renewal period, in seconds. This make the token to never expire, but still has to be renewed within the duration specified by this value"
+  description = "Vault token renewal period, in seconds. This sets the token to never expire, but it still has to be renewed within the duration specified by this value"
   default     = 43200
 }
