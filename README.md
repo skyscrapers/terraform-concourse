@@ -165,6 +165,7 @@ The following resources will be created:
 | work_disk_volume_size | Size of the external EBS volume to use as Concourse worker storage | string | `100` | no |
 | work_disk_volume_type | Volume type of the external EBS volume to use as Concourse worker storage | string | `standard` | no |
 | worker_tsa_port | tsa port that the worker can use to connect to the web | string | `2222` | no |
+| cpu_credits | The credit option for CPU usage. Can be `standard` or `unlimited`. | string | `standard` | no |
 
 ### Output
 
