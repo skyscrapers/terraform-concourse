@@ -16,32 +16,49 @@ data "aws_ami" "ubuntu" {
 }
 
 module "is_ebs_optimised" {
-  source        = "github.com/skyscrapers/terraform-instances//is_ebs_optimised?ref=2.3.4"
+  source        = "github.com/skyscrapers/terraform-instances//is_ebs_optimised?ref=2.3.5"
   instance_type = "${var.instance_type}"
 }
 
-resource "aws_launch_configuration" "concourse_worker_launchconfig" {
-  count                = "${var.work_disk_ephemeral ? 0 : 1}"
-  image_id             = "${length(var.custom_ami) == 0 ? data.aws_ami.ubuntu.id : var.custom_ami}"
-  instance_type        = "${var.instance_type}"
-  key_name             = "${var.ssh_key_name}"
-  security_groups      = ["${concat(list(aws_security_group.worker_instances_sg.id), var.additional_security_group_ids)}"]
-  iam_instance_profile = "${aws_iam_instance_profile.concourse_worker_instance_profile.id}"
-  user_data            = "${data.template_cloudinit_config.concourse_bootstrap.rendered}"
-  ebs_optimized        = "${module.is_ebs_optimised.is_ebs_optimised}"
+resource "aws_launch_template" "concourse_worker_launchtemplate" {
+  count         = "${var.work_disk_ephemeral ? 0 : 1}"
+  image_id      = "${length(var.custom_ami) == 0 ? data.aws_ami.ubuntu.id : var.custom_ami}"
+  instance_type = "${var.instance_type}"
+  key_name      = "${var.ssh_key_name}"
+  user_data     = "${data.template_cloudinit_config.concourse_bootstrap.rendered}"
+  ebs_optimized = "${module.is_ebs_optimised.is_ebs_optimised}"
 
-  root_block_device {
-    volume_type           = "${var.root_disk_volume_type}"
-    volume_size           = "${var.root_disk_volume_size}"
-    delete_on_termination = "true"
+  credit_specification {
+    cpu_credits = "${var.cpu_credits}"
+  }
+
+  network_interfaces {
+    security_groups = ["${concat(list(aws_security_group.worker_instances_sg.id), var.additional_security_group_ids)}"]
+  }
+
+  iam_instance_profile {
+    name = "${aws_iam_instance_profile.concourse_worker_instance_profile.id}"
+  }
+
+  block_device_mappings {
+    device_name = "/dev/sda1"
+
+    ebs {
+      volume_type           = "${var.root_disk_volume_type}"
+      volume_size           = "${var.root_disk_volume_size}"
+      delete_on_termination = "true"
+    }
   }
 
   # This is the work dir for concourse
-  ebs_block_device {
-    device_name           = "${var.work_disk_device_name}"
-    volume_type           = "${var.work_disk_volume_type}"
-    volume_size           = "${var.work_disk_volume_size}"
-    delete_on_termination = "true"
+  block_device_mappings {
+    device_name = "${var.work_disk_device_name}"
+
+    ebs {
+      volume_type           = "${var.work_disk_volume_type}"
+      volume_size           = "${var.work_disk_volume_size}"
+      delete_on_termination = "true"
+    }
   }
 
   lifecycle {
@@ -49,24 +66,38 @@ resource "aws_launch_configuration" "concourse_worker_launchconfig" {
   }
 }
 
-resource "aws_launch_configuration" "concourse_worker_launchconfig_ephemeral" {
-  count                = "${var.work_disk_ephemeral ? 1 : 0}"
-  image_id             = "${length(var.custom_ami) == 0 ? data.aws_ami.ubuntu.id : var.custom_ami}"
-  instance_type        = "${var.instance_type}"
-  key_name             = "${var.ssh_key_name}"
-  security_groups      = ["${concat(list(aws_security_group.worker_instances_sg.id), var.additional_security_group_ids)}"]
-  iam_instance_profile = "${aws_iam_instance_profile.concourse_worker_instance_profile.id}"
-  user_data            = "${data.template_cloudinit_config.concourse_bootstrap.rendered}"
-  ebs_optimized        = "${module.is_ebs_optimised.is_ebs_optimised}"
+resource "aws_launch_template" "concourse_worker_launchtemplate_ephemeral" {
+  count         = "${var.work_disk_ephemeral ? 1 : 0}"
+  image_id      = "${length(var.custom_ami) == 0 ? data.aws_ami.ubuntu.id : var.custom_ami}"
+  instance_type = "${var.instance_type}"
+  key_name      = "${var.ssh_key_name}"
+  user_data     = "${data.template_cloudinit_config.concourse_bootstrap.rendered}"
+  ebs_optimized = "${module.is_ebs_optimised.is_ebs_optimised}"
 
-  root_block_device {
-    volume_type           = "${var.root_disk_volume_type}"
-    volume_size           = "${var.root_disk_volume_size}"
-    delete_on_termination = "true"
+  credit_specification {
+    cpu_credits = "${var.cpu_credits}"
+  }
+
+  network_interfaces {
+    security_groups = ["${concat(list(aws_security_group.worker_instances_sg.id), var.additional_security_group_ids)}"]
+  }
+
+  iam_instance_profile {
+    name = "${aws_iam_instance_profile.concourse_worker_instance_profile.id}"
+  }
+
+  block_device_mappings {
+    device_name = "/dev/sda1"
+
+    ebs {
+      volume_type           = "${var.root_disk_volume_type}"
+      volume_size           = "${var.root_disk_volume_size}"
+      delete_on_termination = "true"
+    }
   }
 
   # This is the work dir for concourse
-  ephemeral_block_device {
+  block_device_mappings {
     device_name  = "${var.work_disk_device_name}"
     virtual_name = "ephemeral0"
   }
@@ -77,12 +108,17 @@ resource "aws_launch_configuration" "concourse_worker_launchconfig_ephemeral" {
 }
 
 resource "aws_autoscaling_group" "concourse_worker_asg" {
-  name                 = "concourse_worker_${var.environment}_${var.name}_asg"
-  launch_configuration = "${element(concat(aws_launch_configuration.concourse_worker_launchconfig.*.id, aws_launch_configuration.concourse_worker_launchconfig_ephemeral.*.id), 0)}"
-  vpc_zone_identifier  = ["${var.subnet_ids}"]
-  max_size             = "${var.concourse_worker_instance_count}"
-  min_size             = "${var.concourse_worker_instance_count}"
-  desired_capacity     = "${var.concourse_worker_instance_count}"
+  name = "concourse_worker_${var.environment}_${var.name}_asg"
+
+  launch_template = {
+    id      = "${element(concat(aws_launch_template.concourse_worker_launchtemplate.*.id, aws_launch_template.concourse_worker_launchtemplate_ephemeral.*.id), 0)}"
+    version = "$$Latest"
+  }
+
+  vpc_zone_identifier = ["${var.subnet_ids}"]
+  max_size            = "${var.concourse_worker_instance_count}"
+  min_size            = "${var.concourse_worker_instance_count}"
+  desired_capacity    = "${var.concourse_worker_instance_count}"
 
   tag {
     key                 = "Environment"
