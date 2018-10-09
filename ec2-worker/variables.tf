@@ -122,3 +122,7 @@ variable "teleport_auth_token" {
 variable "teleport_version" {
   default = "2.5.8"
 }
+
+variable "cpu_credits" {
+  default = "standard"
+}
