@@ -1,5 +1,5 @@
 module "elb" {
-  source                        = "github.com/skyscrapers/terraform-loadbalancers//elb_with_ssl_no_s3logs?ref=6.0.0"
+  source                        = "github.com/skyscrapers/terraform-loadbalancers//elb_with_ssl_no_s3logs?ref=6.1.0"
   name                          = "${var.name}"
   subnets                       = ["${var.elb_subnets}"]
   project                       = "concourse"
@@ -18,6 +18,13 @@ module "elb" {
   lb_ssl_protocol               = "SSL"
   internal                      = false
   ingoing_allowed_ips           = ["${var.allowed_incoming_cidr_blocks}"]
+
+  custom_listeners = [{
+    instance_port     = "${var.concourse_prometheus_bind_port}"
+    instance_protocol = "HTTP"
+    lb_port           = "${var.concourse_prometheus_bind_port}"
+    lb_protocol       = "HTTP"
+  }]
 }
 
 # Allow TSA from ELB to ECS on ECS security group
@@ -26,6 +33,15 @@ resource "aws_security_group_rule" "sg_ecs_instances_elb_in_ssh" {
   type                     = "ingress"
   from_port                = 2222
   to_port                  = 2222
+  protocol                 = "tcp"
+  source_security_group_id = "${module.elb.sg_id}"
+}
+
+resource "aws_security_group_rule" "sg_ecs_instances_elb_in_prometheus" {
+  security_group_id        = "${var.backend_security_group_id}"
+  type                     = "ingress"
+  from_port                = "${var.concourse_prometheus_bind_port}"
+  to_port                  = "${var.concourse_prometheus_bind_port}"
   protocol                 = "tcp"
   source_security_group_id = "${module.elb.sg_id}"
 }
@@ -48,4 +64,22 @@ resource "aws_security_group_rule" "sg_ecs_instances_elb_out_ssh" {
   to_port           = 2222
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "sg_ecs_instances_elb_out_prometheus" {
+  security_group_id        = "${module.elb.sg_id}"
+  type                     = "egress"
+  from_port                = "${var.concourse_prometheus_bind_port}"
+  to_port                  = "${var.concourse_prometheus_bind_port}"
+  protocol                 = "tcp"
+  source_security_group_id = "${var.backend_security_group_id}"
+}
+
+resource "aws_security_group_rule" "sg_elb_in_prometheus" {
+  security_group_id = "${module.elb.sg_id}"
+  type              = "ingress"
+  from_port         = "${var.concourse_prometheus_bind_port}"
+  to_port           = "${var.concourse_prometheus_bind_port}"
+  protocol          = "tcp"
+  cidr_blocks       = ["${var.prometheus_cidrs}"]
 }

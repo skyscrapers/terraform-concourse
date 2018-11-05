@@ -14,6 +14,10 @@
       {
         "containerPort": 2222,
         "hostPort"     : 2222
+      },
+      {
+        "containerPort": ${concourse_prometheus_bind_port},
+        "hostPort"     : ${concourse_prometheus_bind_port}
       }
     ],
     "ulimits": [
@@ -33,7 +37,9 @@
       { "name": "CONCOURSE_POSTGRES_USER"     , "value": "${concourse_db_user}" },
       { "name": "CONCOURSE_POSTGRES_PASSWORD" , "value": "${concourse_db_password}" },
       { "name": "CONCOURSE_POSTGRES_DATABASE" , "value": "${concourse_db_name}" },
-      
+      { "name": "CONCOURSE_PROMETHEUS_BIND_PORT" , "value": "${concourse_prometheus_bind_port}" },
+      { "name": "CONCOURSE_PROMETHEUS_BIND_IP" , "value": "${concourse_prometheus_bind_ip}" },
+
       ${concourse_vault_variables}
       { "name": "_CONCOURSE_KEYS_S3"          , "value": "s3://${concourse_keys_bucket_name}/"  }
     ],

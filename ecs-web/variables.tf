@@ -134,3 +134,16 @@ variable "container_memory" {
 variable "container_cpu" {
   default = 256
 }
+
+variable "concourse_prometheus_bind_port" {
+  default = "9391"
+}
+
+variable "concourse_prometheus_bind_ip" {
+  default = "0.0.0.0"
+}
+
+variable "prometheus_cidrs" {
+  type    = "list"
+  default = []
+}
