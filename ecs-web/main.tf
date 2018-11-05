@@ -13,7 +13,7 @@ resource "aws_ecs_service" "concourse_web" {
     container_port = 8080
   }
 
-  placement_strategy {
+  ordered_placement_strategy {
     type  = "spread"
     field = "instanceId"
   }
@@ -46,6 +46,8 @@ data "template_file" "concourse_web_task_template" {
     concourse_vault_variables      = "${length(var.vault_server_url) > 0 ? data.template_file.concourse_vault_variables.rendered : ""}"
     memory                         = "${var.container_memory}"
     cpu                            = "${var.container_cpu}"
+    concourse_prometheus_bind_port = "${var.concourse_prometheus_bind_port}"
+    concourse_prometheus_bind_ip   = "${var.concourse_prometheus_bind_ip}"
   }
 }
 
