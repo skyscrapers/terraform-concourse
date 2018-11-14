@@ -3,7 +3,7 @@
 set -e
 
 # Install concourse
-curl -L -f -o /usr/local/bin/concourse https://github.com/concourse/concourse/releases/download/v${concourse_version}/concourse_linux_amd64
+curl -s -L -f -o /usr/local/bin/concourse https://github.com/concourse/concourse/releases/download/v${concourse_version}/concourse_linux_amd64
 chmod +x /usr/local/bin/concourse
 
 # AssumeRole for remote TSA
