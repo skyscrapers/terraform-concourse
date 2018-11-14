@@ -56,12 +56,12 @@ variable "work_disk_ephemeral" {
 
 variable "work_disk_device_name" {
   description = "Device name of the external EBS volume to use as Concourse worker storage"
-  default     = "/dev/xvdf"
+  default     = "/dev/sdf"
 }
 
 variable "work_disk_internal_device_name" {
-  description = "Device name of the internal volume as identified by the Linux kernel, which can differ from `work_disk_device_name` depending on used AMI. Make sure this is set according the `instance_type`, eg. `/dev/nvme0n1` when using NVMe ephemeral storage"
-  default     = "/dev/xvdf"
+  description = "Device name of the internal volume as identified by the Linux kernel, which can differ from `work_disk_device_name` depending on used AMI. Make sure this is set according the `instance_type`, eg. `/dev/xvdf` when using an older AMI"
+  default     = "/dev/nvme1n1"
 }
 
 variable "work_disk_volume_type" {
