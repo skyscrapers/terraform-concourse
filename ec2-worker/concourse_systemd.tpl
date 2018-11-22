@@ -3,6 +3,7 @@ Description=Concourse CI Worker
 
 [Service]
 ExecStart=/usr/local/bin/concourse worker \
+       --ephemeral \
        --work-dir /opt/concourse \
        --tsa-host ${concourse_hostname} \
        --tsa-public-key /etc/concourse/tsa_host_key.pub \
