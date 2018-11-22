@@ -261,10 +261,15 @@ EOF
 }
 
 module "teleport_bootstrap_script" {
-  source      = "github.com/skyscrapers/terraform-teleport//teleport-bootstrap-script?ref=3.2.0"
+  source      = "github.com/skyscrapers/terraform-teleport//teleport-bootstrap-script?ref=3.3.5"
   auth_server = "${var.teleport_server}"
   auth_token  = "${var.teleport_auth_token}"
   function    = "concourse"
   environment = "${var.environment}"
   project     = "${var.project}"
+
+  additional_labels = [
+    "concourse_version: \"${var.concourse_version}\"",
+    "instance_type: \"${var.instance_type}\"",
+  ]
 }
