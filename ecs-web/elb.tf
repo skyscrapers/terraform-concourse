@@ -76,10 +76,11 @@ resource "aws_security_group_rule" "sg_ecs_instances_elb_out_prometheus" {
 }
 
 resource "aws_security_group_rule" "sg_elb_in_prometheus" {
+  count             = "${length(var.prometheus_cidrs) > 0 ? 1 : 0}"
   security_group_id = "${module.elb.sg_id}"
   type              = "ingress"
   from_port         = "${var.concourse_prometheus_bind_port}"
   to_port           = "${var.concourse_prometheus_bind_port}"
   protocol          = "tcp"
-  cidr_blocks       = ["${var.prometheus_cidrs}"]
+  cidr_blocks       = "${var.prometheus_cidrs}"
 }

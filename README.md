@@ -1,6 +1,7 @@
 # terraform-concourse
 
 Terraform module to setup Concourse CI. This repository contains the following modules:
+
 * `keys`: Creates an S3 bucket and uploads an auto-generated set of keys for concourse.
 * `ecs-web`: ECS based setup for the Concourse web service, which is currently
   the combination of the ATC and TSA.
@@ -10,19 +11,22 @@ Terraform module to setup Concourse CI. This repository contains the following m
 * `vault-auth`: Sets up the required resources in Vault so it can be integrated in Concourse
 
 ## keys
+
 Creates an S3 bucket and uploads an auto-generated set of keys for concourse.
 
 The following resources are created:
-- S3 bucket for concourse keys
-- Uploads concourse keys to bucket
+
+* S3 bucket for concourse keys
+* Uploads concourse keys to bucket
 
 ### Available variables
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | aws_profile | This is the AWS profile name as set in the shared credentials file. Used to upload the Concourse keys to S3. Omit this if you're using environment variables. | string | `` | no |
-| concourse_workers_iam_role_arns | List of ARNs for the IAM roles that will be able to assume the role to access concourse keys in S3. Normally you'll include the Concourse worker IAM role here | list | - | yes |
+| bucket_force_destroy | A boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error. These objects are not recoverable | string | `false` | no |
 | concourse_keys_version | Change this if you want to re-generate Concourse keys | string | `1` | no |
+| concourse_workers_iam_role_arns | List of ARNs for the IAM roles that will be able to assume the role to access concourse keys in S3. Normally you'll include the Concourse worker IAM role here | list | - | yes |
 | environment | The name of the environment these subnets belong to (prod,stag,dev) | string | - | yes |
 | name | The name of the Concourse deployment, used to distinguish different Concourse setups | string | - | yes |
 
@@ -46,58 +50,63 @@ module "concourse-keys" {
 ```
 
 ## ecs-web
+
 This sets up Concourse Web on an ECS cluster.
 
 The following resources are created:
-- ELB
-- Web concourse ECS service
+
+* ELB
+* Web concourse ECS service
 
 ### Available variables
- * [`environment`]: String(required): the name of the environment these subnets belong to (prod,stag,dev)
- * [`name`]: String(required): The name of the Concourse deployment, used to distinguish different Concourse setups
- * [`ecs_cluster`]: String(required): name of the ecs cluster
- * [`concourse_hostname`]: String(required): hostname on what concourse will be available, this hostname needs to point to the ELB.
- * [`worker_tsa_port`]: String(optional): tsa port that the worker can use to connect to the web. Defaults to ["2222"](https://concourse-ci.org/components.html#component-tsa)
- * [`concourse_docker_image`]: String(optional): docker image to use to start concourse. Default is [skyscrapers/concourse](https://hub.docker.com/r/skyscrapers/concourse/)
- * [`concourse_version`]: String(required): the Concourse CI version to use
- * [`concourse_db_host`]: String(required): postgresql hostname or IP
- * [`concourse_db_port`]: String(optional): port of the postgresql server
- * [`concourse_db_username`]: String(optional): db user to logon to postgresql. Defaults to "concourse".
- * [`concourse_db_password`]: String(required): password to logon to postgresql
- * [`concourse_db_name`]: String(optional): db name to use on the postgresql server. Defaults to "concourse".
- * [`ecs_service_role_arn`]: String(required): IAM role to use for the service to be able to let it register to the ELB
- * [`concourse_web_instance_count`]: Integer(optional): Number of containers running Concourse web
- * [`elb_subnets`]: List(required): Subnets to deploy the ELB in
- * [`ssl_certificate_id`]: String(required): SSL certificate arn to attach to the ELB
- * [`backend_security_group_id`]: String(required): Security groups of the ECS servers
- * [`allowed_incoming_cidr_blocks`]: List(optional): Allowed CIDR blocks in Concourse ATC+TSA. Defaults to 0.0.0.0/0
- * [`keys_bucket_id`]: String(required): The id (name) of the bucket where the concourse keys are stored.
- * [`keys_bucket_arn`]: String(required): The ARN of the bucket where the concourse keys. Used to allow access to the bucket.
- * [`vault_server_url`]: String(optional): The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration. Defaults to ""
- * [`vault_auth_concourse_role_name`]: String(optional): The Vault role that Concourse will use. This is normally fetched from the `vault-auth` terraform module. Defaults to "".
- * [`concourse_vault_auth_backend_max_ttl`]: String(optional): The Vault max-ttl that Concourse will use. Defaults to "2592000" (30 days).
- * [`container_cpu`]: Int(optional): The number of cpu units to reserve for the container. This parameter maps to CpuShares in the Create a container section of the Docker Remote API. Defaults to 256.
- * [`container_memory`]: Int(optional): The amount of memory (in MiB) used by the task. Defaults to 256.
 
-Depending on if you want standard Github authentication or standard authentication,
-you need to fill in the following variables. We advise to use Github as there you can enforce 2 factor
-authentication. More information about teams can be found on
-the [concourse website](http://concourse.ci/teams.html).
-
- * [`concourse_github_auth_client_id`]: String(optional): Github client id
- * [`concourse_github_auth_client_secret`]: String(optional): Github client secret
- * [`concourse_github_auth_team`]: String(optional): Github team that can login
-
- * [`concourse_auth_username`]: String(optional): Basic authentication username
- * [`concourse_auth_password`]: String(optional): Basic authentication password
- * [`concourse_auth_main_team_local_user`]: String(optional): Local user who needs to be granted access to the main team
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| allowed_incoming_cidr_blocks | Allowed CIDR blocks in Concourse ATC+TSA. Defaults to 0.0.0.0/0 | list | `<list>` | no |
+| backend_security_group_id | Security group ID of the ECS servers | string | - | yes |
+| concourse_auth_main_team_local_user | Local user to allow access to the main team | string | `` | no |
+| concourse_auth_password | Basic authentication password | string | `` | no |
+| concourse_auth_username | Basic authentication username | string | `` | no |
+| concourse_db_host | Postgresql server hostname or IP | string | - | yes |
+| concourse_db_name | Database name to use on the postgresql server | string | `concourse` | no |
+| concourse_db_password | Password to logon to postgresql | string | - | yes |
+| concourse_db_port | Port of the postgresql server | string | `5432` | no |
+| concourse_db_postgres_engine_version | Postgres engine version used in the Concourse database server. Only needed if `auto_create_db` is set to `true` | string | `` | no |
+| concourse_github_auth_client_id | Github client id | string | `` | no |
+| concourse_github_auth_client_secret | Github client secret | string | `` | no |
+| concourse_github_auth_team | Github team that can login | string | `` | no |
+| concourse_hostname | Hostname on what concourse will be available, this hostname needs to point to the ELB. If ommitted, the hostname of the AWS ELB will be used instead | string | `` | no |
+| concourse_prometheus_bind_ip | IP address where Concourse will listen for the Prometheus scraper | string | `0.0.0.0` | no |
+| concourse_prometheus_bind_port | Port where Concourse will listen for the Prometheus scraper | string | `9391` | no |
+| concourse_vault_auth_backend_max_ttl | The Vault max-ttl (in seconds) that Concourse will use | string | `2592000` | no |
+| concourse_version | Concourse CI version to use | string | - | yes |
+| concourse_web_instance_count | Number of containers running Concourse web | string | `1` | no |
+| container_cpu | The number of cpu units to reserve for the container. This parameter maps to CpuShares in the Create a container section of the Docker Remote API | string | `256` | no |
+| container_memory | The amount of memory (in MiB) used by the task | string | `256` | no |
+| ecs_cluster | Name of the ecs cluster | string | - | yes |
+| ecs_service_role_arn | IAM role to use for the service to be able to let it register to the ELB | string | - | yes |
+| elb_subnets | Subnets to deploy the ELB in | list | - | yes |
+| environment | The name of the environment these subnets belong to (prod,stag,dev) | string | - | yes |
+| keys_bucket_arn | The S3 bucket ARN which contains the SSH keys to connect to the TSA | string | - | yes |
+| keys_bucket_id | The S3 bucket id which contains the SSH keys to connect to the TSA | string | - | yes |
+| name | The name of the Concourse deployment, used to distinguish different Concourse setups | string | - | yes |
+| prometheus_cidrs | CIDR blocks that'll allowed to access the Prometheus scraper port | list | `<list>` | no |
+| ssl_certificate_id | SSL certificate arn to attach to the ELB | string | - | yes |
+| vault_auth_concourse_role_name | The Vault role that Concourse will use. This is normally fetched from the `vault-auth` Terraform module | string | `` | no |
+| vault_server_url | The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration | string | `` | no |
 
 ### Output
- * [`elb_dns_name`]: String: DNS name of the loadbalancer
- * [`elb_sg_id`]: String: Security group id of the loadbalancer
- * [`iam_role_arn`]: String: ARN of the IAM role created for the Concourse ECS task
+
+| Name | Description |
+|------|-------------|
+| concourse_hostname | Final Concourse hostname |
+| elb_dns_name | DNS name of the loadbalancer |
+| elb_sg_id | Security group id of the loadbalancer |
+| elb_zone_id | Zone ID of the ELB |
+| iam_role_arn | ARN of the IAM role created for the Concourse ECS task |
 
 ### Example
+
 ```
 module "concourse-web" {
   source                              = "github.com/skyscrapers/terraform-concourse//ecs-web"
@@ -129,10 +138,11 @@ module "concourse-web" {
 This sets up a Concourse CI worker pool as EC2 instances running in an Autoscaling group.
 
 The following resources will be created:
-- Autoscaling launch configuration & autoscaling group
-  - The EC2 instances have an additional EBS volume attached, automatically formatted as `btrfs`
-- Security group
-- IAM role
+
+* Autoscaling launch configuration & autoscaling group
+  * The EC2 instances have an additional EBS volume attached, automatically formatted as `btrfs`
+* Security group
+* IAM role
 
 ### Available variables
 
@@ -159,7 +169,7 @@ The following resources will be created:
 | teleport_sg | Teleport server security group id | string | `` | no |
 | teleport_version | teleport version for the client | string | `2.5.8` | no |
 | vpc_id | The VPC id where to deploy the worker instances | string | - | yes |
-| work_disk_ephemeral | Whether to use ephemeral volumes as Concourse worker storage. You must use an `instance_type` that supports this (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames) | bool | false | no
+| work_disk_ephemeral | Whether to use ephemeral volumes as Concourse worker storage. You must use an [`instance_type` that supports this](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames) | bool | false | no
 | work_disk_device_name | Device name of the external EBS volume to use as Concourse worker storage | string | `/dev/xvdf` | no |
 | work_disk_internal_device_name | Device name of the internal volume as identified by the Linux kernel, which can differ from `work_disk_device_name` depending on used AMI. Make sure this is set according the `instance_type`, eg. `/dev/nvme0n1` when using NVMe ephemeral storage | string | `/dev/xvdf` | no |
 | work_disk_volume_size | Size of the external EBS volume to use as Concourse worker storage | string | `100` | no |
@@ -203,8 +213,8 @@ As of now, this situation is not being handled automatically by the module, so d
 
 This module sets up the needed Vault resources for Concourse:
 
-- It creates a Vault policy that allows read-only access to `/concourse/*`
-- It creates a Vault role in the aws auth method (which should be previously created - explained below) for Concourse and attaches the previously mentioned policy
+* It creates a Vault policy that allows read-only access to `/concourse/*`
+* It creates a Vault role in the aws auth method (which should be previously created - explained below) for Concourse and attaches the previously mentioned policy
 
 ### Available variables
 

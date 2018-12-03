@@ -1,7 +1,9 @@
 # Compiled files
 *.tfstate
-*.tfstate.backup
+*.tfstate.*
 
 # Module directory
 .terraform/
 terraform.tfstate.d
+
+vendor

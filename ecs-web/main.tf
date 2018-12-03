@@ -26,12 +26,16 @@ resource "aws_ecs_task_definition" "concourse_web_task_definition" {
   task_role_arn         = "${aws_iam_role.concourse_task_role.arn}"
 }
 
+locals {
+  concourse_hostname = "${var.concourse_hostname == "" ? module.elb.elb_dns_name : var.concourse_hostname}"
+}
+
 data "template_file" "concourse_web_task_template" {
   template = "${file("${path.module}/task-definitions/concourse_web_service.json")}"
 
   vars {
     image                          = "${var.concourse_docker_image}:${var.concourse_version}"
-    concourse_hostname             = "${var.concourse_hostname}"
+    concourse_hostname             = "${local.concourse_hostname}"
     concourse_db_host              = "${var.concourse_db_host}"
     concourse_db_port              = "${var.concourse_db_port}"
     concourse_db_user              = "${var.concourse_db_username}"
@@ -80,7 +84,7 @@ EOF
 
 data "template_file" "concourse_basic_auth_main_team_local_user" {
   template = <<EOF
-{ "name": "CONCOURSE_MAIN_TEAM_LOCAL_USERS", "value": "$${concourse_auth_username}" },
+{ "name": "CONCOURSE_MAIN_TEAM_LOCAL_USER", "value": "$${concourse_auth_username}" },
 EOF
 
   vars {

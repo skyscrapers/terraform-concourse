@@ -20,3 +20,8 @@ variable "concourse_workers_iam_role_arns" {
   type        = "list"
   description = "List of ARNs for the IAM roles that will be able to assume the role to access concourse keys in S3. Normally you'll include the Concourse worker IAM role here"
 }
+
+variable "bucket_force_destroy" {
+  description = "A boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error. These objects are not recoverable"
+  default     = false
+}

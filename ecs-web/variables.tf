@@ -7,15 +7,16 @@ variable "name" {
 }
 
 variable "ecs_cluster" {
-  description = "name of the ecs cluster"
+  description = "Name of the ecs cluster"
 }
 
 variable "concourse_hostname" {
-  description = " hostname on what concourse will be available, this hostname needs to point to the ELB."
+  description = "Hostname on what concourse will be available, this hostname needs to point to the ELB. If ommitted, the hostname of the AWS ELB will be used instead"
+  default     = ""
 }
 
 variable "concourse_docker_image" {
-  description = "docker image to use to start concourse"
+  description = "Docker image to use to start concourse"
   default     = "skyscrapers/concourse"
 }
 
@@ -25,25 +26,25 @@ variable "concourse_version" {
 }
 
 variable "concourse_db_host" {
-  description = "postgresql hostname or IP"
+  description = "Postgresql server hostname or IP"
 }
 
 variable "concourse_db_port" {
-  description = "port of the postgresql server"
+  description = "Port of the postgresql server"
   default     = "5432"
 }
 
 variable "concourse_db_username" {
-  description = "db user to logon to postgresql"
+  description = "Database user to logon to postgresql"
   default     = "concourse"
 }
 
 variable "concourse_db_password" {
-  description = "password to logon to postgresql"
+  description = "Password to logon to postgresql"
 }
 
 variable "concourse_db_name" {
-  description = "db name to use on the postgresql server"
+  description = "Database name to use on the postgresql server"
   default     = "concourse"
 }
 
@@ -92,7 +93,7 @@ variable "elb_subnets" {
 }
 
 variable "backend_security_group_id" {
-  description = ""
+  description = "Security group ID of the ECS servers"
 }
 
 variable "ssl_certificate_id" {
@@ -114,36 +115,42 @@ variable "keys_bucket_arn" {
 }
 
 variable "vault_server_url" {
-  description = "The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration."
+  description = "The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration"
   default     = ""
 }
 
 variable "vault_auth_concourse_role_name" {
-  description = "The Vault role that Concourse will use. This is normally fetched from the `vault-auth` terraform module."
+  description = "The Vault role that Concourse will use. This is normally fetched from the `vault-auth` Terraform module"
   default     = ""
 }
 
 variable "concourse_vault_auth_backend_max_ttl" {
-  default = "2592000"
+  description = "The Vault max-ttl (in seconds) that Concourse will use"
+  default     = "2592000"
 }
 
 variable "container_memory" {
-  default = 256
+  description = "The amount of memory (in MiB) used by the task"
+  default     = 256
 }
 
 variable "container_cpu" {
-  default = 256
+  description = "The number of cpu units to reserve for the container. This parameter maps to CpuShares in the Create a container section of the Docker Remote API"
+  default     = 256
 }
 
 variable "concourse_prometheus_bind_port" {
-  default = "9391"
+  description = "Port where Concourse will listen for the Prometheus scraper"
+  default     = "9391"
 }
 
 variable "concourse_prometheus_bind_ip" {
-  default = "0.0.0.0"
+  description = "IP address where Concourse will listen for the Prometheus scraper"
+  default     = "0.0.0.0"
 }
 
 variable "prometheus_cidrs" {
-  type    = "list"
-  default = []
+  description = "CIDR blocks that'll allowed to access the Prometheus scraper port"
+  type        = "list"
+  default     = []
 }
