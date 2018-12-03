@@ -23,11 +23,11 @@ The following resources are created:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| aws_profile | This is the AWS profile name as set in the shared credentials file. Used to upload the Concourse keys to S3. Omit this if you're using environment variables. | string | `` | no |
 | bucket_force_destroy | A boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error. These objects are not recoverable | string | `false` | no |
 | concourse_keys_version | Change this if you want to re-generate Concourse keys | string | `1` | no |
 | concourse_workers_iam_role_arns | List of ARNs for the IAM roles that will be able to assume the role to access concourse keys in S3. Normally you'll include the Concourse worker IAM role here | list | - | yes |
 | environment | The name of the environment these subnets belong to (prod,stag,dev) | string | - | yes |
+| generate_keys | If set to `true` this module will generate the necessary RSA keys with the [`tls_private_key`](https://www.terraform.io/docs/providers/tls/r/private_key.html) resource and upload them to S3 (server-side encrypted). **Be aware** that this will store the generated *unencrypted* keys in the Terraform state, so be sure to use a secure state backend (e.g. S3 encrypted), or set this to `false` and generate the keys manually | string | `true` | no |
 | name | The name of the Concourse deployment, used to distinguish different Concourse setups | string | - | yes |
 
 ### Outputs
