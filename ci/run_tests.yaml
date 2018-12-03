@@ -1,0 +1,40 @@
+---
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: golang
+    tag: 1.9-alpine
+
+params:
+  AWS_DEFAULT_REGION: eu-west-1
+  TF_VERSION:
+  TEST_ACM_ARN:
+  TEST_CONCOURSE_VERSION:
+  TEST_CONCOURSE_VERSION_FILE:
+  TEST_KEY_NAME:
+  AWS_ACCESS_KEY_ID:
+  AWS_SECRET_ACCESS_KEY:
+  AWS_SESSION_TOKEN:
+
+inputs:
+- name: terraform-src
+  path: gopath/src/github.com/skyscrapers/terraform-concourse
+- name: concourse-release
+  optional: true
+
+run:
+  path: sh
+  args:
+    - -exc
+    - |
+      # Use the version provided in the file $TEST_CONCOURSE_VERSION_FILE if set
+      if [[ ! -z "${TEST_CONCOURSE_VERSION_FILE}" ]]; then
+        TEST_CONCOURSE_VERSION="`cat ${TEST_CONCOURSE_VERSION_FILE}`"
+      fi
+
+      export GOPATH=$PWD/gopath
+      cd gopath/src/github.com/skyscrapers/terraform-concourse/test
+      ./setup.sh
+      dep ensure
+      go test -v -timeout 60m
