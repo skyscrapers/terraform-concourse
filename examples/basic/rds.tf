@@ -14,6 +14,8 @@ module "postgres" {
   engine_version                 = "${var.db_engine_version}"
   default_parameter_group_family = "${var.default_parameter_group_family}"
   storage                        = "${var.rds_allocated_storage}"
+  apply_immediately              = true
+  skip_final_snapshot            = true
 }
 
 resource "aws_security_group_rule" "sg_ecs_instances_postgres_out" {
