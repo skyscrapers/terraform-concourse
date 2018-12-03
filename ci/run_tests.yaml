@@ -11,6 +11,7 @@ params:
   TF_VERSION:
   TEST_ACM_ARN:
   TEST_CONCOURSE_VERSION:
+  TEST_CONCOURSE_VERSION_FILE:
   TEST_KEY_NAME:
   AWS_ACCESS_KEY_ID:
   AWS_SECRET_ACCESS_KEY:
@@ -19,12 +20,19 @@ params:
 inputs:
 - name: terraform-src
   path: gopath/src/github.com/skyscrapers/terraform-concourse
+- name: concourse-release
+  optional: true
 
 run:
   path: sh
   args:
     - -exc
     - |
+      # Use the version provided in the file $TEST_CONCOURSE_VERSION_FILE if set
+      if [[ ! -z "${TEST_CONCOURSE_VERSION_FILE}" ]]; then
+        TEST_CONCOURSE_VERSION="`cat ${TEST_CONCOURSE_VERSION_FILE}`"
+      fi
+
       export GOPATH=$PWD/gopath
       cd gopath/src/github.com/skyscrapers/terraform-concourse/test
       ./setup.sh
