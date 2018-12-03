@@ -24,6 +24,14 @@ resource "aws_ecs_task_definition" "concourse_web_task_definition" {
   container_definitions = "${data.template_file.concourse_web_task_template.rendered}"
   network_mode          = "bridge"
   task_role_arn         = "${aws_iam_role.concourse_task_role.arn}"
+
+  volume {
+    name = "concourse_keys"
+  }
+
+  volume {
+    name = "concourse_db"
+  }
 }
 
 locals {
@@ -52,6 +60,26 @@ data "template_file" "concourse_web_task_template" {
     cpu                            = "${var.container_cpu}"
     concourse_prometheus_bind_port = "${var.concourse_prometheus_bind_port}"
     concourse_prometheus_bind_ip   = "${var.concourse_prometheus_bind_ip}"
+    concourse_db_task_definition   = "${indent(2, join("", data.template_file.concourse_db_task_template.*.rendered))}"
+    volumes_from_concourse_db      = "${var.auto_create_db ? ",{ \"sourceContainer\": \"create_db\" }" : ""}"
+  }
+}
+
+data "template_file" "concourse_db_task_template" {
+  count    = "${var.auto_create_db ? 1 : 0}"
+  template = "${file("${path.module}/task-definitions/create_concourse_db_container.json")}"
+
+  vars {
+    image                      = "postgres"
+    image_tag                  = "${var.concourse_db_postgres_engine_version == "" ? "latest" : var.concourse_db_postgres_engine_version}"
+    concourse_db_host          = "${var.concourse_db_host}"
+    concourse_db_port          = "${var.concourse_db_port}"
+    concourse_db_user          = "${var.concourse_db_username}"
+    concourse_db_password      = "${var.concourse_db_password}"
+    concourse_db_name          = "${var.concourse_db_name}"
+    concourse_db_root_password = "${var.concourse_db_root_password}"
+    awslog_group_name          = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
+    awslog_region              = "${data.aws_region.current.name}"
   }
 }
 
