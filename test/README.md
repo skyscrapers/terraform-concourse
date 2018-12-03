@@ -10,6 +10,8 @@ This folder contains automated tests for this module. All of the tests are writt
 
 **Note #3**: We set `-timeout 60m` on all tests not because they necessarily take that long, but because Go has a default test timeout of 10 minutes, after which it forcefully kills the tests with a `SIGQUIT`, preventing the cleanup tasks from running. Therefore, we set an overlying long timeout to make sure all tests have enough time to finish and clean up.
 
+**Note #4**: These tests will run automatically on every Pull Request that has the `to-test` label attached. The Pull Request status will be automatically updated with the result of the tests.
+
 ## Running the tests
 
 ### Pre-existing resources
