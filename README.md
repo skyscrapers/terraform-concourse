@@ -63,6 +63,7 @@ The following resources are created:
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | allowed_incoming_cidr_blocks | Allowed CIDR blocks in Concourse ATC+TSA. Defaults to 0.0.0.0/0 | list | `<list>` | no |
+| auto_create_db | If set to `true`, the Concourse web container will attempt to create the postgres database if it's not already created | string | `false` | no |
 | backend_security_group_id | Security group ID of the ECS servers | string | - | yes |
 | concourse_auth_main_team_local_user | Local user to allow access to the main team | string | `` | no |
 | concourse_auth_password | Basic authentication password | string | `` | no |
@@ -72,6 +73,9 @@ The following resources are created:
 | concourse_db_password | Password to logon to postgresql | string | - | yes |
 | concourse_db_port | Port of the postgresql server | string | `5432` | no |
 | concourse_db_postgres_engine_version | Postgres engine version used in the Concourse database server. Only needed if `auto_create_db` is set to `true` | string | `` | no |
+| concourse_db_root_password | Root password of the Postgres database server. Only needed if `auto_create_db` is set to `true` | string | `` | no |
+| concourse_db_username | Database user to logon to postgresql | string | `concourse` | no |
+| concourse_docker_image | Docker image to use to start concourse | string | `skyscrapers/concourse` | no |
 | concourse_github_auth_client_id | Github client id | string | `` | no |
 | concourse_github_auth_client_secret | Github client secret | string | `` | no |
 | concourse_github_auth_team | Github team that can login | string | `` | no |

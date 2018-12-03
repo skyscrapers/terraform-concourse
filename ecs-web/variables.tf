@@ -43,6 +43,21 @@ variable "concourse_db_password" {
   description = "Password to logon to postgresql"
 }
 
+variable "concourse_db_root_password" {
+  description = "Root password of the Postgres database server. Only needed if `auto_create_db` is set to `true`"
+  default     = ""
+}
+
+variable "auto_create_db" {
+  description = "If set to `true`, the Concourse web container will attempt to create the postgres database if it's not already created"
+  default     = false
+}
+
+variable "concourse_db_postgres_engine_version" {
+  description = "Postgres engine version used in the Concourse database server. Only needed if `auto_create_db` is set to `true`"
+  default     = ""
+}
+
 variable "concourse_db_name" {
   description = "Database name to use on the postgresql server"
   default     = "concourse"

@@ -1,8 +1,38 @@
 [
   {
-    "name"        : "concourse_web",
-    "image"       : "${image}",
-    "command"     : [ "web" ],
+    "name"             : "download_keys",
+    "image"            : "mesosphere/aws-cli:latest",
+    "essential"        : false,
+    "memoryReservation": 100,
+    "mountPoints"      : [
+      {
+        "containerPath": "/concourse-keys",
+        "sourceVolume" : "concourse_keys"
+      }
+    ],
+    "command": [
+      "s3",
+      "cp",
+      "s3://${concourse_keys_bucket_name}",
+      "/concourse-keys",
+      "--recursive"
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options"  : {
+        "awslogs-group"        : "${awslog_group_name}",
+        "awslogs-region"       : "${awslog_region}",
+        "awslogs-stream-prefix": "download_keys"
+      }
+    }
+  },
+  ${concourse_db_task_definition}
+  {
+    "name"   : "concourse_web",
+    "image"  : "${image}",
+    "command": [
+      "web"
+    ],
     "cpu"         : ${cpu},
     "memory"      : ${memory},
     "essential"   : true,
@@ -31,6 +61,7 @@
       ${concourse_basic_auth}
       ${concourse_basic_auth_main_team}
       ${concourse_github_auth}
+      ${concourse_vault_variables}
       { "name": "CONCOURSE_EXTERNAL_URL"      , "value": "https://${concourse_hostname}" },
       { "name": "CONCOURSE_POSTGRES_HOST"     , "value": "${concourse_db_host}" },
       { "name": "CONCOURSE_POSTGRES_PORT"     , "value": "${concourse_db_port}" },
@@ -38,10 +69,11 @@
       { "name": "CONCOURSE_POSTGRES_PASSWORD" , "value": "${concourse_db_password}" },
       { "name": "CONCOURSE_POSTGRES_DATABASE" , "value": "${concourse_db_name}" },
       { "name": "CONCOURSE_PROMETHEUS_BIND_PORT" , "value": "${concourse_prometheus_bind_port}" },
-      { "name": "CONCOURSE_PROMETHEUS_BIND_IP" , "value": "${concourse_prometheus_bind_ip}" },
-
-      ${concourse_vault_variables}
-      { "name": "_CONCOURSE_KEYS_S3"          , "value": "s3://${concourse_keys_bucket_name}/"  }
+      { "name": "CONCOURSE_PROMETHEUS_BIND_IP" , "value": "${concourse_prometheus_bind_ip}" }
+    ],
+    "volumesFrom": [
+      { "sourceContainer": "download_keys" }
+      ${volumes_from_concourse_db}
     ],
     "logConfiguration": {
       "logDriver": "awslogs",

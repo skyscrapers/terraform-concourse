@@ -1,0 +1,34 @@
+{
+  "name"   : "create_db",
+  "image"  : "${image}:${image_tag}",
+  "memoryReservation": 100,
+  "command": [
+    "/bin/sh",
+    "-exc",
+    "psql -U root -h $CONCOURSE_POSTGRES_HOST -p $CONCOURSE_POSTGRES_PORT -d postgres -c \"CREATE DATABASE $CONCOURSE_POSTGRES_DATABASE\" && psql -U root -h $CONCOURSE_POSTGRES_HOST -p $CONCOURSE_POSTGRES_PORT -d postgres -c \"CREATE USER $CONCOURSE_POSTGRES_USER WITH ENCRYPTED PASSWORD '$CONCOURSE_POSTGRES_PASSWORD'; GRANT ALL PRIVILEGES ON DATABASE $CONCOURSE_POSTGRES_DATABASE TO $CONCOURSE_POSTGRES_USER\""
+  ],
+  "essential"  : false,
+  "environment": [
+    { "name" : "CONCOURSE_POSTGRES_HOST"    , "value": "${concourse_db_host}" },
+    { "name" : "CONCOURSE_POSTGRES_PORT"    , "value": "${concourse_db_port}" },
+    { "name" : "CONCOURSE_POSTGRES_USER"    , "value": "${concourse_db_user}" },
+    { "name" : "CONCOURSE_POSTGRES_PASSWORD", "value": "${concourse_db_password}" },
+    { "name" : "PGPASSWORD"                 , "value": "${concourse_db_root_password}" },
+    { "name" : "CONCOURSE_POSTGRES_DATABASE", "value": "${concourse_db_name}" }
+  ],
+  "logConfiguration": {
+    "logDriver": "awslogs",
+    "options"  : {
+      "awslogs-group"        : "${awslog_group_name}",
+      "awslogs-region"       : "${awslog_region}",
+      "awslogs-stream-prefix": "db_creation"
+    }
+  },
+  "mountPoints": [
+    {
+      "containerPath": "/concourse-db",
+      "sourceVolume" : "concourse_db"
+    }
+  ]
+
+},
