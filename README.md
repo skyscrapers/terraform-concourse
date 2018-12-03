@@ -38,17 +38,6 @@ The following resources are created:
 | keys_bucket_arn | The ARN of the S3 bucket where the concourse keys are stored |
 | keys_bucket_id | The id (name) of the S3 bucket where the concourse keys are stored |
 
-
-### Example
-```
-module "concourse-keys" {
-  source                          = "github.com/skyscrapers/terraform-concourse//keys"
-  environment                     = "${terraform.env}"
-  name                            = "internal"
-  concourse_workers_iam_role_arns = ["${module.concourse-worker.worker_iam_role_arn}"]
-}
-```
-
 ## ecs-web
 
 This sets up Concourse Web on an ECS cluster.
@@ -109,34 +98,6 @@ The following resources are created:
 | elb_zone_id | Zone ID of the ELB |
 | iam_role_arn | ARN of the IAM role created for the Concourse ECS task |
 
-### Example
-
-```
-module "concourse-web" {
-  source                              = "github.com/skyscrapers/terraform-concourse//ecs-web"
-  environment                         = "${terraform.env}"
-  name                                = "internal"
-  ecs_cluster                         = "test-ecs"
-  ecs_service_role_arn                = "${data.terraform_remote_state.static.ecs-service-role}"
-  concourse_hostname                  = "concourse.staging.client.company"
-  concourse_version                   = "3.2.1"
-  concourse_db_host                   = "hostname.rds.test"
-  concourse_db_username               = "concourse"
-  concourse_db_password               = "concourse"
-  concourse_db_name                   = "consourse"
-  concourse_github_auth_client_id     = "${var.concourse_github_auth_client_id}"
-  concourse_github_auth_client_secret = "${var.concourse_github_auth_client_secret}"
-  concourse_github_auth_team          = "${var.concourse_github_auth_team}"
-  elb_subnets                         = "${data.terraform_remote_state.static.public_lb_subnets}"
-  backend_security_group_id           = "${data.terraform_remote_state.static.sg_ecs_instance}"
-  ssl_certificate_id                  = "${var.elb_ssl_certificate}"
-  keys_bucket_id                      = "${module.keys.keys_bucket_id}"
-  keys_bucket_arn                     = "${module.keys.keys_bucket_arn}"
-  vault_server_url                    = "https://vault.example.com"
-  vault_auth_concourse_role_name      = "${module.concourse-vault-auth.concourse_vault_role_name}"
-}
-```
-
 ## ec2-worker
 
 This sets up a Concourse CI worker pool as EC2 instances running in an Autoscaling group.
@@ -189,24 +150,6 @@ The following resources will be created:
 | worker_iam_role | Role name of the worker instances |
 | worker_iam_role_arn | Role ARN of the worker instances |
 
-### Example
-```
-module "concourse-worker" {
-  source                        = "github.com/skyscrapers/terraform-concourse//ec2-worker"
-  environment                   = "${terraform.env}"
-  name                          = "internal"
-  concourse_hostname            = "concourse.staging.client.company"
-  concourse_version             = "3.2.1"
-  keys_bucket_id                = "${module.keys.keys_bucket_id}"
-  keys_bucket_arn               = "${module.keys.keys_bucket_arn}"
-  ssh_key_name                  = "default"
-  instance_type                 = "t2.small"
-  subnet_ids                    = "${data.terraform_remote_state.static.private_app_subnets}"
-  vpc_id                        = "${data.terraform_remote_state.static.vpc_id}"
-  additional_security_group_ids = ["${data.terraform_remote_state.static.sg_all_id}"]
-}
-```
-
 ### NOTE on the external EBS volume
 
 The EC2 instances created by this module will include an external EBS volume that will automatically be attached and mounted. You should pay special attention to the device name that those volumes will have inside the OS once attached, as that name can vary depending on the instance type you selected. For example, in general for `t2` instances, if you attach the EBS volume as `/dev/xvdf` it'll have the same device name inside the OS, but on `m5` or `c4` instances that's not the case, as it'll be named `/dev/nvme1n1`.
@@ -235,20 +178,13 @@ This module sets up the needed Vault resources for Concourse:
 
 --
 
-### Example
-
-```
-module "concourse-vault-auth" {
-  source                    = "github.com/skyscrapers/terraform-concourse//vault-auth"
-  concourse_iam_role_arn    = "${module.concourse-web.iam_role_arn}"
-  vault_server_url          = "https://vault.example.com"
-  vault_concourse_role_name = "concourse-default"
-}
-```
-
 ### How to enable and configure the AWS auth method
 
-If the AWS auth method is not previously enabled, you'll need to do it before applying this module. To do that you'll need to follow the first two steps described in the official Vault documentation: https://www.vaultproject.io/docs/auth/aws.html#via-the-cli
+If the AWS auth method is not previously enabled, you'll need to do it before applying this module. To do that you'll need to follow the first two steps described in the [official Vault documentation](https://www.vaultproject.io/docs/auth/aws.html#via-the-cli).
 
-- Enable the auth method
-- Configure the AWS credentials so Vault can make calls to the AWS API. Note that you can skip this step if you're going to use Vault's IAM EC2 instance role to access the AWS API.
+* Enable the auth method
+* Configure the AWS credentials so Vault can make calls to the AWS API. Note that you can skip this step if you're going to use Vault's IAM EC2 instance role to access the AWS API.
+
+## Examples
+
+Check out the [examples](examples/) folder.
