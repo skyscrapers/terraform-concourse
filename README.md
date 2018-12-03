@@ -75,7 +75,7 @@ The following resources are created:
 | concourse_github_auth_client_id | Github client id | string | `` | no |
 | concourse_github_auth_client_secret | Github client secret | string | `` | no |
 | concourse_github_auth_team | Github team that can login | string | `` | no |
-| concourse_hostname | Hostname on what concourse will be available, this hostname needs to point to the ELB. If ommitted, the hostname of the AWS ELB will be used instead | string | `` | no |
+| concourse_hostname | Hostname on which concourse will be available, this hostname needs to point to the ELB. If ommitted, the hostname of the AWS ELB will be used instead | string | `` | no |
 | concourse_prometheus_bind_ip | IP address where Concourse will listen for the Prometheus scraper | string | `0.0.0.0` | no |
 | concourse_prometheus_bind_port | Port where Concourse will listen for the Prometheus scraper | string | `9391` | no |
 | concourse_vault_auth_backend_max_ttl | The Vault max-ttl (in seconds) that Concourse will use | string | `2592000` | no |

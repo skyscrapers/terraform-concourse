@@ -11,7 +11,7 @@ variable "ecs_cluster" {
 }
 
 variable "concourse_hostname" {
-  description = "Hostname on what concourse will be available, this hostname needs to point to the ELB. If ommitted, the hostname of the AWS ELB will be used instead"
+  description = "Hostname on which concourse will be available, this hostname needs to point to the ELB. If ommitted, the hostname of the AWS ELB will be used instead"
   default     = ""
 }
 
