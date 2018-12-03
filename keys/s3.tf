@@ -1,6 +1,7 @@
 resource "aws_s3_bucket" "concourse_keys" {
-  bucket = "concourse-keys-${var.name}-${var.environment}"
-  acl    = "private"
+  bucket        = "concourse-keys-${var.name}-${var.environment}"
+  acl           = "private"
+  force_destroy = "${var.bucket_force_destroy}"
 
   versioning {
     enabled = true
