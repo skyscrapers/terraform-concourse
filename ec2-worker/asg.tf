@@ -80,7 +80,8 @@ resource "aws_launch_template" "concourse_worker_launchtemplate_ephemeral" {
   }
 
   network_interfaces {
-    security_groups = ["${concat(list(aws_security_group.worker_instances_sg.id), var.additional_security_group_ids)}"]
+    security_groups       = ["${concat(list(aws_security_group.worker_instances_sg.id), var.additional_security_group_ids)}"]
+    delete_on_termination = true
   }
 
   iam_instance_profile {
