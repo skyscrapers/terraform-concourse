@@ -6,17 +6,20 @@ import (
 	"encoding/json"
 	"fmt"
 	"os/exec"
+	"time"
 
 	"crypto/tls"
 	"net/http"
 
 	"github.com/gruntwork-io/terratest/modules/logger"
+	"github.com/gruntwork-io/terratest/modules/retry"
 )
 
 //go:generate counterfeiter . Command
 
 type Command interface {
 	Login(url string, teamName string, username string, password string, insecure bool) []byte
+	LoginRetry(url string, teamName string, username string, password string, insecure bool, maxRetries int, sleepBetweenRetries time.Duration) []byte
 	LoginE(url string, teamName string, username string, password string, insecure bool) ([]byte, error)
 	Pipelines() []string
 	PipelinesE() ([]string, error)
@@ -49,6 +52,25 @@ func NewCommand(target string, t *testing.T, flyBinaryPath string) Command {
 		t:             t,
 		flyBinaryPath: flyBinaryPath,
 	}
+}
+
+func (f command) LoginRetry(
+	url string,
+	teamName string,
+	username string,
+	password string,
+	insecure bool,
+	maxRetries int,
+	sleepBetweenRetries time.Duration,
+) []byte {
+	output, err := retry.DoWithRetry(f.t, "Logging into Concourse", maxRetries, sleepBetweenRetries, func() ([]byte, error) {
+		return f.LoginE(url, teamName, username, password, insecure)
+	})
+	if err != nil {
+		f.t.Fatal(err)
+	}
+
+	return output
 }
 
 func (f command) Login(

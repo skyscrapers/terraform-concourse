@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/test-structure"
@@ -88,7 +89,11 @@ func validate(t *testing.T, terraformOptions *terraform.Options) {
 
 func loginInConcourse(t *testing.T, flyCommand fly.Command, concourse_hostname string, concourse_team string, concourse_user string, concourse_pass string, insecure bool) {
 	logger.Logf(t, "Logging into Concourse server %s, team %s, username %s", concourse_hostname, concourse_team, concourse_user)
-	flyCommand.Login(fmt.Sprintf("https://%s", concourse_hostname), concourse_team, concourse_user, concourse_pass, insecure)
+
+	maxRetries := 30
+	sleepBetweenRetries := 10 * time.Second
+
+	flyCommand.LoginRetry(fmt.Sprintf("https://%s", concourse_hostname), concourse_team, concourse_user, concourse_pass, insecure, maxRetries, sleepBetweenRetries)
 }
 
 func validateWorkers(t *testing.T, flyCommand fly.Command, workersCount int) {
