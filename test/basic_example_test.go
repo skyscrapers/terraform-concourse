@@ -107,6 +107,8 @@ func validateWorkers(t *testing.T, flyCommand fly.Command, workersCount int) {
 			return "", errors.New(fmt.Sprintf("the number of running workers (%s) doesn't match the expected value (%s)", len(workers), workersCount))
 		}
 
+		logger.Logf(t, "correct number of running workers found: %s", len(workers))
+
 		for _, w := range workers {
 			if w.State != "running" {
 				return "", errors.New(fmt.Sprintf("worker %s is not in the 'running' state (%s)", w.Name, w.State))
