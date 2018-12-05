@@ -14,8 +14,6 @@ import (
 	"github.com/gruntwork-io/terratest/modules/logger"
 	"github.com/gruntwork-io/terratest/modules/retry"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/skyscrapers/terraform-concourse/test/fly"
 )
 
@@ -102,20 +100,20 @@ func validateWorkers(t *testing.T, flyCommand fly.Command, workersCount int) {
 	maxRetries := 30
 	sleepBetweenRetries := 10 * time.Second
 
-	retry.DoWithRetry(f.t, "Validating concourse workers", maxRetries, sleepBetweenRetries, func() (string, error) {
+	retry.DoWithRetry(t, "Validating concourse workers", maxRetries, sleepBetweenRetries, func() (string, error) {
 		workers := flyCommand.Workers()
 
 		if len(workers) != workersCount {
-			return nil, errors.New(fmt.Sprintf("the number of running workers (%s) doesn't match the expected value (%s)", len(workers), workersCount))
+			return "", errors.New(fmt.Sprintf("the number of running workers (%s) doesn't match the expected value (%s)", len(workers), workersCount))
 		}
 
 		for _, w := range workers {
 			if w.State != "running" {
-				return nil, errors.New(fmt.Sprintf("worker %s is not in the 'running' state (%s)", w.Name, w.State))
+				return "", errors.New(fmt.Sprintf("worker %s is not in the 'running' state (%s)", w.Name, w.State))
 			}
 		}
 
-		return nil, nil
+		return "", nil
 	})
 }
 
