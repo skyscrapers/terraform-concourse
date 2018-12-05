@@ -1,9 +1,12 @@
 #!/bin/sh
 
-TF_VERSION=${TF_VERSION:-0.11.10}
-
 apk add --update unzip curl dep git
 
-# Install terraform
-curl -s -o "terraform.zip" "https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip"
-unzip terraform.zip -d /usr/local/bin
+# Unzip terraform binary
+unzip terraform-release/terraform_*_linux_amd64.zip -d /usr/local/bin
+chmod +x /usr/local/bin/terraform
+
+# Move fly binary into PATH
+export TEST_FLY_PATH=/usr/local/bin/fly
+cp -a concourse-release/fly_linux_amd64 $TEST_FLY_PATH
+chmod +x $TEST_FLY_PATH

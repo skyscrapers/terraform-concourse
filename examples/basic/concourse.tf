@@ -45,21 +45,42 @@ module "concourse_worker" {
   keys_bucket_id                  = "${module.concourse_keys.keys_bucket_id}"
   keys_bucket_arn                 = "${module.concourse_keys.keys_bucket_arn}"
   ssh_key_name                    = "${var.key_name}"
-  instance_type                   = "${var.worker_instance_type}"
+  instance_type                   = "t3.medium"
   subnet_ids                      = "${module.vpc.private_management_subnets}"
   vpc_id                          = "${module.vpc.vpc_id}"
-  work_disk_ephemeral             = "${var.worker_work_disk_ephemeral}"
-  work_disk_volume_type           = "${var.worker_work_disk_volume_type}"
-  work_disk_volume_size           = "${var.worker_work_disk_volume_size}"
-  work_disk_internal_device_name  = "${var.worker_work_disk_internal_device_name}"
-  root_disk_volume_type           = "${var.worker_root_disk_volume_type}"
-  root_disk_volume_size           = "${var.worker_root_disk_volume_size}"
+  work_disk_ephemeral             = false
+  cpu_credits                     = "${var.worker_cpu_credits}"
+}
+
+module "concourse_worker_ephemeral" {
+  source                          = "../../ec2-worker"
+  environment                     = "${var.environment}"
+  name                            = "${var.project}-ephemeral"
+  concourse_worker_instance_count = "${var.worker_instance_count}"
+  concourse_version               = "${var.concourse_version}"
+  concourse_hostname              = "${module.concourse_web.concourse_hostname}"
+  keys_bucket_id                  = "${module.concourse_keys.keys_bucket_id}"
+  keys_bucket_arn                 = "${module.concourse_keys.keys_bucket_arn}"
+  ssh_key_name                    = "${var.key_name}"
+  instance_type                   = "m3.large"
+  subnet_ids                      = "${module.vpc.private_management_subnets}"
+  vpc_id                          = "${module.vpc.vpc_id}"
+  work_disk_ephemeral             = true
   cpu_credits                     = "${var.worker_cpu_credits}"
 }
 
 # Workers need to access the outside world
 resource "aws_security_group_rule" "workers_access_out" {
   security_group_id = "${module.concourse_worker.worker_instances_sg_id}"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "workers_ephemeral_access_out" {
+  security_group_id = "${module.concourse_worker_ephemeral.worker_instances_sg_id}"
   type              = "egress"
   from_port         = 0
   to_port           = 0

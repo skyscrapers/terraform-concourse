@@ -16,6 +16,7 @@ module "postgres" {
   storage                        = "${var.rds_allocated_storage}"
   apply_immediately              = true
   skip_final_snapshot            = true
+  backup_retention_period        = 0
 }
 
 resource "aws_security_group_rule" "sg_ecs_instances_postgres_out" {

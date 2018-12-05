@@ -1,5 +1,7 @@
 # terraform-concourse
 
+[![ci.skyscrape.rs](https://ci.skyscrape.rs/api/v1/teams/skyscrapers/pipelines/terraform-modules/jobs/test-terraform-concourse-master/badge)](https://ci.skyscrape.rs/teams/skyscrapers/pipelines/terraform-modules?groups=terraform-concourse)
+
 Terraform module to setup Concourse CI. This repository contains the following modules:
 
 * `keys`: Creates an S3 bucket and uploads an auto-generated set of keys for concourse.

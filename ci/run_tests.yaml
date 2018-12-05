@@ -8,7 +8,6 @@ image_resource:
 
 params:
   AWS_DEFAULT_REGION: eu-west-1
-  TF_VERSION:
   TEST_ACM_ARN:
   TEST_CONCOURSE_VERSION:
   TEST_CONCOURSE_VERSION_FILE:
@@ -16,12 +15,14 @@ params:
   AWS_ACCESS_KEY_ID:
   AWS_SECRET_ACCESS_KEY:
   AWS_SESSION_TOKEN:
+  SKIP_deploy:
+  SKIP_teardown:
 
 inputs:
 - name: terraform-src
   path: gopath/src/github.com/skyscrapers/terraform-concourse
 - name: concourse-release
-  optional: true
+- name: terraform-release
 
 run:
   path: sh
@@ -32,9 +33,11 @@ run:
       if [[ ! -z "${TEST_CONCOURSE_VERSION_FILE}" ]]; then
         TEST_CONCOURSE_VERSION="`cat ${TEST_CONCOURSE_VERSION_FILE}`"
       fi
+      
+      # Run the test setup script
+      gopath/src/github.com/skyscrapers/terraform-concourse/test/setup.sh
 
       export GOPATH=$PWD/gopath
       cd gopath/src/github.com/skyscrapers/terraform-concourse/test
-      ./setup.sh
       dep ensure
       go test -v -timeout 60m

@@ -5,11 +5,30 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
+	"errors"
 
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/test-structure"
 	"github.com/gruntwork-io/terratest/modules/terraform"
+	"github.com/gruntwork-io/terratest/modules/logger"
+	"github.com/gruntwork-io/terratest/modules/retry"
+
+	"github.com/skyscrapers/terraform-concourse/test/fly"
 )
+
+var (
+	flyBinaryPath = getenv("TEST_FLY_PATH", "fly")
+	flyTargetName = "test"
+)
+
+func getenv(key, fallback string) string {
+	value := os.Getenv(key)
+	if len(value) == 0 {
+		return fallback
+	}
+	return value
+}
 
 // An example of how to test the simple Terraform module in examples/basic using Terratest.
 func TestBasicExample(t *testing.T) {
@@ -48,7 +67,60 @@ func TestBasicExample(t *testing.T) {
 		terraform.InitAndApply(t, terraformOptions)
 	})
 
-	// test_structure.RunTestStage(t, "validate", func() {
-		// initializeAndUnsealVaultCluster(t)
-	// })
+	test_structure.RunTestStage(t, "validate", func() {
+		terraformOptions := test_structure.LoadTerraformOptions(t, exampleFolder)
+		validate(t, terraformOptions)
+	})
+}
+
+func validate(t *testing.T, terraformOptions *terraform.Options) {
+	var flyCommand fly.Command
+
+	concourse_hostname := terraform.Output(t, terraformOptions, "concourse_hostname")
+	concourse_user := terraform.Output(t, terraformOptions, "concourse_local_user_username")
+	concourse_pass := terraform.Output(t, terraformOptions, "concourse_local_user_password")
+
+	flyCommand = fly.NewCommand(flyTargetName, t, flyBinaryPath)
+
+	loginInConcourse(t, flyCommand, concourse_hostname, "main", concourse_user, concourse_pass, true)
+	validateWorkers(t, flyCommand, 2)
+	setPipeline(t, flyCommand, "test", "./test_pipeline.yaml", make([]string, 0))
+}
+
+func loginInConcourse(t *testing.T, flyCommand fly.Command, concourse_hostname string, concourse_team string, concourse_user string, concourse_pass string, insecure bool) {
+	logger.Logf(t, "Logging into Concourse server %s, team %s, username %s", concourse_hostname, concourse_team, concourse_user)
+
+	maxRetries := 30
+	sleepBetweenRetries := 10 * time.Second
+
+	flyCommand.LoginRetry(fmt.Sprintf("https://%s", concourse_hostname), concourse_team, concourse_user, concourse_pass, insecure, maxRetries, sleepBetweenRetries)
+}
+
+func validateWorkers(t *testing.T, flyCommand fly.Command, workersCount int) {
+	maxRetries := 30
+	sleepBetweenRetries := 10 * time.Second
+
+	retry.DoWithRetry(t, "Validating concourse workers", maxRetries, sleepBetweenRetries, func() (string, error) {
+		workers := flyCommand.Workers()
+
+		if len(workers) != workersCount {
+			return "", errors.New(fmt.Sprintf("the number of running workers (%d) doesn't match the expected value (%d)", len(workers), workersCount))
+		}
+
+		logger.Logf(t, "correct number of running workers found: %d", len(workers))
+
+		for _, w := range workers {
+			if w.State != "running" {
+				return "", errors.New(fmt.Sprintf("worker %s is not in the 'running' state (%s)", w.Name, w.State))
+			}
+		}
+
+		return "", nil
+	})
+}
+
+func setPipeline(t *testing.T, flyCommand fly.Command, pipeline_name string, configFilePath string, varsFilePaths []string) {
+	logger.Logf(t, "Setting pipeline %s in Concourse", pipeline_name)
+	flyCommand.SetPipeline(pipeline_name, configFilePath, varsFilePaths)
+	flyCommand.UnpausePipeline(pipeline_name)
 }
