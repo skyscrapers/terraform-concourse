@@ -63,8 +63,9 @@ func (f command) LoginRetry(
 	maxRetries int,
 	sleepBetweenRetries time.Duration,
 ) []byte {
-	output, err := retry.DoWithRetry(f.t, "Logging into Concourse", maxRetries, sleepBetweenRetries, func() ([]byte, error) {
-		return f.LoginE(url, teamName, username, password, insecure)
+	output, err := retry.DoWithRetry(f.t, "Logging into Concourse", maxRetries, sleepBetweenRetries, func() (string, error) {
+		out, err := f.LoginE(url, teamName, username, password, insecure)
+		return string(out), err
 	})
 	if err != nil {
 		f.t.Fatal(err)
