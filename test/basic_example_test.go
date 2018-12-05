@@ -6,11 +6,13 @@ import (
 	"os"
 	"strings"
 	"time"
+	"errors"
 
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/test-structure"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/gruntwork-io/terratest/modules/logger"
+	"github.com/gruntwork-io/terratest/modules/retry"
 
 	"github.com/stretchr/testify/assert"
 
@@ -97,14 +99,24 @@ func loginInConcourse(t *testing.T, flyCommand fly.Command, concourse_hostname s
 }
 
 func validateWorkers(t *testing.T, flyCommand fly.Command, workersCount int) {
-	logger.Logf(t, "Check that there are %d running workers attached to Concourse", workersCount)
-	workers := flyCommand.Workers()
+	maxRetries := 30
+	sleepBetweenRetries := 10 * time.Second
 
-	for _, w := range workers {
-		assert.Equal(t, "running", w.State, fmt.Sprintf("worker %s should be running", w.Name))
-	}
+	retry.DoWithRetry(f.t, "Validating concourse workers", maxRetries, sleepBetweenRetries, func() (string, error) {
+		workers := flyCommand.Workers()
 
-	assert.Equal(t, workersCount, len(workers), fmt.Sprintf("there should be %d running workers", workersCount))
+		if len(workers) != workersCount {
+			return nil, errors.New(fmt.Sprintf("the number of running workers (%s) doesn't match the expected value (%s)", len(workers), workersCount))
+		}
+
+		for _, w := range workers {
+			if w.State != "running" {
+				return nil, errors.New(fmt.Sprintf("worker %s is not in the 'running' state (%s)", w.Name, w.State))
+			}
+		}
+
+		return nil, nil
+	})
 }
 
 func setPipeline(t *testing.T, flyCommand fly.Command, pipeline_name string, configFilePath string, varsFilePaths []string) {
