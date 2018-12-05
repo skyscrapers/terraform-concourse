@@ -90,34 +90,6 @@ variable "worker_instance_count" {
   default = "1"
 }
 
-variable "worker_instance_type" {
-  default = "t3.micro"
-}
-
-variable "worker_work_disk_ephemeral" {
-  default = false
-}
-
-variable "worker_work_disk_volume_type" {
-  default = "standard"
-}
-
-variable "worker_work_disk_volume_size" {
-  default = "100"
-}
-
-variable "worker_root_disk_volume_type" {
-  default = "standard"
-}
-
-variable "worker_root_disk_volume_size" {
-  default = "10"
-}
-
-variable "worker_work_disk_internal_device_name" {
-  default = "/dev/nvme1n1"
-}
-
 variable "worker_cpu_credits" {
   default = "standard"
 }

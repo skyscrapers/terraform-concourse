@@ -83,7 +83,7 @@ func validate(t *testing.T, terraformOptions *terraform.Options) {
 	flyCommand = fly.NewCommand(flyTargetName, t, flyBinaryPath)
 
 	loginInConcourse(t, flyCommand, concourse_hostname, "main", concourse_user, concourse_pass, true)
-	validateWorkers(t, flyCommand, 1)
+	validateWorkers(t, flyCommand, 2)
 	setPipeline(t, flyCommand, "test", "./test_pipeline.yaml", make([]string, 0))
 }
 
