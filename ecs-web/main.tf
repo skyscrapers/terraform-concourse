@@ -91,12 +91,13 @@ data "template_file" "vault_auth_task_template" {
   template = "${file("${path.module}/task-definitions/vault_auth_container.json")}"
 
   vars {
-    image                      = "vault"
-    image_tag                  = "${var.vault_docker_image_tag}"
-    concourse_vault_url        = "${var.vault_server_url}"
-    concourse_vault_auth_param = "header_value=${replace(replace(var.vault_server_url, "/^http(s)?:///", ""), "/", "")},role=${var.vault_auth_concourse_role_name}"
-    awslog_group_name          = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
-    awslog_region              = "${data.aws_region.current.name}"
+    image             = "vault"
+    image_tag         = "${var.vault_docker_image_tag}"
+    vault_addr        = "${var.vault_server_url}"
+    auth_header_value = "${replace(replace(var.vault_server_url, "/^http(s)?:///", ""), "/", "")}"
+    auth_role         = "${var.vault_auth_concourse_role_name}"
+    awslog_group_name = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
+    awslog_region     = "${data.aws_region.current.name}"
   }
 }
 
