@@ -27,11 +27,13 @@
     }
   },
   ${concourse_db_task_definition}
+  ${vault_auth_task_definition}
   {
     "name"   : "concourse_web",
     "image"  : "${image}",
     "command": [
       "web"
+      ${vault_command_args}
     ],
     "cpu"         : ${cpu},
     "memory"      : ${memory},
@@ -74,6 +76,7 @@
     "volumesFrom": [
       { "sourceContainer": "download_keys" }
       ${volumes_from_concourse_db}
+      ${volumes_from_vault_auth}
     ],
     "logConfiguration": {
       "logDriver": "awslogs",

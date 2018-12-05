@@ -139,11 +139,6 @@ variable "vault_auth_concourse_role_name" {
   default     = ""
 }
 
-variable "concourse_vault_auth_backend_max_ttl" {
-  description = "The Vault max-ttl (in seconds) that Concourse will use"
-  default     = "2592000"
-}
-
 variable "container_memory" {
   description = "The amount of memory (in MiB) used by the task"
   default     = 256
@@ -168,4 +163,9 @@ variable "prometheus_cidrs" {
   description = "CIDR blocks that'll allowed to access the Prometheus scraper port"
   type        = "list"
   default     = []
+}
+
+variable "vault_docker_image_tag" {
+  description = "Docker image version to use for the Vault auth container"
+  default     = "latest"
 }

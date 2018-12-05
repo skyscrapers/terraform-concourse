@@ -1,0 +1,35 @@
+{
+  "name"             : "vault_auth",
+  "image"            : "${image}:${image_tag}",
+  "memoryReservation": 100,
+  "command"          : [
+    "/bin/sh",
+    "-exc",
+    "/bin/vault login -token-only -method=aws `echo -n ${CONCOURSE_VAULT_AUTH_PARAM} | tr ',' ' '` > /concourse_vault/token"
+  ],
+  "essential"  : false,
+  "environment": [
+    {
+      "name" : "CONCOURSE_VAULT_AUTH_PARAM",
+      "value": "${concourse_vault_url}"
+    },
+    {
+      "name" : "CONCOURSE_VAULT_URL",
+      "value": "${concourse_vault_auth_param}"
+    }
+  ],
+  "logConfiguration": {
+    "logDriver": "awslogs",
+    "options"  : {
+      "awslogs-group"        : "${awslog_group_name}",
+      "awslogs-region"       : "${awslog_region}",
+      "awslogs-stream-prefix": "vault_auth"
+    }
+  },
+  "mountPoints": [
+    {
+      "containerPath": "/concourse-vault",
+      "sourceVolume" : "concourse_vault"
+    }
+  ]
+},
