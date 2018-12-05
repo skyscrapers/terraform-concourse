@@ -19,7 +19,7 @@ import (
 
 type Command interface {
 	Login(url string, teamName string, username string, password string, insecure bool) []byte
-	LoginRetry(url string, teamName string, username string, password string, insecure bool, maxRetries int, sleepBetweenRetries time.Duration) []byte
+	LoginRetry(url string, teamName string, username string, password string, insecure bool, maxRetries int, sleepBetweenRetries time.Duration) string
 	LoginE(url string, teamName string, username string, password string, insecure bool) ([]byte, error)
 	Pipelines() []string
 	PipelinesE() ([]string, error)
@@ -62,7 +62,7 @@ func (f command) LoginRetry(
 	insecure bool,
 	maxRetries int,
 	sleepBetweenRetries time.Duration,
-) []byte {
+) string {
 	return retry.DoWithRetry(f.t, "Logging into Concourse", maxRetries, sleepBetweenRetries, func() (string, error) {
 		out, err := f.LoginE(url, teamName, username, password, insecure)
 		return string(out), err
