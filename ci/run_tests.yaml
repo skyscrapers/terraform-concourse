@@ -15,8 +15,8 @@ params:
   AWS_ACCESS_KEY_ID:
   AWS_SECRET_ACCESS_KEY:
   AWS_SESSION_TOKEN:
-  SKIP_deploy: false
-  SKIP_teardown: false
+  SKIP_deploy:
+  SKIP_teardown:
 
 inputs:
 - name: terraform-src
