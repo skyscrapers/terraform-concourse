@@ -123,7 +123,7 @@ variable "teleport_auth_token" {
 
 variable "teleport_version" {
   description = "Teleport version for the client"
-  default     = "2.5.8"
+  default     = "3.0.1"
 }
 
 variable "cpu_credits" {

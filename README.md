@@ -135,7 +135,7 @@ The following resources will be created:
 | subnet_ids | List of subnet ids where to deploy the worker instances | list | - | yes |
 | teleport_auth_token | Teleport node token to authenticate with the auth server | string | `` | no |
 | teleport_server | Teleport auth server hostname | string | `` | no |
-| teleport_version | Teleport version for the client | string | `2.5.8` | no |
+| teleport_version | Teleport version for the client | string | `3.0.1` | no |
 | vpc_id | The VPC id where to deploy the worker instances | string | - | yes |
 | work_disk_device_name | Device name of the external EBS volume to use as Concourse worker storage | string | `/dev/sdf` | no |
 | work_disk_ephemeral | Whether to use ephemeral volumes as Concourse worker storage. You must use an [`instance_type` that supports this](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames) | string | `false` | no |
