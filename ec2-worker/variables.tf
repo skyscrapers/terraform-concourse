@@ -7,7 +7,7 @@ variable "name" {
 }
 
 variable "project" {
-  description = "Project where the concourse claster belongs to. This is mainly used to identify it in teleport ''"
+  description = "Project where the concourse claster belongs to. This is mainly used to identify it in Teleport"
   default     = ""
 }
 
@@ -112,17 +112,21 @@ variable "cross_account_worker_role_arn" {
 }
 
 variable "teleport_server" {
-  default = ""
+  description = "Teleport auth server hostname"
+  default     = ""
 }
 
 variable "teleport_auth_token" {
-  default = ""
+  description = "Teleport node token to authenticate with the auth server"
+  default     = ""
 }
 
 variable "teleport_version" {
-  default = "2.5.8"
+  description = "Teleport version for the client"
+  default     = "2.5.8"
 }
 
 variable "cpu_credits" {
-  default = "standard"
+  description = "The credit option for CPU usage. Can be `standard` or `unlimited`"
+  default     = "standard"
 }

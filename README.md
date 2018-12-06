@@ -120,7 +120,7 @@ The following resources will be created:
 | concourse_tags | List of tags to add to the worker to use for assigning jobs and tasks | list | `<list>` | no |
 | concourse_version | Concourse CI version to use | string | - | yes |
 | concourse_worker_instance_count | Number of Concourse worker instances | string | `1` | no |
-| cpu_credits |  | string | `standard` | no |
+| cpu_credits | The credit option for CPU usage. Can be `standard` or `unlimited` | string | `standard` | no |
 | cross_account_worker_role_arn | IAM role ARN to assume to access the Concourse keys bucket in another AWS account | string | `` | no |
 | custom_ami | Use a custom AMI for the worker instances. If omitted the latest Ubuntu 16.04 AMI will be used. | string | `` | no |
 | environment | The name of the environment these subnets belong to (prod,stag,dev) | string | - | yes |
@@ -128,14 +128,14 @@ The following resources will be created:
 | keys_bucket_arn | The S3 bucket ARN which contains the SSH keys to connect to the TSA | string | - | yes |
 | keys_bucket_id | The S3 bucket id which contains the SSH keys to connect to the TSA | string | - | yes |
 | name | A descriptive name of the purpose of this Concourse worker pool | string | - | yes |
-| project | Project where the concourse claster belongs to. This is mainly used to identify it in teleport '' | string | `` | no |
+| project | Project where the concourse claster belongs to. This is mainly used to identify it in Teleport | string | `` | no |
 | root_disk_volume_size | Size of the worker instances root disk | string | `10` | no |
 | root_disk_volume_type | Volume type of the worker instances root disk | string | `standard` | no |
 | ssh_key_name | The key name to use for the instance | string | - | yes |
 | subnet_ids | List of subnet ids where to deploy the worker instances | list | - | yes |
-| teleport_auth_token |  | string | `` | no |
-| teleport_server |  | string | `` | no |
-| teleport_version |  | string | `2.5.8` | no |
+| teleport_auth_token | Teleport node token to authenticate with the auth server | string | `` | no |
+| teleport_server | Teleport auth server hostname | string | `` | no |
+| teleport_version | Teleport version for the client | string | `2.5.8` | no |
 | vpc_id | The VPC id where to deploy the worker instances | string | - | yes |
 | work_disk_device_name | Device name of the external EBS volume to use as Concourse worker storage | string | `/dev/sdf` | no |
 | work_disk_ephemeral | Whether to use ephemeral volumes as Concourse worker storage. You must use an [`instance_type` that supports this](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames) | string | `false` | no |
