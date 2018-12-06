@@ -17,7 +17,7 @@ variable "concourse_hostname" {
 
 variable "concourse_docker_image" {
   description = "Docker image to use to start concourse"
-  default     = "skyscrapers/concourse"
+  default     = "concourse/concourse"
 }
 
 variable "concourse_version" {
