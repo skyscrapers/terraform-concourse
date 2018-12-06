@@ -66,14 +66,13 @@ The following resources are created:
 | concourse_db_postgres_engine_version | Postgres engine version used in the Concourse database server. Only needed if `auto_create_db` is set to `true` | string | `` | no |
 | concourse_db_root_password | Root password of the Postgres database server. Only needed if `auto_create_db` is set to `true` | string | `` | no |
 | concourse_db_username | Database user to logon to postgresql | string | `concourse` | no |
-| concourse_docker_image | Docker image to use to start concourse | string | `skyscrapers/concourse` | no |
+| concourse_docker_image | Docker image to use to start concourse | string | `concourse/concourse` | no |
 | concourse_github_auth_client_id | Github client id | string | `` | no |
 | concourse_github_auth_client_secret | Github client secret | string | `` | no |
 | concourse_github_auth_team | Github team that can login | string | `` | no |
 | concourse_hostname | Hostname on which concourse will be available, this hostname needs to point to the ELB. If ommitted, the hostname of the AWS ELB will be used instead | string | `` | no |
 | concourse_prometheus_bind_ip | IP address where Concourse will listen for the Prometheus scraper | string | `0.0.0.0` | no |
 | concourse_prometheus_bind_port | Port where Concourse will listen for the Prometheus scraper | string | `9391` | no |
-| concourse_vault_auth_backend_max_ttl | The Vault max-ttl (in seconds) that Concourse will use | string | `2592000` | no |
 | concourse_version | Concourse CI version to use | string | - | yes |
 | concourse_web_instance_count | Number of containers running Concourse web | string | `1` | no |
 | container_cpu | The number of cpu units to reserve for the container. This parameter maps to CpuShares in the Create a container section of the Docker Remote API | string | `256` | no |
@@ -88,6 +87,7 @@ The following resources are created:
 | prometheus_cidrs | CIDR blocks that'll allowed to access the Prometheus scraper port | list | `<list>` | no |
 | ssl_certificate_id | SSL certificate arn to attach to the ELB | string | - | yes |
 | vault_auth_concourse_role_name | The Vault role that Concourse will use. This is normally fetched from the `vault-auth` Terraform module | string | `` | no |
+| vault_docker_image_tag | Docker image version to use for the Vault auth container | string | `latest` | no |
 | vault_server_url | The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration | string | `` | no |
 
 ### Output
@@ -120,6 +120,7 @@ The following resources will be created:
 | concourse_tags | List of tags to add to the worker to use for assigning jobs and tasks | list | `<list>` | no |
 | concourse_version | Concourse CI version to use | string | - | yes |
 | concourse_worker_instance_count | Number of Concourse worker instances | string | `1` | no |
+| cpu_credits |  | string | `standard` | no |
 | cross_account_worker_role_arn | IAM role ARN to assume to access the Concourse keys bucket in another AWS account | string | `` | no |
 | custom_ami | Use a custom AMI for the worker instances. If omitted the latest Ubuntu 16.04 AMI will be used. | string | `` | no |
 | environment | The name of the environment these subnets belong to (prod,stag,dev) | string | - | yes |
@@ -127,30 +128,29 @@ The following resources will be created:
 | keys_bucket_arn | The S3 bucket ARN which contains the SSH keys to connect to the TSA | string | - | yes |
 | keys_bucket_id | The S3 bucket id which contains the SSH keys to connect to the TSA | string | - | yes |
 | name | A descriptive name of the purpose of this Concourse worker pool | string | - | yes |
-| project | Project where the concourse claster belongs to. This is mainly used to identify it in teleport | string | `` | no |
+| project | Project where the concourse claster belongs to. This is mainly used to identify it in teleport '' | string | `` | no |
 | root_disk_volume_size | Size of the worker instances root disk | string | `10` | no |
 | root_disk_volume_type | Volume type of the worker instances root disk | string | `standard` | no |
 | ssh_key_name | The key name to use for the instance | string | - | yes |
 | subnet_ids | List of subnet ids where to deploy the worker instances | list | - | yes |
-| teleport_auth_token | Teleport server node token  | string | `` | no |
-| teleport_sg | Teleport server security group id | string | `` | no |
-| teleport_version | teleport version for the client | string | `2.5.8` | no |
+| teleport_auth_token |  | string | `` | no |
+| teleport_server |  | string | `` | no |
+| teleport_version |  | string | `2.5.8` | no |
 | vpc_id | The VPC id where to deploy the worker instances | string | - | yes |
-| work_disk_ephemeral | Whether to use ephemeral volumes as Concourse worker storage. You must use an [`instance_type` that supports this](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames) | bool | false | no
-| work_disk_device_name | Device name of the external EBS volume to use as Concourse worker storage | string | `/dev/xvdf` | no |
-| work_disk_internal_device_name | Device name of the internal volume as identified by the Linux kernel, which can differ from `work_disk_device_name` depending on used AMI. Make sure this is set according the `instance_type`, eg. `/dev/nvme0n1` when using NVMe ephemeral storage | string | `/dev/xvdf` | no |
+| work_disk_device_name | Device name of the external EBS volume to use as Concourse worker storage | string | `/dev/sdf` | no |
+| work_disk_ephemeral | Whether to use ephemeral volumes as Concourse worker storage. You must use an [`instance_type` that supports this](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames) | string | `false` | no |
+| work_disk_internal_device_name | Device name of the internal volume as identified by the Linux kernel, which can differ from `work_disk_device_name` depending on used AMI. Make sure this is set according the `instance_type`, eg. `/dev/xvdf` when using an older AMI | string | `/dev/nvme1n1` | no |
 | work_disk_volume_size | Size of the external EBS volume to use as Concourse worker storage | string | `100` | no |
 | work_disk_volume_type | Volume type of the external EBS volume to use as Concourse worker storage | string | `standard` | no |
 | worker_tsa_port | tsa port that the worker can use to connect to the web | string | `2222` | no |
-| cpu_credits | The credit option for CPU usage. Can be `standard` or `unlimited`. | string | `standard` | no |
 
 ### Output
 
 | Name | Description |
 |------|-------------|
-| worker_instances_sg_id | Security group ID used for the worker instances |
 | worker_iam_role | Role name of the worker instances |
 | worker_iam_role_arn | Role ARN of the worker instances |
+| worker_instances_sg_id | Security group ID used for the worker instances |
 
 ### NOTE on the external EBS volume
 
