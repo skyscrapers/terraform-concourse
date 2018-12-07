@@ -148,6 +148,9 @@ The following resources will be created:
 
 | Name | Description |
 |------|-------------|
+| worker_autoscaling_group_arn | The AWS region configured in the provider |
+| worker_autoscaling_group_id | The Concourse workers autoscaling group ARN |
+| worker_autoscaling_group_name | The Concourse workers autoscaling group name |
 | worker_instances_sg_id | Security group ID used for the worker instances |
 | worker_iam_role | Role name of the worker instances |
 | worker_iam_role_arn | Role ARN of the worker instances |
