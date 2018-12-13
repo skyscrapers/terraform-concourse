@@ -82,5 +82,5 @@ resource "aws_security_group_rule" "sg_elb_in_prometheus" {
   from_port         = "${var.concourse_prometheus_bind_port}"
   to_port           = "${var.concourse_prometheus_bind_port}"
   protocol          = "tcp"
-  cidr_blocks       = "${var.prometheus_cidrs}"
+  cidr_blocks       = ["${var.prometheus_cidrs}"]
 }
