@@ -21,8 +21,8 @@ variable "concourse_docker_image" {
 }
 
 variable "concourse_version" {
-  # No default version set here to make sure a version is locked for a customer setup.
-  description = "Concourse CI version to use"
+  description = "Concourse CI version to use. Defaults to the latest tested version"
+  default     = "4.2.2"
 }
 
 variable "concourse_db_host" {
