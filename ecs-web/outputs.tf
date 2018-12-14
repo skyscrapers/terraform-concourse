@@ -18,6 +18,11 @@ output "concourse_hostname" {
   value       = "${local.concourse_hostname}"
 }
 
+output "concourse_version" {
+  description = "Concourse version deployed"
+  value       = "${local.concourse_version}"
+}
+
 output "iam_role_arn" {
   description = "ARN of the IAM role created for the Concourse ECS task"
   value       = "${aws_iam_role.concourse_task_role.arn}"

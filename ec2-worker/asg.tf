@@ -154,7 +154,7 @@ data "template_file" "concourse_bootstrap" {
   template = "${file("${path.module}/bootstrap_concourse.sh.tpl")}"
 
   vars {
-    concourse_version             = "${var.concourse_version}"
+    concourse_version             = "${local.concourse_version}"
     keys_bucket_id                = "${var.keys_bucket_id}"
     cross_account_worker_role_arn = "${var.cross_account_worker_role_arn}"
   }
@@ -271,7 +271,7 @@ module "teleport_bootstrap_script" {
   project     = "${var.project}"
 
   additional_labels = [
-    "concourse_version: \"${var.concourse_version}\"",
+    "concourse_version: \"${local.concourse_version}\"",
     "instance_type: \"${var.instance_type}\"",
   ]
 }

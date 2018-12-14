@@ -1,3 +1,7 @@
+locals {
+  concourse_version = "${var.concourse_version_override == "" ? var.concourse_version : var.concourse_version_override}"
+}
+
 resource "aws_security_group" "worker_instances_sg" {
   name        = "concourse_worker_${var.environment}_${var.name}"
   description = "Security group for the Concourse worker instances in ${var.environment}"

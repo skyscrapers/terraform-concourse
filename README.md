@@ -75,6 +75,7 @@ The following resources are created:
 | concourse_prometheus_bind_port | Port where Concourse will listen for the Prometheus scraper | string | `9391` | no |
 | concourse_vault_auth_backend_max_ttl | The Vault max-ttl (in seconds) that Concourse will use | string | `2592000` | no |
 | concourse_version | Concourse CI version to use. Defaults to the latest tested version | string | `4.2.2` | no |
+| concourse_version_override | Variable to override the default Concourse version. Leave it empty to fallback to `concourse_version`. Useful if you want to default to the module's default but also give the users the option to override it | string | `` | no |
 | concourse_web_instance_count | Number of containers running Concourse web | string | `1` | no |
 | container_cpu | The number of cpu units to reserve for the container. This parameter maps to CpuShares in the Create a container section of the Docker Remote API | string | `256` | no |
 | container_memory | The amount of memory (in MiB) used by the task | string | `256` | no |
@@ -95,6 +96,7 @@ The following resources are created:
 | Name | Description |
 |------|-------------|
 | concourse_hostname | Final Concourse hostname |
+| concourse_version | Concourse version deployed |
 | elb_dns_name | DNS name of the loadbalancer |
 | elb_sg_id | Security group id of the loadbalancer |
 | elb_zone_id | Zone ID of the ELB |
@@ -119,6 +121,7 @@ The following resources will be created:
 | concourse_hostname | Hostname on what concourse will be available, this hostname needs to point to the ELB. | string | - | yes |
 | concourse_tags | List of tags to add to the worker to use for assigning jobs and tasks | list | `<list>` | no |
 | concourse_version | Concourse CI version to use. Defaults to the latest tested version | string | `4.2.2` | no |
+| concourse_version_override | Variable to override the default Concourse version. Leave it empty to fallback to `concourse_version`. Useful if you want to default to the module's default but also give the users the option to override it | string | `` | no |
 | concourse_worker_instance_count | Number of Concourse worker instances | string | `1` | no |
 | cpu_credits | The credit option for CPU usage. Can be `standard` or `unlimited` | string | `standard` | no |
 | cross_account_worker_role_arn | IAM role ARN to assume to access the Concourse keys bucket in another AWS account | string | `` | no |
@@ -148,6 +151,7 @@ The following resources will be created:
 
 | Name | Description |
 |------|-------------|
+| concourse_version | Concourse version deployed |
 | worker_autoscaling_group_arn | The AWS region configured in the provider |
 | worker_autoscaling_group_id | The Concourse workers autoscaling group ARN |
 | worker_autoscaling_group_name | The Concourse workers autoscaling group name |
