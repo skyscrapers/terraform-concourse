@@ -36,13 +36,14 @@ resource "aws_ecs_task_definition" "concourse_web_task_definition" {
 
 locals {
   concourse_hostname = "${var.concourse_hostname == "" ? module.elb.elb_dns_name : var.concourse_hostname}"
+  concourse_version  = "${var.concourse_version_override == "" ? var.concourse_version : var.concourse_version_override}"
 }
 
 data "template_file" "concourse_web_task_template" {
   template = "${file("${path.module}/task-definitions/concourse_web_service.json")}"
 
   vars {
-    image                          = "${var.concourse_docker_image}:${var.concourse_version}"
+    image                          = "${var.concourse_docker_image}:${local.concourse_version}"
     concourse_hostname             = "${local.concourse_hostname}"
     concourse_db_host              = "${var.concourse_db_host}"
     concourse_db_port              = "${var.concourse_db_port}"

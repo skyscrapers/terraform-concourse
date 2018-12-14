@@ -27,3 +27,8 @@ output "worker_autoscaling_group_arn" {
   description = "The AWS region configured in the provider"
   value       = "${aws_autoscaling_group.concourse_worker_asg.arn}"
 }
+
+output "concourse_version" {
+  description = "Concourse version deployed"
+  value       = "${local.concourse_version}"
+}
