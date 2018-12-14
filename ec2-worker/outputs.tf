@@ -1,13 +1,16 @@
 output "worker_instances_sg_id" {
-  value = "${aws_security_group.worker_instances_sg.id}"
+  description = "Security group ID used for the worker instances"
+  value       = "${aws_security_group.worker_instances_sg.id}"
 }
 
 output "worker_iam_role" {
-  value = "${aws_iam_role.concourse_worker_role.name}"
+  description = "Role name of the worker instances"
+  value       = "${aws_iam_role.concourse_worker_role.name}"
 }
 
 output "worker_iam_role_arn" {
-  value = "${aws_iam_role.concourse_worker_role.arn}"
+  description = "Role ARN of the worker instances"
+  value       = "${aws_iam_role.concourse_worker_role.arn}"
 }
 
 output "worker_autoscaling_group_id" {
