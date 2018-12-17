@@ -89,7 +89,13 @@ variable "concourse_worker_instance_count" {
 }
 
 variable "concourse_version" {
-  description = "Concourse CI version to use"
+  description = "Concourse CI version to use. Defaults to the latest tested version"
+  default     = "4.2.2"
+}
+
+variable "concourse_version_override" {
+  description = "Variable to override the default Concourse version. Leave it empty to fallback to `concourse_version`. Useful if you want to default to the module's default but also give the users the option to override it"
+  default     = ""
 }
 
 variable "keys_bucket_id" {
