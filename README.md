@@ -66,7 +66,7 @@ The following resources are created:
 | concourse_db_postgres_engine_version | Postgres engine version used in the Concourse database server. Only needed if `auto_create_db` is set to `true` | string | `` | no |
 | concourse_db_root_password | Root password of the Postgres database server. Only needed if `auto_create_db` is set to `true` | string | `` | no |
 | concourse_db_username | Database user to logon to postgresql | string | `concourse` | no |
-| concourse_docker_image | Docker image to use to start concourse | string | `skyscrapers/concourse` | no |
+| concourse_docker_image | Docker image to use to start concourse | string | `concourse/concourse` | no |
 | concourse_github_auth_client_id | Github client id | string | `` | no |
 | concourse_github_auth_client_secret | Github client secret | string | `` | no |
 | concourse_github_auth_team | Github team that can login | string | `` | no |
@@ -89,6 +89,7 @@ The following resources are created:
 | prometheus_cidrs | CIDR blocks that'll allowed to access the Prometheus scraper port | list | `<list>` | no |
 | ssl_certificate_id | SSL certificate arn to attach to the ELB | string | - | yes |
 | vault_auth_concourse_role_name | The Vault role that Concourse will use. This is normally fetched from the `vault-auth` Terraform module | string | `` | no |
+| vault_docker_image_tag | Docker image version to use for the Vault auth container | string | `latest` | no |
 | vault_server_url | The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration | string | `` | no |
 
 ### Output
@@ -138,7 +139,7 @@ The following resources will be created:
 | subnet_ids | List of subnet ids where to deploy the worker instances | list | - | yes |
 | teleport_auth_token | Teleport node token to authenticate with the auth server | string | `` | no |
 | teleport_server | Teleport auth server hostname | string | `` | no |
-| teleport_version | Teleport version for the client | string | `2.5.8` | no |
+| teleport_version | Teleport version for the client | string | `3.0.1` | no |
 | vpc_id | The VPC id where to deploy the worker instances | string | - | yes |
 | work_disk_device_name | Device name of the external EBS volume to use as Concourse worker storage | string | `/dev/sdf` | no |
 | work_disk_ephemeral | Whether to use ephemeral volumes as Concourse worker storage. You must use an [`instance_type` that supports this](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames) | string | `false` | no |

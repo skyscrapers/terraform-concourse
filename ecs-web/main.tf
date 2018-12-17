@@ -63,6 +63,9 @@ data "template_file" "concourse_web_task_template" {
     concourse_prometheus_bind_ip   = "${var.concourse_prometheus_bind_ip}"
     concourse_db_task_definition   = "${indent(2, join("", data.template_file.concourse_db_task_template.*.rendered))}"
     volumes_from_concourse_db      = "${var.auto_create_db ? ",{ \"sourceContainer\": \"create_db\" }" : ""}"
+    volumes_from_vault_auth        = "${length(var.vault_server_url) > 0 ? ",{ \"sourceContainer\": \"vault_auth\" }" : ""}"
+    vault_command_args             = "${length(var.vault_server_url) > 0 ? ",\"--vault-client-token=`cat /concourse_vault/token`\"" : ""}"
+    vault_auth_task_definition     = "${indent(2, join("", data.template_file.vault_auth_task_template.*.rendered))}"
   }
 }
 
@@ -84,19 +87,28 @@ data "template_file" "concourse_db_task_template" {
   }
 }
 
+data "template_file" "vault_auth_task_template" {
+  count    = "${length(var.vault_server_url) > 0 ? 1 : 0}"
+  template = "${file("${path.module}/task-definitions/vault_auth_container.json")}"
+
+  vars {
+    image             = "vault"
+    image_tag         = "${var.vault_docker_image_tag}"
+    vault_addr        = "${var.vault_server_url}"
+    auth_header_value = "${replace(replace(var.vault_server_url, "/^http(s)?:///", ""), "/", "")}"
+    auth_role         = "${var.vault_auth_concourse_role_name}"
+    awslog_group_name = "${aws_cloudwatch_log_group.concourse_web_log_group.name}"
+    awslog_region     = "${data.aws_region.current.name}"
+  }
+}
+
 data "template_file" "concourse_vault_variables" {
   template = <<EOF
 { "name": "CONCOURSE_VAULT_URL", "value": "$${concourse_vault_url}" },
-{ "name": "CONCOURSE_VAULT_AUTH_BACKEND", "value": "$${concourse_vault_auth_backend}" },
-{ "name": "CONCOURSE_VAULT_AUTH_PARAM", "value": "$${concourse_vault_auth_param}" },
-{ "name": "CONCOURSE_VAULT_AUTH_BACKEND_MAX_TTL", "value": "$${concourse_vault_auth_backend_max_ttl}" },
 EOF
 
   vars {
-    concourse_vault_url                  = "${var.vault_server_url}"
-    concourse_vault_auth_backend         = "aws"
-    concourse_vault_auth_param           = "header_value=${replace(replace(var.vault_server_url, "/^http(s)?:///", ""), "/", "")},role=${var.vault_auth_concourse_role_name}"
-    concourse_vault_auth_backend_max_ttl = "${var.concourse_vault_auth_backend_max_ttl}"
+    concourse_vault_url = "${var.vault_server_url}"
   }
 }
 
