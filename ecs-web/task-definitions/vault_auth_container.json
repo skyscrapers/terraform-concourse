@@ -31,5 +31,10 @@
       "containerPath": "/concourse_vault",
       "sourceVolume" : "concourse_vault"
     }
-  ]
+  ],
+  "linuxParameters": {
+    "capabilities": {
+      "add": [ "IPC_LOCK" ]
+    }
+  }
 },
