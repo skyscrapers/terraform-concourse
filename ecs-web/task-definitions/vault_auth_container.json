@@ -3,13 +3,9 @@
   "image"            : "${image}:${image_tag}",
   "memoryReservation": 100,
   "command"          : [
-    "login",
-    "-token-only",
-    "-method=aws",
-    "header_value=${auth_header_value}",
-    "role=${auth_role}",
-    ">",
-    "/concourse_vault/token"
+    "/bin/sh",
+    "-c",
+    "vault login -token-only -method=aws header_value=${auth_header_value} role=${auth_role} > /concourse_vault/token"
   ],
   "essential"  : false,
   "environment": [

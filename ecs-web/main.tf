@@ -35,7 +35,7 @@ resource "aws_ecs_task_definition" "concourse_web_task_definition" {
 
   volume {
     name = "concourse_vault"
-}
+  }
 }
 
 locals {
@@ -68,7 +68,7 @@ data "template_file" "concourse_web_task_template" {
     concourse_db_task_definition   = "${indent(2, join("", data.template_file.concourse_db_task_template.*.rendered))}"
     volumes_from_concourse_db      = "${var.auto_create_db ? ",{ \"sourceContainer\": \"create_db\" }" : ""}"
     volumes_from_vault_auth        = "${length(var.vault_server_url) > 0 ? ",{ \"sourceContainer\": \"vault_auth\" }" : ""}"
-    vault_command_args             = "${length(var.vault_server_url) > 0 ? ",\"--vault-client-token=`cat /concourse_vault/token`\"" : ""}"
+    vault_command_args             = "${length(var.vault_server_url) > 0 ? "--vault-client-token=`cat /concourse_vault/token`" : ""}"
     vault_auth_task_definition     = "${indent(2, join("", data.template_file.vault_auth_task_template.*.rendered))}"
   }
 }

@@ -32,9 +32,9 @@
     "name"   : "concourse_web",
     "image"  : "${image}",
     "command": [
-      "web"
-      ${vault_command_args}
+      "concourse web ${vault_command_args}"
     ],
+    "entryPoint": ["/bin/sh", "-c"],
     "cpu"         : ${cpu},
     "memory"      : ${memory},
     "essential"   : true,
