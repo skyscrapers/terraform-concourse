@@ -32,6 +32,10 @@ resource "aws_ecs_task_definition" "concourse_web_task_definition" {
   volume {
     name = "concourse_db"
   }
+
+  volume {
+    name = "concourse_vault"
+}
 }
 
 locals {

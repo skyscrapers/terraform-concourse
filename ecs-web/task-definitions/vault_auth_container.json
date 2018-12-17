@@ -28,7 +28,7 @@
   },
   "mountPoints": [
     {
-      "containerPath": "/concourse-vault",
+      "containerPath": "/concourse_vault",
       "sourceVolume" : "concourse_vault"
     }
   ]
