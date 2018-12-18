@@ -68,7 +68,7 @@
       { "name": "CONCOURSE_POSTGRES_HOST"     , "value": "${concourse_db_host}" },
       { "name": "CONCOURSE_POSTGRES_PORT"     , "value": "${concourse_db_port}" },
       { "name": "CONCOURSE_POSTGRES_USER"     , "value": "${concourse_db_user}" },
-      { "name": "CONCOURSE_POSTGRES_PASSWORD" , "value": "${concourse_db_password}" },
+      { "name": "CONCOURSE_POSTGRES_PASSWORD" , "value": ${concourse_db_password} },
       { "name": "CONCOURSE_POSTGRES_DATABASE" , "value": "${concourse_db_name}" },
       { "name": "CONCOURSE_PROMETHEUS_BIND_PORT" , "value": "${concourse_prometheus_bind_port}" },
       { "name": "CONCOURSE_PROMETHEUS_BIND_IP" , "value": "${concourse_prometheus_bind_ip}" }

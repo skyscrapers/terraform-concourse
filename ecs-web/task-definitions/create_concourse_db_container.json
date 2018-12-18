@@ -12,8 +12,8 @@
     { "name" : "CONCOURSE_POSTGRES_HOST"    , "value": "${concourse_db_host}" },
     { "name" : "CONCOURSE_POSTGRES_PORT"    , "value": "${concourse_db_port}" },
     { "name" : "CONCOURSE_POSTGRES_USER"    , "value": "${concourse_db_user}" },
-    { "name" : "CONCOURSE_POSTGRES_PASSWORD", "value": "${concourse_db_password}" },
-    { "name" : "PGPASSWORD"                 , "value": "${concourse_db_root_password}" },
+    { "name" : "CONCOURSE_POSTGRES_PASSWORD", "value": ${concourse_db_password} },
+    { "name" : "PGPASSWORD"                 , "value": ${concourse_db_root_password} },
     { "name" : "CONCOURSE_POSTGRES_DATABASE", "value": "${concourse_db_name}" }
   ],
   "logConfiguration": {
