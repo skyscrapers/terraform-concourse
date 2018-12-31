@@ -7,6 +7,9 @@ resource "aws_ecs_service" "concourse_web" {
   desired_count   = "${var.concourse_web_instance_count}"
   iam_role        = "${var.ecs_service_role_arn}"
 
+  # This will allow the service to be updated even if there's only one instance running in the cluster
+  deployment_minimum_healthy_percent = 0
+
   load_balancer {
     elb_name       = "${module.elb.elb_name}"
     container_name = "concourse_web"
