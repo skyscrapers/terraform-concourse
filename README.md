@@ -92,16 +92,17 @@ The following resources are created:
 | vault_docker_image_tag | Docker image version to use for the Vault auth container | string | `latest` | no |
 | vault_server_url | The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration | string | `` | no |
 
-### Output
+## Outputs
 
 | Name | Description |
 |------|-------------|
-| concourse_hostname | Final Concourse hostname |
-| concourse_version | Concourse version deployed |
-| elb_dns_name | DNS name of the loadbalancer |
-| elb_sg_id | Security group id of the loadbalancer |
-| elb_zone_id | Zone ID of the ELB |
-| iam_role_arn | ARN of the IAM role created for the Concourse ECS task |
+| concourse\_hostname | Final Concourse hostname |
+| concourse\_version | Concourse version deployed |
+| ecs\_service\_name | ECS Service Name of concourse web |
+| elb\_dns\_name | DNS name of the loadbalancer |
+| elb\_sg\_id | Security group id of the loadbalancer |
+| elb\_zone\_id | Zone ID of the ELB |
+| iam\_role\_arn | ARN of the IAM role created for the Concourse ECS task |
 
 ## ec2-worker
 
