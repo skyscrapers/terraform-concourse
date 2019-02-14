@@ -27,3 +27,7 @@ output "iam_role_arn" {
   description = "ARN of the IAM role created for the Concourse ECS task"
   value       = "${aws_iam_role.concourse_task_role.arn}"
 }
+output "ecs_service_name" {
+  description = "ECS Service Name of concourse web"
+  value = "${aws_ecs_service.concourse_web.name}"
+}
