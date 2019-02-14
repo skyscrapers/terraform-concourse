@@ -92,7 +92,7 @@ The following resources are created:
 | vault_docker_image_tag | Docker image version to use for the Vault auth container | string | `latest` | no |
 | vault_server_url | The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration | string | `` | no |
 
-## Outputs
+### Outputs
 
 | Name | Description |
 |------|-------------|
