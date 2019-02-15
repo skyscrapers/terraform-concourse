@@ -20,6 +20,10 @@ resource "aws_ecs_service" "concourse_web" {
     type  = "spread"
     field = "instanceId"
   }
+
+  lifecycle {
+    ignore_changes = ["desired_count"]
+  }
 }
 
 resource "aws_ecs_task_definition" "concourse_web_task_definition" {
