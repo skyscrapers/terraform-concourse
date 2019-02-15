@@ -90,7 +90,7 @@ variable "concourse_worker_instance_count" {
 
 variable "concourse_version" {
   description = "Concourse CI version to use. Defaults to the latest tested version"
-  default     = "4.2.2"
+  default     = "4.2.3"
 }
 
 variable "concourse_version_override" {
