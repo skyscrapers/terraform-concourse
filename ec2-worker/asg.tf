@@ -114,7 +114,7 @@ resource "aws_autoscaling_group" "concourse_worker_asg" {
 
   launch_template = {
     id      = "${element(concat(aws_launch_template.concourse_worker_launchtemplate.*.id, aws_launch_template.concourse_worker_launchtemplate_ephemeral.*.id), 0)}"
-    version = "$$Latest"
+    version = "${element(concat(aws_launch_template.concourse_worker_launchtemplate.*.latest_version, aws_launch_template.concourse_worker_launchtemplate_ephemeral.*.latest_version), 0)}"
   }
 
   vpc_zone_identifier = ["${var.subnet_ids}"]
