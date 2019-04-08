@@ -3,8 +3,8 @@
 set -e
 
 # Install concourse
-curl -s -L -f -o /usr/local/bin/concourse https://github.com/concourse/concourse/releases/download/v${concourse_version}/concourse_linux_amd64
-chmod +x /usr/local/bin/concourse
+curl -s -L -f -o ./concourse.tgz https://github.com/concourse/concourse/releases/download/v${concourse_version}/concourse-${concourse_version}-linux-amd64.tgz
+tar -xzf ./concourse.tgz -C /usr/local
 
 # AssumeRole for remote TSA
  if [ ! -z "${cross_account_worker_role_arn}" ]
