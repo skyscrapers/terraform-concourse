@@ -32,7 +32,7 @@
     "name"   : "concourse_web",
     "image"  : "${image}",
     "command": [
-      "concourse web ${vault_command_args}"
+      "PATH=$PATH:/usr/local/concourse/bin:/usr/local/bin concourse web ${vault_command_args}"
     ],
     "entryPoint": ["/bin/sh", "-c"],
     "cpu"         : ${cpu},
