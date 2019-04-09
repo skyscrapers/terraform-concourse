@@ -21,7 +21,6 @@ params:
 inputs:
 - name: terraform-src
   path: gopath/src/github.com/skyscrapers/terraform-concourse
-- name: concourse-release
 - name: terraform-release
 
 run:

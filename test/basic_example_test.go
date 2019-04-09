@@ -1,24 +1,26 @@
 package test
 
 import (
-	"testing"
+	"crypto/tls"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
+	"runtime"
 	"strings"
+	"testing"
 	"time"
-	"errors"
 
-	"github.com/gruntwork-io/terratest/modules/random"
-	"github.com/gruntwork-io/terratest/modules/test-structure"
-	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/gruntwork-io/terratest/modules/logger"
+	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/retry"
+	"github.com/gruntwork-io/terratest/modules/terraform"
+	test_structure "github.com/gruntwork-io/terratest/modules/test-structure"
 
 	"github.com/skyscrapers/terraform-concourse/test/fly"
 )
 
 var (
-	flyBinaryPath = getenv("TEST_FLY_PATH", "fly")
 	flyTargetName = "test"
 )
 
@@ -42,8 +44,8 @@ func TestBasicExample(t *testing.T) {
 	})
 
 	test_structure.RunTestStage(t, "deploy", func() {
-		uniqueId := strings.ToLower(random.UniqueId())
-		projectName := fmt.Sprintf("concourse-%s", uniqueId)
+		uniqueID := strings.ToLower(random.UniqueId())
+		projectName := fmt.Sprintf("concourse-%s", uniqueID)
 
 		terraformOptions := &terraform.Options{
 			TerraformDir: exampleFolder,
@@ -51,9 +53,9 @@ func TestBasicExample(t *testing.T) {
 			// Variables to pass to our Terraform code using -var options
 			Vars: map[string]interface{}{
 				"elb_ssl_certificate_id": os.Getenv("TEST_ACM_ARN"),
-				"concourse_version": os.Getenv("TEST_CONCOURSE_VERSION"),
-				"key_name": os.Getenv("TEST_KEY_NAME"),
-				"project": projectName,
+				"concourse_version":      os.Getenv("TEST_CONCOURSE_VERSION"),
+				"key_name":               os.Getenv("TEST_KEY_NAME"),
+				"project":                projectName,
 			},
 
 			EnvVars: map[string]string{
@@ -76,24 +78,28 @@ func TestBasicExample(t *testing.T) {
 func validate(t *testing.T, terraformOptions *terraform.Options) {
 	var flyCommand fly.Command
 
-	concourse_hostname := terraform.Output(t, terraformOptions, "concourse_hostname")
-	concourse_user := terraform.Output(t, terraformOptions, "concourse_local_user_username")
-	concourse_pass := terraform.Output(t, terraformOptions, "concourse_local_user_password")
+	concourseHostname := terraform.Output(t, terraformOptions, "concourse_hostname")
+	concourseUser := terraform.Output(t, terraformOptions, "concourse_local_user_username")
+	concoursePass := terraform.Output(t, terraformOptions, "concourse_local_user_password")
+
+	flyBinaryPath := fmt.Sprintf("/tmp/fly-%s", terraformOptions.Vars["project"])
+
+	downloadFly(t, concourseHostname, flyBinaryPath)
 
 	flyCommand = fly.NewCommand(flyTargetName, t, flyBinaryPath)
 
-	loginInConcourse(t, flyCommand, concourse_hostname, "main", concourse_user, concourse_pass, true)
+	loginInConcourse(t, flyCommand, concourseHostname, "main", concourseUser, concoursePass, true)
 	validateWorkers(t, flyCommand, 2)
 	setPipeline(t, flyCommand, "test", "./test_pipeline.yaml", make([]string, 0))
 }
 
-func loginInConcourse(t *testing.T, flyCommand fly.Command, concourse_hostname string, concourse_team string, concourse_user string, concourse_pass string, insecure bool) {
-	logger.Logf(t, "Logging into Concourse server %s, team %s, username %s", concourse_hostname, concourse_team, concourse_user)
+func loginInConcourse(t *testing.T, flyCommand fly.Command, concourseHostname string, concourseTeam string, concourseUser string, concoursePass string, insecure bool) {
+	logger.Logf(t, "Logging into Concourse server %s, team %s, username %s", concourseHostname, concourseTeam, concourseUser)
 
 	maxRetries := 30
 	sleepBetweenRetries := 10 * time.Second
 
-	flyCommand.LoginRetry(fmt.Sprintf("https://%s", concourse_hostname), concourse_team, concourse_user, concourse_pass, insecure, maxRetries, sleepBetweenRetries)
+	flyCommand.LoginRetry(fmt.Sprintf("https://%s", concourseHostname), concourseTeam, concourseUser, concoursePass, insecure, maxRetries, sleepBetweenRetries)
 }
 
 func validateWorkers(t *testing.T, flyCommand fly.Command, workersCount int) {
@@ -104,14 +110,14 @@ func validateWorkers(t *testing.T, flyCommand fly.Command, workersCount int) {
 		workers := flyCommand.Workers()
 
 		if len(workers) != workersCount {
-			return "", errors.New(fmt.Sprintf("the number of running workers (%d) doesn't match the expected value (%d)", len(workers), workersCount))
+			return "", fmt.Errorf("the number of running workers (%d) doesn't match the expected value (%d)", len(workers), workersCount)
 		}
 
 		logger.Logf(t, "correct number of running workers found: %d", len(workers))
 
 		for _, w := range workers {
 			if w.State != "running" {
-				return "", errors.New(fmt.Sprintf("worker %s is not in the 'running' state (%s)", w.Name, w.State))
+				return "", fmt.Errorf("worker %s is not in the 'running' state (%s)", w.Name, w.State)
 			}
 		}
 
@@ -119,8 +125,43 @@ func validateWorkers(t *testing.T, flyCommand fly.Command, workersCount int) {
 	})
 }
 
-func setPipeline(t *testing.T, flyCommand fly.Command, pipeline_name string, configFilePath string, varsFilePaths []string) {
-	logger.Logf(t, "Setting pipeline %s in Concourse", pipeline_name)
-	flyCommand.SetPipeline(pipeline_name, configFilePath, varsFilePaths)
-	flyCommand.UnpausePipeline(pipeline_name)
+func setPipeline(t *testing.T, flyCommand fly.Command, pipelineName string, configFilePath string, varsFilePaths []string) {
+	logger.Logf(t, "Setting pipeline %s in Concourse", pipelineName)
+	flyCommand.SetPipeline(pipelineName, configFilePath, varsFilePaths)
+	flyCommand.UnpausePipeline(pipelineName)
+}
+
+func downloadFly(t *testing.T, concourseHostname string, flyBinaryPath string) {
+	maxRetries := 30
+	sleepBetweenRetries := 10 * time.Second
+
+	retry.DoWithRetry(t, "Downloading fly cli", maxRetries, sleepBetweenRetries, func() (string, error) {
+		// Get the data
+		tr := &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
+		client := &http.Client{Transport: tr}
+		resp, err := client.Get(fmt.Sprintf("https://%s/api/v1/cli?arch=%s&platform=%s", concourseHostname, runtime.GOARCH, runtime.GOOS))
+		if err != nil {
+			return "", err
+		}
+		defer resp.Body.Close()
+
+		// Create the file
+		out, err := os.Create(flyBinaryPath)
+		if err != nil {
+			return "", err
+		}
+		defer out.Close()
+
+		// Set file executable
+		err = os.Chmod(flyBinaryPath, 0755)
+		if err != nil {
+			return "", err
+		}
+
+		// Write the body to file
+		_, err = io.Copy(out, resp.Body)
+		return "", err
+	})
 }

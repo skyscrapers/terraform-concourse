@@ -2,6 +2,7 @@
 
 
 [[projects]]
+  digest = "1:fdf9eb00448387fd7fc9a7af179c8032a8c83cb39aabbc7d5779d0358bfe6652"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -13,6 +14,7 @@
     "aws/credentials",
     "aws/credentials/ec2rolecreds",
     "aws/credentials/endpointcreds",
+    "aws/credentials/processcreds",
     "aws/credentials/stscreds",
     "aws/csm",
     "aws/defaults",
@@ -49,28 +51,34 @@
     "service/s3/s3manager",
     "service/sns",
     "service/sqs",
-    "service/sts"
+    "service/sts",
   ]
-  revision = "ceab7b7ac6f535d1397f124620720b5145f1ad59"
-  version = "v1.15.88"
+  pruneopts = "UT"
+  revision = "56c1def75689cceec1fa6f14c2eedb4b798827f9"
+  version = "v1.19.11"
 
 [[projects]]
+  digest = "1:7b94d37d65c0445053c6f3e73090e3966c1c29127035492c349e14f25c440359"
   name = "github.com/boombuler/barcode"
   packages = [
     ".",
     "qr",
-    "utils"
+    "utils",
   ]
+  pruneopts = "UT"
   revision = "3cfea5ab600ae37946be2b763b8ec2c1cf2d272d"
   version = "v1.0.0"
 
 [[projects]]
+  digest = "1:8f8811f9be822914c3a25c6a071e93beb4c805d7b026cbf298bc577bc1cc945b"
   name = "github.com/google/uuid"
   packages = ["."]
+  pruneopts = "UT"
   revision = "064e2069ce9c359c118179501254f67d7d37ba24"
   version = "0.2"
 
 [[projects]]
+  digest = "1:ca89a78532f79285d0fb6a3ece57f99387ef947cbebc8474ef76399ad8c49a31"
   name = "github.com/gruntwork-io/terratest"
   packages = [
     "modules/aws",
@@ -83,28 +91,34 @@
     "modules/shell",
     "modules/ssh",
     "modules/terraform",
-    "modules/test-structure"
+    "modules/test-structure",
   ]
+  pruneopts = "UT"
   revision = "8bcb4e1ad409e19aac4ad7fab99fe632326a1884"
   version = "v0.9.17"
 
 [[projects]]
+  digest = "1:bb81097a5b62634f3e9fec1014657855610c82d19b9a40c17612e32651e35dca"
   name = "github.com/jmespath/go-jmespath"
   packages = ["."]
-  revision = "0b12d6b5"
+  pruneopts = "UT"
+  revision = "c2b33e84"
 
 [[projects]]
+  digest = "1:dc56e7178a82f8e84960ed9efa7d4ebd0a6d7864894bfc46f8a35ee5eae7153a"
   name = "github.com/pquerna/otp"
   packages = [
     ".",
     "hotp",
-    "totp"
+    "totp",
   ]
-  revision = "b7b89250c468c06871d3837bee02e2d5c155ae19"
-  version = "v1.0.0"
+  pruneopts = "UT"
+  revision = "be78767b3e392ce45ea73444451022a6fc32ad0d"
+  version = "v1.1.0"
 
 [[projects]]
   branch = "master"
+  digest = "1:6d0d109802ece494958ddf11f2100953b32315374326cf4e7519b9e874b4643f"
   name = "golang.org/x/crypto"
   packages = [
     "curve25519",
@@ -114,19 +128,39 @@
     "internal/subtle",
     "poly1305",
     "ssh",
-    "ssh/agent"
+    "ssh/agent",
   ]
-  revision = "eb0de9b17e854e9b1ccd9963efafc79862359959"
+  pruneopts = "UT"
+  revision = "38d8ce5564a5b71b2e3a00553993f1b9a7ae852f"
 
 [[projects]]
   branch = "master"
+  digest = "1:76ee51c3f468493aff39dbacc401e8831fbb765104cbf613b89bef01cf4bad70"
   name = "golang.org/x/net"
   packages = ["context"]
-  revision = "fae4c4e3ad76c295c3d6d259f898136b4bf833a8"
+  pruneopts = "UT"
+  revision = "eb5bcb51f2a31c7d5141d810b70815c05d9c9146"
+
+[[projects]]
+  branch = "master"
+  digest = "1:d78755393cc6ee9bd63b4debeed9be209517adc3296e61ecdf97590b15260f45"
+  name = "golang.org/x/sys"
+  packages = [
+    "cpu",
+    "unix",
+  ]
+  pruneopts = "UT"
+  revision = "4b34438f7a67ee5f45cc6132e2bad873a20324e9"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "462e69cd6f22dc0ad1595dec2a9ea30ef6fbb776d04347e1dba6935b8ec3cc8f"
+  input-imports = [
+    "github.com/gruntwork-io/terratest/modules/logger",
+    "github.com/gruntwork-io/terratest/modules/random",
+    "github.com/gruntwork-io/terratest/modules/retry",
+    "github.com/gruntwork-io/terratest/modules/terraform",
+    "github.com/gruntwork-io/terratest/modules/test-structure",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
