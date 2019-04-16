@@ -22,7 +22,7 @@ variable "concourse_docker_image" {
 
 variable "concourse_version" {
   description = "Concourse CI version to use. Defaults to the latest tested version"
-  default     = "5.0.1"
+  default     = "5.1.0"
 }
 
 variable "concourse_version_override" {
