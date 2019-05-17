@@ -135,7 +135,7 @@ The following resources will be created:
 | name | A descriptive name of the purpose of this Concourse worker pool | string | - | yes |
 | project | Project where the concourse claster belongs to. This is mainly used to identify it in Teleport | string | `` | no |
 | root_disk_volume_size | Size of the worker instances root disk | string | `10` | no |
-| root_disk_volume_type | Volume type of the worker instances root disk | string | `standard` | no |
+| root_disk_volume_type | Volume type of the worker instances root disk | string | `gp2` | no |
 | ssh_key_name | The key name to use for the instance | string | - | yes |
 | subnet_ids | List of subnet ids where to deploy the worker instances | list | - | yes |
 | teleport_auth_token | Teleport node token to authenticate with the auth server | string | `` | no |
@@ -146,7 +146,7 @@ The following resources will be created:
 | work_disk_ephemeral | Whether to use ephemeral volumes as Concourse worker storage. You must use an [`instance_type` that supports this](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames) | string | `false` | no |
 | work_disk_internal_device_name | Device name of the internal volume as identified by the Linux kernel, which can differ from `work_disk_device_name` depending on used AMI. Make sure this is set according the `instance_type`, eg. `/dev/xvdf` when using an older AMI | string | `/dev/nvme1n1` | no |
 | work_disk_volume_size | Size of the external EBS volume to use as Concourse worker storage | string | `100` | no |
-| work_disk_volume_type | Volume type of the external EBS volume to use as Concourse worker storage | string | `standard` | no |
+| work_disk_volume_type | Volume type of the external EBS volume to use as Concourse worker storage | string | `gp2` | no |
 | worker_tsa_port | tsa port that the worker can use to connect to the web | string | `2222` | no |
 
 ### Output

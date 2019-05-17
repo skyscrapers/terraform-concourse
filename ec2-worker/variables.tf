@@ -41,7 +41,7 @@ variable "additional_security_group_ids" {
 
 variable "root_disk_volume_type" {
   description = "Volume type of the worker instances root disk"
-  default     = "standard"
+  default     = "gp2"
 }
 
 variable "root_disk_volume_size" {
@@ -66,7 +66,7 @@ variable "work_disk_internal_device_name" {
 
 variable "work_disk_volume_type" {
   description = "Volume type of the external EBS volume to use as Concourse worker storage"
-  default     = "standard"
+  default     = "gp2"
 }
 
 variable "work_disk_volume_size" {
