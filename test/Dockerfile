@@ -1,7 +1,7 @@
 FROM golang:1.9-alpine
 
 # This is the release of Terraform to pull in.
-ARG TF_VERSION=0.11.10
+ARG TF_VERSION=0.12.5
 
 VOLUME [ "/go/src/github.com/skyscrapers/terraform-concourse" ]
 
