@@ -1,7 +1,7 @@
 resource "aws_s3_bucket" "concourse_keys" {
   bucket        = "concourse-keys-${var.name}-${var.environment}"
   acl           = "private"
-  force_destroy = "${var.bucket_force_destroy}"
+  force_destroy = var.bucket_force_destroy
 
   versioning {
     enabled = true
@@ -15,14 +15,14 @@ resource "aws_s3_bucket" "concourse_keys" {
     }
   }
 
-  tags {
+  tags = {
     Name        = "concourse keys for ${var.name}"
-    Environment = "${var.environment}"
+    Environment = var.environment
   }
 }
 
 resource "aws_s3_bucket_policy" "concourse_keys" {
-  bucket = "${aws_s3_bucket.concourse_keys.bucket}"
+  bucket = aws_s3_bucket.concourse_keys.bucket
 
   policy = <<EOF
 {
@@ -56,4 +56,6 @@ resource "aws_s3_bucket_policy" "concourse_keys" {
   ]
 }
 EOF
+
 }
+
