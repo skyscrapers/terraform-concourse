@@ -126,8 +126,8 @@ variable "concourse_auth_main_team_local_user" {
 
 variable "concourse_web_instance_count" {
   description = "Number of containers running Concourse web"
-  default     = "1"
-  type        = string
+  default     = 1
+  type        = number
 }
 
 variable "elb_subnets" {

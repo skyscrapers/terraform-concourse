@@ -36,7 +36,7 @@ variable "ssh_key_name" {
 
 variable "custom_ami" {
   description = "Use a custom AMI for the worker instances. If omitted the latest Ubuntu 16.04 AMI will be used."
-  default     = ""
+  default     = null
   type        = string
 }
 
@@ -101,8 +101,8 @@ variable "worker_tsa_port" {
 
 variable "concourse_worker_instance_count" {
   description = "Number of Concourse worker instances"
-  default     = "1"
-  type        = string
+  default     = 1
+  type        = number
 }
 
 variable "concourse_version" {
@@ -113,7 +113,7 @@ variable "concourse_version" {
 
 variable "concourse_version_override" {
   description = "Variable to override the default Concourse version. Leave it empty to fallback to `concourse_version`. Useful if you want to default to the module's default but also give the users the option to override it"
-  default     = ""
+  default     = null
   type        = string
 }
 
@@ -135,7 +135,7 @@ variable "concourse_tags" {
 
 variable "cross_account_worker_role_arn" {
   description = "IAM role ARN to assume to access the Concourse keys bucket in another AWS account"
-  default     = ""
+  default     = null
   type        = string
 }
 

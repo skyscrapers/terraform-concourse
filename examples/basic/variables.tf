@@ -72,7 +72,7 @@ variable "concourse_db_name" {
 }
 
 variable "github_client_id" {
-  default = ""
+  default = null
   type    = string
 }
 
@@ -87,12 +87,12 @@ variable "concourse_auth_password" {
 }
 
 variable "github_client_secret" {
-  default = ""
+  default = null
   type    = string
 }
 
 variable "github_auth_team" {
-  default = ""
+  default = null
   type    = string
 }
 
@@ -112,8 +112,8 @@ variable "elb_ssl_certificate_id" {
 }
 
 variable "worker_instance_count" {
-  default = "1"
-  type    = string
+  default = 1
+  type    = number
 }
 
 variable "worker_cpu_credits" {

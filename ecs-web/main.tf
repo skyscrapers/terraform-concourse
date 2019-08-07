@@ -139,25 +139,25 @@ data "template_file" "concourse_basic_auth" {
 EOF
 
 
-vars = {
-concourse_auth_username = coalesce(var.concourse_auth_username, 0)
-concourse_auth_password = coalesce(var.concourse_auth_password, 0)
-}
+  vars = {
+    concourse_auth_username = coalesce(var.concourse_auth_username, 0)
+    concourse_auth_password = coalesce(var.concourse_auth_password, 0)
+   }
 }
 
 data "template_file" "concourse_basic_auth_main_team_local_user" {
-template = <<EOF
+  template = <<EOF
 { "name": "CONCOURSE_MAIN_TEAM_LOCAL_USER", "value": "$${concourse_auth_username}" },
 EOF
 
 
-vars = {
-concourse_auth_username = coalesce(var.concourse_auth_main_team_local_user, 0)
-}
+  vars = {
+    concourse_auth_username = coalesce(var.concourse_auth_main_team_local_user, 0)
+  }
 }
 
 data "template_file" "concourse_github_auth" {
-template = <<EOF
+  template = <<EOF
 { "name": "CONCOURSE_GITHUB_CLIENT_ID", "value": "$${concourse_github_auth_client_id}" },
 { "name": "CONCOURSE_GITHUB_CLIENT_SECRET", "value": "$${concourse_github_auth_client_secret}" },
 { "name": "CONCOURSE_MAIN_TEAM_GITHUB_TEAM", "value": "$${concourse_github_auth_team}" },
