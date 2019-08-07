@@ -15,7 +15,7 @@ variable "ecs_cluster" {
 
 variable "concourse_hostname" {
   description = "Hostname on which concourse will be available, this hostname needs to point to the ELB. If ommitted, the hostname of the AWS ELB will be used instead"
-  default     = ""
+  default     = null
   type        = string
 }
 
@@ -33,7 +33,7 @@ variable "concourse_version" {
 
 variable "concourse_version_override" {
   description = "Variable to override the default Concourse version. Leave it empty to fallback to `concourse_version`. Useful if you want to default to the module's default but also give the users the option to override it"
-  default     = ""
+  default     = null
   type        = string
 }
 
@@ -73,7 +73,7 @@ variable "auto_create_db" {
 
 variable "concourse_db_postgres_engine_version" {
   description = "Postgres engine version used in the Concourse database server. Only needed if `auto_create_db` is set to `true`"
-  default     = ""
+  default     = null
   type        = string
 }
 
@@ -90,37 +90,37 @@ variable "ecs_service_role_arn" {
 
 variable "concourse_github_auth_client_id" {
   description = "Github client id"
-  default     = ""
+  default     = null
   type        = string
 }
 
 variable "concourse_github_auth_client_secret" {
   description = "Github client secret"
-  default     = ""
+  default     = null
   type        = string
 }
 
 variable "concourse_github_auth_team" {
   description = "Github team that can login"
-  default     = ""
+  default     = null
   type        = string
 }
 
 variable "concourse_auth_username" {
   description = "Basic authentication username"
-  default     = ""
+  default     = null
   type        = string
 }
 
 variable "concourse_auth_password" {
   description = "Basic authentication password"
-  default     = ""
+  default     = null
   type        = string
 }
 
 variable "concourse_auth_main_team_local_user" {
   description = "Local user to allow access to the main team"
-  default     = ""
+  default     = null
   type        = string
 }
 
@@ -163,13 +163,13 @@ variable "keys_bucket_arn" {
 
 variable "vault_server_url" {
   description = "The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration"
-  default     = ""
+  default     = null
   type        = string
 }
 
 variable "vault_auth_concourse_role_name" {
   description = "The Vault role that Concourse will use. This is normally fetched from the `vault-auth` Terraform module"
-  default     = ""
+  default     = null
   type        = string
 }
 

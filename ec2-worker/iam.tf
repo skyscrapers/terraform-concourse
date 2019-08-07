@@ -41,7 +41,7 @@ data "aws_iam_policy_document" "concourse_worker_policy" {
 }
 
 resource "aws_iam_role_policy" "concourse_worker_policy" {
-  count  = length(var.cross_account_worker_role_arn) > 0 ? 0 : 1 # Disable if accessing another AWS account through an assume role
+  count  = coalesce(var.cross_account_worker_role_arn, 1) # Disable if accessing another AWS account through an assume role
   name   = "concourse_worker_${var.environment}_${var.name}_policy"
   role   = aws_iam_role.concourse_worker_role.id
   policy = data.aws_iam_policy_document.concourse_worker_policy.json

@@ -22,7 +22,7 @@ module "is_ebs_optimised" {
 
 resource "aws_launch_template" "concourse_worker_launchtemplate" {
   count         = var.work_disk_ephemeral ? 0 : 1
-  image_id      = length(var.custom_ami) == 0 ? data.aws_ami.ubuntu.id : var.custom_ami
+  image_id      = coalesce(var.custom_ami, data.aws_ami.ubuntu.id)
   instance_type = var.instance_type
   key_name      = var.ssh_key_name
   user_data     = data.template_cloudinit_config.concourse_bootstrap.rendered
@@ -72,7 +72,7 @@ resource "aws_launch_template" "concourse_worker_launchtemplate" {
 
 resource "aws_launch_template" "concourse_worker_launchtemplate_ephemeral" {
   count         = var.work_disk_ephemeral ? 1 : 0
-  image_id      = length(var.custom_ami) == 0 ? data.aws_ami.ubuntu.id : var.custom_ami
+  image_id      = coalesce(var.custom_ami, data.aws_ami.ubuntu.id)
   instance_type = var.instance_type
   key_name      = var.ssh_key_name
   user_data     = data.template_cloudinit_config.concourse_bootstrap.rendered

@@ -1,5 +1,5 @@
 locals {
-  concourse_version = var.concourse_version_override == "" ? var.concourse_version : var.concourse_version_override
+  concourse_version = coalesce(var.concourse_version_override, var.concourse_version)
 }
 
 resource "aws_security_group" "worker_instances_sg" {

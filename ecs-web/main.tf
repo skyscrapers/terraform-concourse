@@ -47,8 +47,8 @@ resource "aws_ecs_task_definition" "concourse_web_task_definition" {
 }
 
 locals {
-  concourse_hostname = var.concourse_hostname == "" ? module.elb.elb_dns_name : var.concourse_hostname
-  concourse_version  = var.concourse_version_override == "" ? var.concourse_version : var.concourse_version_override
+  concourse_hostname = coalesce(var.concourse_hostname, module.elb.elb_dns_name)
+  concourse_version  = coalesce(var.concourse_version_override, var.concourse_version)
 }
 
 data "template_file" "concourse_web_task_template" {
@@ -65,10 +65,10 @@ data "template_file" "concourse_web_task_template" {
     awslog_group_name              = aws_cloudwatch_log_group.concourse_web_log_group.name
     awslog_region                  = data.aws_region.current.name
     concourse_keys_bucket_name     = var.keys_bucket_id
-    concourse_basic_auth           = length(var.concourse_auth_username) > 0 && length(var.concourse_auth_password) > 0 ? data.template_file.concourse_basic_auth.rendered : ""
-    concourse_basic_auth_main_team = length(var.concourse_auth_main_team_local_user) > 0 ? data.template_file.concourse_basic_auth_main_team_local_user.rendered : ""
-    concourse_github_auth          = length(var.concourse_github_auth_client_id) > 0 && length(var.concourse_github_auth_client_secret) > 0 && length(var.concourse_github_auth_team) > 0 ? data.template_file.concourse_github_auth.rendered : ""
-    concourse_vault_variables      = length(var.vault_server_url) > 0 ? data.template_file.concourse_vault_variables.rendered : ""
+    concourse_basic_auth           = var.concourse_auth_username != null && var.concourse_auth_password != null ? data.template_file.concourse_basic_auth.rendered : ""
+    concourse_basic_auth_main_team = var.concourse_auth_main_team_local_user != null ?  data.template_file.concourse_basic_auth_main_team_local_user.rendered : ""
+    concourse_github_auth          = var.concourse_github_auth_client_id != null && var.concourse_github_auth_client_secret != null && var.concourse_github_auth_team != null ? data.template_file.concourse_github_auth.rendered : ""
+    concourse_vault_variables      = var.vault_server_url != null ? data.template_file.concourse_vault_variables.rendered : ""
     memory                         = var.container_memory
     cpu                            = var.container_cpu
     concourse_prometheus_bind_port = var.concourse_prometheus_bind_port
@@ -78,8 +78,8 @@ data "template_file" "concourse_web_task_template" {
       join("", data.template_file.concourse_db_task_template.*.rendered),
     )
     volumes_from_concourse_db = var.auto_create_db ? ",{ \"sourceContainer\": \"create_db\" }" : ""
-    volumes_from_vault_auth   = length(var.vault_server_url) > 0 ? ",{ \"sourceContainer\": \"vault_auth\" }" : ""
-    vault_command_args        = length(var.vault_server_url) > 0 ? "--vault-client-token=`cat /concourse_vault/token`" : ""
+    volumes_from_vault_auth   = var.vault_server_url != null ? ",{ \"sourceContainer\": \"vault_auth\" }" : ""
+    vault_command_args        = var.vault_server_url != null ? "--vault-client-token=`cat /concourse_vault/token`" : ""
     vault_auth_task_definition = indent(
       2,
       join("", data.template_file.vault_auth_task_template.*.rendered),
@@ -95,7 +95,7 @@ data "template_file" "concourse_db_task_template" {
 
   vars = {
     image                      = "postgres"
-    image_tag                  = var.concourse_db_postgres_engine_version == "" ? "latest" : var.concourse_db_postgres_engine_version
+    image_tag                  = coalesce(var.concourse_db_postgres_engine_version, "latest")
     concourse_db_host          = var.concourse_db_host
     concourse_db_port          = var.concourse_db_port
     concourse_db_user          = var.concourse_db_username
@@ -108,7 +108,7 @@ data "template_file" "concourse_db_task_template" {
 }
 
 data "template_file" "vault_auth_task_template" {
-  count    = length(var.vault_server_url) > 0 ? 1 : 0
+  count    = var.vault_server_url !=null ? 1 : 0
   template = file("${path.module}/task-definitions/vault_auth_container.json")
 
   vars = {
@@ -129,7 +129,7 @@ EOF
 
 
   vars = {
-    concourse_vault_url = var.vault_server_url
+    concourse_vault_url = coalesce(var.vault_server_url, 0)
   }
 }
 
@@ -140,8 +140,8 @@ EOF
 
 
 vars = {
-concourse_auth_username = var.concourse_auth_username
-concourse_auth_password = var.concourse_auth_password
+concourse_auth_username = coalesce(var.concourse_auth_username, 0)
+concourse_auth_password = coalesce(var.concourse_auth_password, 0)
 }
 }
 
@@ -152,7 +152,7 @@ EOF
 
 
 vars = {
-concourse_auth_username = var.concourse_auth_main_team_local_user
+concourse_auth_username = coalesce(var.concourse_auth_main_team_local_user, 0)
 }
 }
 
@@ -165,9 +165,9 @@ EOF
 
 
   vars = {
-    concourse_github_auth_client_id     = var.concourse_github_auth_client_id
-    concourse_github_auth_client_secret = var.concourse_github_auth_client_secret
-    concourse_github_auth_team          = var.concourse_github_auth_team
+    concourse_github_auth_client_id     = coalesce(var.concourse_github_auth_client_id, 0)
+    concourse_github_auth_client_secret = coalesce(var.concourse_github_auth_client_secret, 0)
+    concourse_github_auth_team          = coalesce(var.concourse_github_auth_team, 0)
   }
 }
 
