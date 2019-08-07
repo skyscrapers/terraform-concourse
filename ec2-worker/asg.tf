@@ -174,7 +174,7 @@ data "template_file" "concourse_bootstrap" {
   vars = {
     concourse_version             = local.concourse_version
     keys_bucket_id                = var.keys_bucket_id
-    cross_account_worker_role_arn = var.cross_account_worker_role_arn
+    cross_account_worker_role_arn = coalesce(var.cross_account_worker_role_arn, 0)
   }
 }
 
