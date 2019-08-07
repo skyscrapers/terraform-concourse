@@ -10,6 +10,7 @@ variable "environment" {
 
 variable "project" {
   type    = string
+  default = "sample"
 }
 
 variable "db_instance_type" {
