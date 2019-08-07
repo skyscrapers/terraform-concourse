@@ -26,9 +26,9 @@ module "bluegreen" {
   name                   = "asg-${var.project}-test-cluster-${terraform.workspace}"
   blue_ami               = data.aws_ami.ecs.id
   green_ami              = data.aws_ami.ecs.id
-  subnets                = [module.vpc.private_app_subnets]
+  subnets                = module.vpc.private_app_subnets
   green_instance_type    = var.ecs_instance_type
-  blue_instance_type    = var.ecs_instance_type
+  blue_instance_type     = var.ecs_instance_type
   iam_instance_profile   = module.ecs_cluster.ecs-instance-profile
   key_name               = var.key_name
   blue_max_size          = 1
