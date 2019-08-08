@@ -176,7 +176,7 @@ EOF
 }
 
 data "template_file" "concourse_extra_env" {
-  count = length(var.concourse_extra_env)
+  count = var.concourse_extra_env != null ? length(var.concourse_extra_env) : 0
 
   template = <<EOF
 { "name": "$${key}", "value": "$${value}" },
