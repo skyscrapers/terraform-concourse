@@ -73,13 +73,17 @@ data "template_file" "concourse_web_task_template" {
     cpu                            = var.container_cpu
     concourse_prometheus_bind_port = var.concourse_prometheus_bind_port
     concourse_prometheus_bind_ip   = var.concourse_prometheus_bind_ip
+    volumes_from_concourse_db      = var.auto_create_db ? ",{ \"sourceContainer\": \"create_db\" }" : ""
+    volumes_from_vault_auth        = var.vault_server_url != null ? ",{ \"sourceContainer\": \"vault_auth\" }" : ""
+    vault_command_args             = var.vault_server_url != null ? "--vault-client-token=`cat /concourse_vault/token`" : ""
+    concourse_extra_args           = var.concourse_extra_args != null ? var.concourse_extra_args : ""
+    concourse_extra_env            = var.concourse_extra_env != null ? jsonencode(var.concourse_extra_env) : ""
+
     concourse_db_task_definition = indent(
       2,
       join("", data.template_file.concourse_db_task_template.*.rendered),
     )
-    volumes_from_concourse_db = var.auto_create_db ? ",{ \"sourceContainer\": \"create_db\" }" : ""
-    volumes_from_vault_auth   = var.vault_server_url != null ? ",{ \"sourceContainer\": \"vault_auth\" }" : ""
-    vault_command_args        = var.vault_server_url != null ? "--vault-client-token=`cat /concourse_vault/token`" : ""
+
     vault_auth_task_definition = indent(
       2,
       join("", data.template_file.vault_auth_task_template.*.rendered),
@@ -194,4 +198,3 @@ resource "aws_cloudwatch_log_metric_filter" "concourse_errors" {
     default_value = "0"
   }
 }
-

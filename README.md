@@ -91,6 +91,8 @@ The following resources are created:
 | vault_auth_concourse_role_name | The Vault role that Concourse will use. This is normally fetched from the `vault-auth` Terraform module | string | `` | no |
 | vault_docker_image_tag | Docker image version to use for the Vault auth container | string | `latest` | no |
 | vault_server_url | The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration | string | `` | no |
+| concourse\_extra\_args | Extra arguments to pass to Concourse Web | string | `null` | no |
+| concourse\_extra\_env | Extra ENV variables to pass to Concourse Web. Use the following format: `[{ name = "MYVAR", value = "MYVALUE" }, { name = "MYVAR2", value = "MYVALUE2" }]` | list(object({ name=string, value=string })) | `null` | no |
 
 ### Outputs
 
