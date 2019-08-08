@@ -1,6 +1,6 @@
 #!/bin/sh
 
-apk add --update unzip curl dep git
+apk add --update unzip curl dep git build-base
 
 # Unzip terraform binary
 unzip terraform-release/terraform_*_linux_amd64.zip -d /usr/local/bin
