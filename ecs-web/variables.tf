@@ -209,3 +209,14 @@ variable "vault_docker_image_tag" {
   type        = string
 }
 
+variable "concourse_extra_args" {
+  description = "Extra arguments to pass to Concourse Web"
+  type        = string
+  default     = null
+}
+
+variable "concourse_extra_env" {
+  description = "Extra ENV variables to pass to Concourse Web. Use a map with the ENV var name as key and value as value"
+  type        = map(string)
+  default     = null
+}

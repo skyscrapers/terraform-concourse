@@ -32,7 +32,7 @@
     "name"   : "concourse_web",
     "image"  : "${image}",
     "command": [
-      "PATH=$PATH:/usr/local/concourse/bin:/usr/local/bin concourse web ${vault_command_args}"
+      "PATH=$PATH:/usr/local/concourse/bin:/usr/local/bin concourse web ${vault_command_args} ${concourse_extra_args}"
     ],
     "entryPoint": ["/bin/sh", "-c"],
     "cpu"         : ${cpu},
@@ -64,6 +64,7 @@
       ${concourse_basic_auth_main_team}
       ${concourse_github_auth}
       ${concourse_vault_variables}
+      ${concourse_extra_env}
       { "name": "CONCOURSE_EXTERNAL_URL"      , "value": "https://${concourse_hostname}" },
       { "name": "CONCOURSE_POSTGRES_HOST"     , "value": "${concourse_db_host}" },
       { "name": "CONCOURSE_POSTGRES_PORT"     , "value": "${concourse_db_port}" },
