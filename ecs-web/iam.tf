@@ -16,11 +16,12 @@ resource "aws_iam_role" "concourse_task_role" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy" "concourse_task_policy" {
   name = "concourse_web_${var.name}_${var.environment}_task_policy"
-  role = "${aws_iam_role.concourse_task_role.id}"
+  role = aws_iam_role.concourse_task_role.id
 
   policy = <<EOF
 {
@@ -40,4 +41,6 @@ resource "aws_iam_role_policy" "concourse_task_policy" {
   ]
 }
 EOF
+
 }
+

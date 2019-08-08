@@ -13,7 +13,7 @@ chmod +x /usr/local/concourse/bin/concourse
 %{ endif }
 
 # AssumeRole for remote TSA
-if [ ! -z "${cross_account_worker_role_arn}" ]
+if [ ! "${cross_account_worker_role_arn}" == 0 ]
 then
   ASSUMED_ROLE=$(aws sts assume-role --role-arn ${cross_account_worker_role_arn} --role-session-name concourse-worker-$HOSTNAME)
   export AWS_ACCESS_KEY_ID=$(echo "$ASSUMED_ROLE" | jq -r ".Credentials.AccessKeyId")
