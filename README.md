@@ -92,7 +92,7 @@ The following resources are created:
 | vault_docker_image_tag | Docker image version to use for the Vault auth container | string | `latest` | no |
 | vault_server_url | The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration | string | `` | no |
 | concourse\_extra\_args | Extra arguments to pass to Concourse Web | string | `null` | no |
-| concourse\_extra\_env | Extra ENV variables to pass to Concourse Web. Use the following format: `[{ name = "MYVAR", value = "MYVALUE" }, { name = "MYVAR2", value = "MYVALUE2" }]` | list(object({ name=string, value=string })) | `null` | no |
+| concourse\_extra\_env | Extra ENV variables to pass to Concourse Web. Use a map with the ENV var name as key and value as value | map(string) | `null` | no |
 
 ### Outputs
 
@@ -105,6 +105,20 @@ The following resources are created:
 | elb\_sg\_id | Security group id of the loadbalancer |
 | elb\_zone\_id | Zone ID of the ELB |
 | iam\_role\_arn | ARN of the IAM role created for the Concourse ECS task |
+
+### Examples
+
+You can use `concourse_extra_args` or `concourse_extra_env` to pass any Concourse configuration to the deployment. For example, to add GitLab authentication for a self-hosted instance:
+
+```terraform
+concourse_extra_env = {
+  CONCOURSE_GITLAB_CLIENT_ID       = "my_client_id",
+  CONCOURSE_GITLAB_CLIENT_SECRET   = "my_client_secret",
+  CONCOURSE_GITLAB_HOST            = "https://gitlab.example.com",
+  # If you want a GitLab group to access the `main` Concourse team:
+  CONCOURSE_MAIN_TEAM_GITLAB_GROUP = "my_group"
+}
+```
 
 ## ec2-worker
 

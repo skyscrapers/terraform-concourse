@@ -216,7 +216,7 @@ variable "concourse_extra_args" {
 }
 
 variable "concourse_extra_env" {
-  description = "Extra ENV variables to pass to Concourse Web. Use the following format: `[{ name = "MYVAR", value = "MYVALUE" }, { name = "MYVAR2", value = "MYVALUE2" }]`"
-  type        = list(object({ name=string, value=string }))
+  description = "Extra ENV variables to pass to Concourse Web. Use a map with the ENV var name as key and value as value"
+  type        = map(string)
   default     = null
 }

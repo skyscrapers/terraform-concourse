@@ -77,7 +77,7 @@ data "template_file" "concourse_web_task_template" {
     volumes_from_vault_auth        = var.vault_server_url != null ? ",{ \"sourceContainer\": \"vault_auth\" }" : ""
     vault_command_args             = var.vault_server_url != null ? "--vault-client-token=`cat /concourse_vault/token`" : ""
     concourse_extra_args           = var.concourse_extra_args != null ? var.concourse_extra_args : ""
-    concourse_extra_env            = var.concourse_extra_env != null ? jsonencode(var.concourse_extra_env) : ""
+    concourse_extra_env            = var.concourse_extra_env != null ? join("", data.template_file.concourse_extra_env.*.rendered) : ""
 
     concourse_db_task_definition = indent(
       2,
@@ -172,6 +172,19 @@ EOF
     concourse_github_auth_client_id     = coalesce(var.concourse_github_auth_client_id, 0)
     concourse_github_auth_client_secret = coalesce(var.concourse_github_auth_client_secret, 0)
     concourse_github_auth_team          = coalesce(var.concourse_github_auth_team, 0)
+  }
+}
+
+data "template_file" "concourse_extra_env" {
+  count = length(var.concourse_extra_env)
+
+  template = <<EOF
+{ "name": "$${key}", "value": "$${value}" },
+EOF
+
+  vars = {
+    key   = keys(var.concourse_extra_env)[count.index]
+    value = values(var.concourse_extra_env)[count.index]
   }
 }
 
