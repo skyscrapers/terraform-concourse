@@ -1,6 +1,6 @@
 variable "environment" {
   description = "The name of the environment these subnets belong to (prod,stag,dev)"
-  type        = string 
+  type        = string
 }
 
 variable "name" {
@@ -107,7 +107,7 @@ variable "concourse_worker_instance_count" {
 
 variable "concourse_version" {
   description = "Concourse CI version to use. Defaults to the latest tested version"
-  default     = "5.2.0"
+  default     = "5.2.1"
   type        = string
 }
 
