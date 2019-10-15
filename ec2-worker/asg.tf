@@ -16,7 +16,7 @@ data "aws_ami" "ubuntu" {
 }
 
 module "is_ebs_optimised" {
-  source        = "github.com/skyscrapers/terraform-instances//is_ebs_optimised?ref=3.0.1"
+  source        = "github.com/skyscrapers/terraform-instances//is_ebs_optimised?ref=3.0.2"
   instance_type = var.instance_type
 }
 
@@ -33,7 +33,7 @@ resource "aws_launch_template" "concourse_worker_launchtemplate" {
   }
 
   network_interfaces {
-    security_groups = concat([aws_security_group.worker_instances_sg.id], var.additional_security_group_ids)
+    security_groups       = concat([aws_security_group.worker_instances_sg.id], var.additional_security_group_ids)
     delete_on_termination = true
   }
 
@@ -80,7 +80,7 @@ resource "aws_launch_template" "concourse_worker_launchtemplate_ephemeral" {
   }
 
   network_interfaces {
-    security_groups = concat([aws_security_group.worker_instances_sg.id], var.additional_security_group_ids)
+    security_groups       = concat([aws_security_group.worker_instances_sg.id], var.additional_security_group_ids)
     delete_on_termination = true
   }
 
@@ -209,7 +209,7 @@ EOF
   # And format and mount the drive
   part {
     content_type = "text/x-shellscript"
-    content = var.work_disk_ephemeral ? "" : data.template_file.check_attachment.rendered
+    content      = var.work_disk_ephemeral ? "" : data.template_file.check_attachment.rendered
   }
 
   # Format external volume as btrfs
@@ -223,24 +223,24 @@ fs_setup:
     device: '${var.work_disk_internal_device_name}'
 EOF
 
-}
+  }
 
-# Mount external volume
-part {
-content_type = "text/cloud-config"
+  # Mount external volume
+  part {
+    content_type = "text/cloud-config"
 
-content = <<EOF
+    content = <<EOF
 mounts:
   - [ ${var.work_disk_internal_device_name}, /opt/concourse, btrfs, "defaults", "0", "2" ]
 EOF
 
-}
+  }
 
-# Create concourse_worker systemd service file
-part {
-content_type = "text/cloud-config"
+  # Create concourse_worker systemd service file
+  part {
+    content_type = "text/cloud-config"
 
-content = <<EOF
+    content = <<EOF
 write_files:
 - encoding: b64
   content: ${base64encode(data.template_file.concourse_systemd.rendered)}
@@ -280,16 +280,15 @@ EOF
 }
 
 module "teleport_bootstrap_script" {
-  source = "github.com/skyscrapers/terraform-teleport//teleport-bootstrap-script?ref=5.0.0"
+  source      = "github.com/skyscrapers/terraform-teleport//teleport-bootstrap-script?ref=5.0.3"
   auth_server = var.teleport_server
-  auth_token = var.teleport_auth_token
-  function = "concourse"
+  auth_token  = var.teleport_auth_token
+  function    = "concourse"
   environment = var.environment
-  project = var.project
+  project     = var.project
 
   additional_labels = [
     "concourse_version: \"${local.concourse_version}\"",
     "instance_type: \"${var.instance_type}\"",
   ]
 }
-
