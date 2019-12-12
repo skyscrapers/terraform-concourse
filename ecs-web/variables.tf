@@ -27,7 +27,7 @@ variable "concourse_docker_image" {
 
 variable "concourse_version" {
   description = "Concourse CI version to use. Defaults to the latest tested version"
-  default     = "5.5.3"
+  default     = "5.7.2"
   type        = string
 }
 
