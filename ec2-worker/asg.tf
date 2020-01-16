@@ -33,8 +33,9 @@ resource "aws_launch_template" "concourse_worker_launchtemplate" {
   }
 
   network_interfaces {
-    security_groups       = concat([aws_security_group.worker_instances_sg.id], var.additional_security_group_ids)
-    delete_on_termination = true
+    security_groups             = concat([aws_security_group.worker_instances_sg.id], var.additional_security_group_ids)
+    delete_on_termination       = true
+    associate_public_ip_address = var.public
   }
 
   iam_instance_profile {
@@ -80,8 +81,9 @@ resource "aws_launch_template" "concourse_worker_launchtemplate_ephemeral" {
   }
 
   network_interfaces {
-    security_groups       = concat([aws_security_group.worker_instances_sg.id], var.additional_security_group_ids)
-    delete_on_termination = true
+    security_groups             = concat([aws_security_group.worker_instances_sg.id], var.additional_security_group_ids)
+    delete_on_termination       = true
+    associate_public_ip_address = var.public
   }
 
   iam_instance_profile {
