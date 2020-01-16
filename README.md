@@ -134,37 +134,37 @@ The following resources will be created:
 ### Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| concourse\_hostname | Hostname on what concourse will be available, this hostname needs to point to the ELB. | string | n/a | yes |
-| environment | The name of the environment these subnets belong to \(prod,stag,dev\) | string | n/a | yes |
-| instance\_type | EC2 instance type for the worker instances | string | n/a | yes |
-| keys\_bucket\_arn | The S3 bucket ARN which contains the SSH keys to connect to the TSA | string | n/a | yes |
-| keys\_bucket\_id | The S3 bucket id which contains the SSH keys to connect to the TSA | string | n/a | yes |
-| name | A descriptive name of the purpose of this Concourse worker pool | string | n/a | yes |
-| ssh\_key\_name | The key name to use for the instance | string | n/a | yes |
-| subnet\_ids | List of subnet ids where to deploy the worker instances | list(string) | n/a | yes |
-| vpc\_id | The VPC id where to deploy the worker instances | string | n/a | yes |
-| additional\_security\_group\_ids | Additional security group ids to attach to the worker instances | list(string) | `[]` | no |
-| concourse\_tags | List of tags to add to the worker to use for assigning jobs and tasks | list(string) | `[]` | no |
-| concourse\_version | Concourse CI version to use. Defaults to the latest tested version | string | `"5.7.2"` | no |
-| concourse\_version\_override | Variable to override the default Concourse version. Leave it empty to fallback to `concourse\_version`. Useful if you want to default to the module's default but also give the users the option to override it | string | `"null"` | no |
-| concourse\_worker\_instance\_count | Number of Concourse worker instances | number | `"1"` | no |
-| cpu\_credits | The credit option for CPU usage. Can be `standard` or `unlimited` | string | `"standard"` | no |
-| cross\_account\_worker\_role\_arn | IAM role ARN to assume to access the Concourse keys bucket in another AWS account | string | `"null"` | no |
-| custom\_ami | Use a custom AMI for the worker instances. If omitted the latest Ubuntu 16.04 AMI will be used. | string | `"null"` | no |
-| project | Project where the concourse claster belongs to. This is mainly used to identify it in Teleport | string | `""` | no |
-| public | Whether to assign these worker nodes a public IP \(when public subnets are defined in `var.subnet\_ids`\) | bool | `"false"` | no |
-| root\_disk\_volume\_size | Size of the worker instances root disk | string | `"10"` | no |
-| root\_disk\_volume\_type | Volume type of the worker instances root disk | string | `"gp2"` | no |
-| teleport\_auth\_token | Teleport node token to authenticate with the auth server | string | `""` | no |
-| teleport\_server | Teleport auth server hostname | string | `""` | no |
-| teleport\_version | Teleport version for the client | string | `"4.1.1"` | no |
-| work\_disk\_device\_name | Device name of the external EBS volume to use as Concourse worker storage | string | `"/dev/sdf"` | no |
-| work\_disk\_ephemeral | Whether to use ephemeral volumes as Concourse worker storage. You must use an \[`instance\_type` that supports this\]\(https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames\) | string | `"false"` | no |
-| work\_disk\_internal\_device\_name | Device name of the internal volume as identified by the Linux kernel, which can differ from `work\_disk\_device\_name` depending on used AMI. Make sure this is set according the `instance\_type`, eg. `/dev/xvdf` when using an older AMI | string | `"/dev/nvme1n1"` | no |
-| work\_disk\_volume\_size | Size of the external EBS volume to use as Concourse worker storage | string | `"100"` | no |
-| work\_disk\_volume\_type | Volume type of the external EBS volume to use as Concourse worker storage | string | `"gp2"` | no |
-| worker\_tsa\_port | tsa port that the worker can use to connect to the web | string | `"2222"` | no |
+|------|-------------|------|---------|:-----:|
+| concourse\_hostname | Hostname on what concourse will be available, this hostname needs to point to the ELB. | `string` | n/a | yes |
+| concourse\_version\_override | Variable to override the default Concourse version. Leave it empty to fallback to `concourse_version`. Useful if you want to default to the module's default but also give the users the option to override it | `string` | n/a | yes |
+| cross\_account\_worker\_role\_arn | IAM role ARN to assume to access the Concourse keys bucket in another AWS account | `string` | n/a | yes |
+| custom\_ami | Use a custom AMI for the worker instances. If omitted the latest Ubuntu 16.04 AMI will be used. | `string` | n/a | yes |
+| environment | The name of the environment these subnets belong to (prod,stag,dev) | `string` | n/a | yes |
+| instance\_type | EC2 instance type for the worker instances | `string` | n/a | yes |
+| keys\_bucket\_arn | The S3 bucket ARN which contains the SSH keys to connect to the TSA | `string` | n/a | yes |
+| keys\_bucket\_id | The S3 bucket id which contains the SSH keys to connect to the TSA | `string` | n/a | yes |
+| name | A descriptive name of the purpose of this Concourse worker pool | `string` | n/a | yes |
+| ssh\_key\_name | The key name to use for the instance | `string` | n/a | yes |
+| subnet\_ids | List of subnet ids where to deploy the worker instances | `list(string)` | n/a | yes |
+| vpc\_id | The VPC id where to deploy the worker instances | `string` | n/a | yes |
+| additional\_security\_group\_ids | Additional security group ids to attach to the worker instances | `list(string)` | `[]` | no |
+| concourse\_tags | List of tags to add to the worker to use for assigning jobs and tasks | `list(string)` | `[]` | no |
+| concourse\_version | Concourse CI version to use. Defaults to the latest tested version | `string` | `"5.7.2"` | no |
+| concourse\_worker\_instance\_count | Number of Concourse worker instances | `number` | `1` | no |
+| cpu\_credits | The credit option for CPU usage. Can be `standard` or `unlimited` | `string` | `"standard"` | no |
+| project | Project where the concourse claster belongs to. This is mainly used to identify it in Teleport | `string` | `""` | no |
+| public | Whether to assign these worker nodes a public IP (when public subnets are defined in `var.subnet_ids`) | `bool` | `false` | no |
+| root\_disk\_volume\_size | Size of the worker instances root disk | `string` | `"10"` | no |
+| root\_disk\_volume\_type | Volume type of the worker instances root disk | `string` | `"gp2"` | no |
+| teleport\_auth\_token | Teleport node token to authenticate with the auth server | `string` | `""` | no |
+| teleport\_server | Teleport auth server hostname | `string` | `""` | no |
+| teleport\_version | Teleport version for the client | `string` | `"4.1.1"` | no |
+| work\_disk\_device\_name | Device name of the external EBS volume to use as Concourse worker storage | `string` | `"/dev/sdf"` | no |
+| work\_disk\_ephemeral | Whether to use ephemeral volumes as Concourse worker storage. You must use an [`instance_type` that supports this](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames) | `string` | `false` | no |
+| work\_disk\_internal\_device\_name | Device name of the internal volume as identified by the Linux kernel, which can differ from `work_disk_device_name` depending on used AMI. Make sure this is set according the `instance_type`, eg. `/dev/xvdf` when using an older AMI | `string` | `"/dev/nvme1n1"` | no |
+| work\_disk\_volume\_size | Size of the external EBS volume to use as Concourse worker storage | `string` | `"100"` | no |
+| work\_disk\_volume\_type | Volume type of the external EBS volume to use as Concourse worker storage | `string` | `"gp2"` | no |
+| worker\_tsa\_port | tsa port that the worker can use to connect to the web | `string` | `"2222"` | no |
 
 ### Outputs
 
