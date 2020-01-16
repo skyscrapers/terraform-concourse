@@ -162,3 +162,9 @@ variable "cpu_credits" {
   default     = "standard"
   type        = string
 }
+
+variable "public" {
+  type        = bool
+  description = "Whether to assign these worker nodes a public IP (when public subnets are defined in `var.subnet_ids`)"
+  default     = false
+}
