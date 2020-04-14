@@ -89,7 +89,7 @@ The following resources are created:
 | prometheus_cidrs | CIDR blocks that'll allowed to access the Prometheus scraper port | list | `<list>` | no |
 | ssl_certificate_id | SSL certificate arn to attach to the ELB | string | - | yes |
 | vault_auth_concourse_role_name | The Vault role that Concourse will use. This is normally fetched from the `vault-auth` Terraform module | string | `` | no |
-| vault_docker_image_tag | Docker image version to use for the Vault auth container | string | `1.1.3` | no |
+| vault_docker_image_tag | Docker image version to use for the Vault auth container | string | `1.3.2` | no |
 | vault_server_url | The Vault server URL to configure in Concourse. Leaving it empty will disable the Vault integration | string | `` | no |
 | concourse\_extra\_args | Extra arguments to pass to Concourse Web | string | `null` | no |
 | concourse\_extra\_env | Extra ENV variables to pass to Concourse Web. Use a map with the ENV var name as key and value as value | map(string) | `null` | no |

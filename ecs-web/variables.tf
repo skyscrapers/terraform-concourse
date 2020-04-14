@@ -205,7 +205,7 @@ variable "prometheus_cidrs" {
 
 variable "vault_docker_image_tag" {
   description = "Docker image version to use for the Vault auth container"
-  default     = "1.1.3"
+  default     = "1.3.2"
   type        = string
 }
 
