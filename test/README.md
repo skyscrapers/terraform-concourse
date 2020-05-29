@@ -46,7 +46,7 @@ docker run --rm terraform-concourse-test dep ensure
 **Note** that all the examples below assume that you are in the root of the `terraform-concourse` project folder.
 
 ```bash
-export TEST_CONCOURSE_VERSION="4.2.1"
+export TEST_CONCOURSE_VERSION="6.1.0"
 export TEST_ACM_ARN="arn:aws:acm:eu-west-1:1234567890:certificate/uev7722-434t-55g7-86ba-a882d9da1fa5"
 export AWS_ACCESS_KEY_ID=...
 export AWS_SECRET_ACCESS_KEY=...
@@ -54,10 +54,12 @@ export AWS_SESSION_TOKEN=...
 docker run --rm -e TEST_CONCOURSE_VERSION -e TEST_ACM_ARN -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN -v $PWD:/go/src/github.com/skyscrapers/terraform-concourse terraform-concourse-test go test -v -timeout 60m
 ```
 
+*Note:* add `SKIP_deploy` and or `SKIP_teardown` to skip the terraform deploy and or destroy step of the tests
+
 You can also run the tests remotely in Concourse. *Of course you need access to a Concourse server to do this*
 
 ```bash
-export TEST_CONCOURSE_VERSION="4.2.1"
+export TEST_CONCOURSE_VERSION="6.1.0"
 export TEST_ACM_ARN="arn:aws:acm:eu-west-1:1234567890:certificate/uev7722-434t-55g7-86ba-a882d9da1fa5"
 export AWS_ACCESS_KEY_ID=...
 export AWS_SECRET_ACCESS_KEY=...
@@ -70,7 +72,7 @@ fly -t your_target execute --config ci/run_tests.yaml -i terraform-src=$PWD
 To run a specific test called `TestFoo`:
 
 ```bash
-export TEST_CONCOURSE_VERSION="4.2.1"
+export TEST_CONCOURSE_VERSION="6.1.0"
 export TEST_ACM_ARN="arn:aws:acm:eu-west-1:1234567890:certificate/uev7722-434t-55g7-86ba-a882d9da1fa5"
 export AWS_ACCESS_KEY_ID=...
 export AWS_SECRET_ACCESS_KEY=...

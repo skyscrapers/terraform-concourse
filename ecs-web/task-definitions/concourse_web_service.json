@@ -34,7 +34,7 @@
     "command": [
       "PATH=$PATH:/usr/local/concourse/bin:/usr/local/bin concourse web ${vault_command_args} ${concourse_extra_args}"
     ],
-    "entryPoint": ["/bin/sh", "-c"],
+    "entryPoint"  : ["/bin/sh", "-c"],
     "cpu"         : ${cpu},
     "memory"      : ${memory},
     "essential"   : true,
@@ -72,7 +72,11 @@
       { "name": "CONCOURSE_POSTGRES_PASSWORD" , "value": ${concourse_db_password} },
       { "name": "CONCOURSE_POSTGRES_DATABASE" , "value": "${concourse_db_name}" },
       { "name": "CONCOURSE_PROMETHEUS_BIND_PORT" , "value": "${concourse_prometheus_bind_port}" },
-      { "name": "CONCOURSE_PROMETHEUS_BIND_IP" , "value": "${concourse_prometheus_bind_ip}" }
+      { "name": "CONCOURSE_PROMETHEUS_BIND_IP" , "value": "${concourse_prometheus_bind_ip}" },
+      { "name": "CONCOURSE_SESSION_SIGNING_KEY" , "value": "/concourse-keys/session_signing_key" },
+      { "name": "CONCOURSE_TSA_AUTHORIZED_KEYS" , "value": "/concourse-keys/authorized_worker_keys" },
+      { "name": "CONCOURSE_TSA_HOST_KEY" , "value": "/concourse-keys/tsa_host_key" }
+      
     ],
     "volumesFrom": [
       { "sourceContainer": "download_keys" }
