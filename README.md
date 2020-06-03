@@ -149,7 +149,7 @@ The following resources will be created:
 | vpc\_id | The VPC id where to deploy the worker instances | `string` | n/a | yes |
 | additional\_security\_group\_ids | Additional security group ids to attach to the worker instances | `list(string)` | `[]` | no |
 | concourse\_tags | List of tags to add to the worker to use for assigning jobs and tasks | `list(string)` | `[]` | no |
-| concourse\_version | Concourse CI version to use. Defaults to the latest tested version | `string` | `"5.7.2"` | no |
+| concourse\_version | Concourse CI version to use. Defaults to the latest tested version | `string` | `"6.2.0"` | no |
 | concourse\_worker\_instance\_count | Number of Concourse worker instances | `number` | `1` | no |
 | cpu\_credits | The credit option for CPU usage. Can be `standard` or `unlimited` | `string` | `"standard"` | no |
 | project | Project where the concourse claster belongs to. This is mainly used to identify it in Teleport | `string` | `""` | no |
