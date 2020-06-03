@@ -107,7 +107,7 @@ variable "concourse_worker_instance_count" {
 
 variable "concourse_version" {
   description = "Concourse CI version to use. Defaults to the latest tested version"
-  default     = "6.1.0"
+  default     = "6.2.0"
   type        = string
 }
 
@@ -153,7 +153,7 @@ variable "teleport_auth_token" {
 
 variable "teleport_version" {
   description = "Teleport version for the client"
-  default     = "4.1.1"
+  default     = "4.2.1"
   type        = string
 }
 

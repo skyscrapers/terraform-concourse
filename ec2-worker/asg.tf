@@ -4,15 +4,10 @@ data "aws_ami" "ubuntu" {
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
   }
 
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"] # Canonical
+  owners = ["137112412989"] # Amazon
 }
 
 module "is_ebs_optimised" {
@@ -43,7 +38,7 @@ resource "aws_launch_template" "concourse_worker_launchtemplate" {
   }
 
   block_device_mappings {
-    device_name = "/dev/sda1"
+    device_name = "/dev/xvda"
 
     ebs {
       volume_type           = var.root_disk_volume_type
@@ -203,6 +198,7 @@ data "template_cloudinit_config" "concourse_bootstrap" {
 packages:
   - awscli
   - jq
+  - btrfs-progs
 EOF
 
   }
@@ -214,17 +210,15 @@ EOF
     content      = var.work_disk_ephemeral ? "" : data.template_file.check_attachment.rendered
   }
 
-  # Format external volume as btrfs
+  # Format external volume as btrfs and mount
   part {
-    content_type = "text/cloud-config"
+    content_type = "text/x-shellscript"
 
     content = <<EOF
-fs_setup:
-  - label: concourseworkdir
-    filesystem: 'btrfs'
-    device: '${var.work_disk_internal_device_name}'
+#!/bin/bash
+/usr/sbin/mkfs.btrfs ${var.work_disk_internal_device_name}
+/usr/bin/mount -a
 EOF
-
   }
 
   # Mount external volume
