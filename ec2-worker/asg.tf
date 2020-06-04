@@ -1,5 +1,5 @@
-# Get the latest ubuntu ami
-data "aws_ami" "ubuntu" {
+# Get the latest Amazon Linux 2 ami
+data "aws_ami" "AL2" {
   most_recent = true
 
   filter {
@@ -17,7 +17,7 @@ module "is_ebs_optimised" {
 
 resource "aws_launch_template" "concourse_worker_launchtemplate" {
   count         = var.work_disk_ephemeral ? 0 : 1
-  image_id      = coalesce(var.custom_ami, data.aws_ami.ubuntu.id)
+  image_id      = coalesce(var.custom_ami, data.aws_ami.AL2.id)
   instance_type = var.instance_type
   key_name      = var.ssh_key_name
   user_data     = data.template_cloudinit_config.concourse_bootstrap.rendered
@@ -65,7 +65,7 @@ resource "aws_launch_template" "concourse_worker_launchtemplate" {
 
 resource "aws_launch_template" "concourse_worker_launchtemplate_ephemeral" {
   count         = var.work_disk_ephemeral ? 1 : 0
-  image_id      = coalesce(var.custom_ami, data.aws_ami.ubuntu.id)
+  image_id      = coalesce(var.custom_ami, data.aws_ami.AL2.id)
   instance_type = var.instance_type
   key_name      = var.ssh_key_name
   user_data     = data.template_cloudinit_config.concourse_bootstrap.rendered
@@ -86,7 +86,7 @@ resource "aws_launch_template" "concourse_worker_launchtemplate_ephemeral" {
   }
 
   block_device_mappings {
-    device_name = "/dev/sda1"
+    device_name = "/dev/xvda"
 
     ebs {
       volume_type           = var.root_disk_volume_type
