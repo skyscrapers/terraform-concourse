@@ -157,7 +157,7 @@ The following resources will be created:
 | root_disk_volume_type | Volume type of the worker instances root disk | `string` | `"gp2"` | no |
 | teleport_auth_token | Teleport node token to authenticate with the auth server | `string` | `""` | no |
 | teleport_server | Teleport auth server hostname | `string` | `""` | no |
-| teleport_version | Teleport version for the client | `string` | `"4.2.1"` | no |
+| teleport_version | Teleport version for the client | `string` | `"4.2.10"` | no |
 | work_disk_device_name | Device name of the external EBS volume to use as Concourse worker storage | `string` | `"/dev/sdf"` | no |
 | work_disk_ephemeral | Whether to use ephemeral volumes as Concourse worker storage. You must use an [`instance_type` that supports this](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html#InstanceStoreDeviceNames) | `string` | `false` | no |
 | work_disk_internal_device_name | Device name of the internal volume as identified by the Linux kernel, which can differ from `work_disk_device_name` depending on used AMI. Make sure this is set according the `instance_type`, eg. `/dev/xvdf` when using an older AMI | `string` | `"/dev/nvme1n1"` | no |
