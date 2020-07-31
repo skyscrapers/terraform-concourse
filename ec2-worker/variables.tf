@@ -107,7 +107,7 @@ variable "concourse_worker_instance_count" {
 
 variable "concourse_version" {
   description = "Concourse CI version to use. Defaults to the latest tested version"
-  default     = "6.2.0"
+  default     = "6.4.0"
   type        = string
 }
 
