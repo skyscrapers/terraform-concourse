@@ -2,6 +2,9 @@
 
 set -e
 
+# Enable compression in logrotate
+sed -i 's/#compress/compress/g' /etc/logrotate.conf
+
 # Install concourse
 %{ if split(".", concourse_version)[0] >= 5 }
 curl -s -L -f -o ./concourse.tgz https://github.com/concourse/concourse/releases/download/v${concourse_version}/concourse-${concourse_version}-linux-amd64.tgz
