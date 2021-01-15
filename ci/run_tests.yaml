@@ -1,10 +1,10 @@
 ---
 platform: linux
 image_resource:
-  type: docker-image
+  type: registry-image
   source:
     repository: golang
-    tag: 1.12-alpine
+    tag: 11.15.6-alpine
 
 params:
   AWS_DEFAULT_REGION: eu-west-1
