@@ -57,6 +57,8 @@ resource "aws_s3_bucket_policy" "concourse_keys" {
 }
 EOF
 
+  depends_on = [aws_s3_bucket.concourse_keys]
+
 }
 
 resource "aws_s3_bucket_public_access_block" "concourse_keys" {
@@ -65,4 +67,7 @@ resource "aws_s3_bucket_public_access_block" "concourse_keys" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
+
+  depends_on = [aws_s3_bucket.concourse_keys, aws_s3_bucket_policy.concourse_keys]
+
 }
