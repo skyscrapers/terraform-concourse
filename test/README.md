@@ -38,7 +38,7 @@ Setup the test Docker image:
 ```bash
 cd test
 docker build -t terraform-concourse-test .
-docker run --rm terraform-concourse-test dep ensure
+docker run -v $PWD:/go/src/github.com/skyscrapers/terraform-concourse --rm terraform-concourse-test dep ensure
 ```
 
 ### Run all the tests
