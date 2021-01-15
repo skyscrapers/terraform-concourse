@@ -10,7 +10,7 @@
   version = "v0.43.0"
 
 [[projects]]
-  digest = "1:0c95ce941fc98774decb8b94067ac4bb0e2d481f3d87b2997854d4bc730038fa"
+  digest = "1:535cd8130c6a5af5324d64d128d1becc777c335fdee34cf1255a0c38d264c737"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -47,6 +47,7 @@
     "private/protocol/query",
     "private/protocol/query/queryutil",
     "private/protocol/rest",
+    "private/protocol/restjson",
     "private/protocol/restxml",
     "private/protocol/xml/xmlutil",
     "service/acm",
@@ -54,13 +55,16 @@
     "service/cloudwatchlogs",
     "service/dynamodb",
     "service/ec2",
+    "service/ecr",
     "service/ecs",
     "service/iam",
     "service/kms",
+    "service/lambda",
     "service/rds",
     "service/s3",
     "service/s3/s3iface",
     "service/s3/s3manager",
+    "service/secretsmanager",
     "service/sns",
     "service/sqs",
     "service/ssm",
@@ -214,7 +218,7 @@
   version = "v0.4.2"
 
 [[projects]]
-  digest = "1:6649271a5956876bc6ea7faf6dfa9cc950cd7e26e57d7b99fd7668f78bbf1b3d"
+  digest = "1:8d57bc07669285155bc6f2da9140214f2257c60ac22c511aaf3dbc7fb87b12e5"
   name = "github.com/gruntwork-io/terratest"
   packages = [
     "modules/aws",
@@ -231,10 +235,11 @@
     "modules/ssh",
     "modules/terraform",
     "modules/test-structure",
+    "modules/testing",
   ]
   pruneopts = "UT"
-  revision = "7c4706e3a7994db351b18915bf44a5b69fdeeaa8"
-  version = "v0.18.3"
+  revision = "916a1200e00ada415b49706875cfc054e67f4f3d"
+  version = "v0.31.3"
 
 [[projects]]
   digest = "1:a0cefd27d12712af4b5018dc7046f245e1e3b5760e2e848c30b171b570708f9b"
@@ -245,12 +250,12 @@
   version = "v0.3.7"
 
 [[projects]]
-  digest = "1:870d441fe217b8e689d7949fef6e43efbc787e50f200cb1e70dbca9204a1d6be"
-  name = "github.com/inconshreveable/mousetrap"
+  digest = "1:0456e9dae4d409eb3f6531bbf6702d9441165f221847a1d59d801f81c0d52e0d"
+  name = "github.com/jinzhu/copier"
   packages = ["."]
   pruneopts = "UT"
-  revision = "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
-  version = "v1.0"
+  revision = "e9a219c0a8404e824088efddcfdc70b4dd528811"
+  version = "v0.2.3"
 
 [[projects]]
   digest = "1:bb81097a5b62634f3e9fec1014657855610c82d19b9a40c17612e32651e35dca"
@@ -326,14 +331,6 @@
   pruneopts = "UT"
   revision = "be78767b3e392ce45ea73444451022a6fc32ad0d"
   version = "v1.1.0"
-
-[[projects]]
-  digest = "1:e096613fb7cf34743d49af87d197663cfccd61876e2219853005a57baedfa562"
-  name = "github.com/spf13/cobra"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "f2b07da1e2c38d5f12845a4f607e2e1018cbb1f5"
-  version = "v0.0.5"
 
 [[projects]]
   digest = "1:c1b1102241e7f645bc8e0c22ae352e8f0dc6484b6cb4d132fa9f24174e0119e2"
@@ -643,14 +640,6 @@
   ]
   pruneopts = "UT"
   revision = "386e588352a49a5c8dc7632348278569d4f57419"
-
-[[projects]]
-  digest = "1:0eb0e54e287f561fa804eba0640e99c857606aa47c04c0a41ce6e395e0ea3b7a"
-  name = "k8s.io/kubernetes"
-  packages = ["pkg/kubectl/generate"]
-  pruneopts = "UT"
-  revision = "f6278300bebbb750328ac16ee6dd3aa7d3549568"
-  version = "v1.15.2"
 
 [solve-meta]
   analyzer-name = "dep"
