@@ -1,4 +1,4 @@
-FROM golang:1.15.6-alpine
+FROM golang:1.14-alpine
 
 # This is the release of Terraform to pull in.
 ARG TF_VERSION=0.14.4

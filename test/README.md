@@ -26,7 +26,6 @@ These tests expect some AWS resources to be already there to be able to run prop
 You can either run Terratest locally or through Docker. If you decide to run it without Docker, you'll need to install the following in your computer:
 
 - Install the latest version of [Go](https://golang.org/).
-- Install [dep](https://github.com/golang/dep) for Go dependency management.
 - Install [Terraform](https://www.terraform.io/downloads.html).
 
 Also, you'll obviously need access to an AWS account, if you're using Terratest directly (without Docker), you can configure your AWS credentials using one of the [options supported by the AWS SDK](http://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html). If you're using Docker to run Terratest, you'll have to provide your AWS credentials through environment variables, as shown in the examples below.
@@ -38,7 +37,6 @@ Setup the test Docker image:
 ```bash
 cd test
 docker build -t terraform-concourse-test .
-docker run -v $PWD:/go/src/github.com/skyscrapers/terraform-concourse --rm terraform-concourse-test dep ensure
 ```
 
 ### Run all the tests
