@@ -38,4 +38,5 @@ run:
       gopath/src/github.com/skyscrapers/terraform-concourse/test/setup.sh
 
       export GOPATH=$PWD/gopath
+      cd gopath/src/github.com/skyscrapers/terraform-concourse
       go test -v -timeout 60m
