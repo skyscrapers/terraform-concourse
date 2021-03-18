@@ -27,7 +27,7 @@ variable "concourse_docker_image" {
 
 variable "concourse_version" {
   description = "Concourse CI version to use. Defaults to the latest tested version"
-  default     = "6.7.3"
+  default     = "7.1.0"
   type        = string
 }
 
@@ -206,6 +206,18 @@ variable "prometheus_cidrs" {
 variable "vault_docker_image_tag" {
   description = "Docker image version to use for the Vault auth container"
   default     = "1.3.2"
+  type        = string
+}
+
+variable "concourse_default_build_logs_to_retain" {
+  description = "Default number of build logs that are kept. This can be overridden on job level"
+  default     = "100"
+  type        = string
+}
+
+variable "concourse_default_days_to_retain_build_logs" {
+  description = "Default days of build logs that are kept. This can be overridden on job level"
+  default     = "90"
   type        = string
 }
 

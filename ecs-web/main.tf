@@ -55,29 +55,31 @@ data "template_file" "concourse_web_task_template" {
   template = file("${path.module}/task-definitions/concourse_web_service.json")
 
   vars = {
-    image                          = "${var.concourse_docker_image}:${local.concourse_version}"
-    concourse_hostname             = local.concourse_hostname
-    concourse_db_host              = var.concourse_db_host
-    concourse_db_port              = var.concourse_db_port
-    concourse_db_user              = var.concourse_db_username
-    concourse_db_password          = jsonencode(var.concourse_db_password)
-    concourse_db_name              = var.concourse_db_name
-    awslog_group_name              = aws_cloudwatch_log_group.concourse_web_log_group.name
-    awslog_region                  = data.aws_region.current.name
-    concourse_keys_bucket_name     = var.keys_bucket_id
-    concourse_basic_auth           = var.concourse_auth_username != null && var.concourse_auth_password != null ? data.template_file.concourse_basic_auth.rendered : ""
-    concourse_basic_auth_main_team = var.concourse_auth_main_team_local_user != null ?  data.template_file.concourse_basic_auth_main_team_local_user.rendered : ""
-    concourse_github_auth          = var.concourse_github_auth_client_id != null && var.concourse_github_auth_client_secret != null && var.concourse_github_auth_team != null ? data.template_file.concourse_github_auth.rendered : ""
-    concourse_vault_variables      = var.vault_server_url != null ? data.template_file.concourse_vault_variables.rendered : ""
-    memory                         = var.container_memory
-    cpu                            = var.container_cpu
-    concourse_prometheus_bind_port = var.concourse_prometheus_bind_port
-    concourse_prometheus_bind_ip   = var.concourse_prometheus_bind_ip
-    volumes_from_concourse_db      = var.auto_create_db ? ",{ \"sourceContainer\": \"create_db\" }" : ""
-    volumes_from_vault_auth        = var.vault_server_url != null ? ",{ \"sourceContainer\": \"vault_auth\" }" : ""
-    vault_command_args             = var.vault_server_url != null ? "--vault-client-token=`cat /concourse_vault/token`" : ""
-    concourse_extra_args           = var.concourse_extra_args != null ? var.concourse_extra_args : ""
-    concourse_extra_env            = var.concourse_extra_env != null ? join("", data.template_file.concourse_extra_env.*.rendered) : ""
+    image                                       = "${var.concourse_docker_image}:${local.concourse_version}"
+    concourse_hostname                          = local.concourse_hostname
+    concourse_db_host                           = var.concourse_db_host
+    concourse_db_port                           = var.concourse_db_port
+    concourse_db_user                           = var.concourse_db_username
+    concourse_db_password                       = jsonencode(var.concourse_db_password)
+    concourse_db_name                           = var.concourse_db_name
+    awslog_group_name                           = aws_cloudwatch_log_group.concourse_web_log_group.name
+    awslog_region                               = data.aws_region.current.name
+    concourse_keys_bucket_name                  = var.keys_bucket_id
+    concourse_basic_auth                        = var.concourse_auth_username != null && var.concourse_auth_password != null ? data.template_file.concourse_basic_auth.rendered : ""
+    concourse_basic_auth_main_team              = var.concourse_auth_main_team_local_user != null ? data.template_file.concourse_basic_auth_main_team_local_user.rendered : ""
+    concourse_github_auth                       = var.concourse_github_auth_client_id != null && var.concourse_github_auth_client_secret != null && var.concourse_github_auth_team != null ? data.template_file.concourse_github_auth.rendered : ""
+    concourse_vault_variables                   = var.vault_server_url != null ? data.template_file.concourse_vault_variables.rendered : ""
+    memory                                      = var.container_memory
+    cpu                                         = var.container_cpu
+    concourse_prometheus_bind_port              = var.concourse_prometheus_bind_port
+    concourse_prometheus_bind_ip                = var.concourse_prometheus_bind_ip
+    volumes_from_concourse_db                   = var.auto_create_db ? ",{ \"sourceContainer\": \"create_db\" }" : ""
+    volumes_from_vault_auth                     = var.vault_server_url != null ? ",{ \"sourceContainer\": \"vault_auth\" }" : ""
+    vault_command_args                          = var.vault_server_url != null ? "--vault-client-token=`cat /concourse_vault/token`" : ""
+    concourse_extra_args                        = var.concourse_extra_args != null ? var.concourse_extra_args : ""
+    concourse_extra_env                         = var.concourse_extra_env != null ? join("", data.template_file.concourse_extra_env.*.rendered) : ""
+    concourse_default_build_logs_to_retain      = var.concourse_default_build_logs_to_retain
+    concourse_default_days_to_retain_build_logs = var.concourse_default_days_to_retain_build_logs
 
     concourse_db_task_definition = indent(
       2,
@@ -112,7 +114,7 @@ data "template_file" "concourse_db_task_template" {
 }
 
 data "template_file" "vault_auth_task_template" {
-  count    = var.vault_server_url !=null ? 1 : 0
+  count    = var.vault_server_url != null ? 1 : 0
   template = file("${path.module}/task-definitions/vault_auth_container.json")
 
   vars = {
@@ -146,7 +148,7 @@ EOF
   vars = {
     concourse_auth_username = coalesce(var.concourse_auth_username, 0)
     concourse_auth_password = coalesce(var.concourse_auth_password, 0)
-   }
+  }
 }
 
 data "template_file" "concourse_basic_auth_main_team_local_user" {
