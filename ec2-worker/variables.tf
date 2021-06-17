@@ -153,7 +153,7 @@ variable "teleport_auth_token" {
 
 variable "teleport_version" {
   description = "Teleport version for the client"
-  default     = "4.4.9"
+  default     = "5.2.1"
   type        = string
 }
 
