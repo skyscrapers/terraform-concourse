@@ -62,7 +62,7 @@ module "concourse_worker_ephemeral" {
   keys_bucket_id                  = module.concourse_keys.keys_bucket_id
   keys_bucket_arn                 = module.concourse_keys.keys_bucket_arn
   ssh_key_name                    = var.key_name
-  instance_type                   = "m3.large"
+  instance_type                   = "m5.large"
   subnet_ids                      = module.vpc.private_management_subnets
   vpc_id                          = module.vpc.vpc_id
   work_disk_ephemeral             = true
