@@ -198,7 +198,6 @@ data "template_cloudinit_config" "concourse_bootstrap" {
 packages:
   - awscli
   - jq
-  - btrfs-progs
 EOF
 
   }
@@ -210,13 +209,13 @@ EOF
     content      = var.work_disk_ephemeral ? "" : data.template_file.check_attachment.rendered
   }
 
-  # Format external volume as btrfs and mount
+  # Format external volume as ext4 and mount
   part {
     content_type = "text/x-shellscript"
 
     content = <<EOF
 #!/bin/bash
-/usr/sbin/mkfs.btrfs ${var.work_disk_internal_device_name}
+/usr/sbin/mkfs.ext4 ${var.work_disk_internal_device_name}
 /usr/bin/mount -a
 EOF
   }
@@ -227,7 +226,7 @@ EOF
 
     content = <<EOF
 mounts:
-  - [ ${var.work_disk_internal_device_name}, /opt/concourse, btrfs, "defaults", "0", "2" ]
+  - [ ${var.work_disk_internal_device_name}, /opt/concourse, ext4, "defaults", "0", "2" ]
 EOF
 
   }
