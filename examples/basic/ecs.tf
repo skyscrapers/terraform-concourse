@@ -34,7 +34,7 @@ module "bluegreen" {
   blue_max_size          = 1
   blue_min_size          = 1
   blue_desired_capacity  = 1
-  blue_disk_volume_size = 30
+  blue_disk_volume_size  = 30
   green_max_size         = 0
   green_min_size         = 0
   green_desired_capacity = 0
