@@ -275,7 +275,7 @@ EOF
 }
 
 module "teleport_bootstrap_script" {
-  source      = "github.com/skyscrapers/terraform-teleport//teleport-bootstrap-script?ref=5.0.3"
+  source      = "github.com/skyscrapers/terraform-teleport//teleport-bootstrap-script?ref=7.2.1"
   auth_server = var.teleport_server
   auth_token  = var.teleport_auth_token
   function    = "concourse"
