@@ -74,8 +74,10 @@ data "template_file" "concourse_web_task_template" {
     concourse_prometheus_bind_port              = var.concourse_prometheus_bind_port
     concourse_prometheus_bind_ip                = var.concourse_prometheus_bind_ip
     volumes_from_concourse_db                   = var.auto_create_db ? ",{ \"sourceContainer\": \"create_db\" }" : ""
+    db_container_dependency                     = var.auto_create_db ? ",{ \"containerName\": \"create_db\", \"condition\": \"COMPLETE\" }" : ""
     volumes_from_vault_auth                     = var.vault_server_url != null ? ",{ \"sourceContainer\": \"vault_auth\" }" : ""
     vault_command_args                          = var.vault_server_url != null ? "--vault-client-token=`cat /concourse_vault/token`" : ""
+    vault_container_dependency                  = var.vault_server_url != null ? ",{ \"containerName\": \"create_db\", \"condition\": \"SUCCESS\" }" : ""
     concourse_extra_args                        = var.concourse_extra_args != null ? var.concourse_extra_args : ""
     concourse_extra_env                         = var.concourse_extra_env != null ? join("", data.template_file.concourse_extra_env.*.rendered) : ""
     concourse_default_build_logs_to_retain      = var.concourse_default_build_logs_to_retain

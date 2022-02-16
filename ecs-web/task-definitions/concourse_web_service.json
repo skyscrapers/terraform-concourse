@@ -84,6 +84,14 @@
       ${volumes_from_concourse_db}
       ${volumes_from_vault_auth}
     ],
+    "dependsOn": [
+      {
+        "containerName": "download_keys",
+        "condition": "SUCCESS"
+      }
+      ${db_container_dependency}
+      ${vault_container_dependency}
+    ],
     "logConfiguration": {
       "logDriver": "awslogs",
       "options"  : {
