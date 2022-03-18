@@ -29,7 +29,7 @@ variable "rds_storage_encrypted" {
 }
 
 variable "db_engine_version" {
-  default = "12.5"
+  default = "12.10"
   type    = string
 }
 
