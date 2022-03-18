@@ -29,12 +29,12 @@ variable "rds_storage_encrypted" {
 }
 
 variable "db_engine_version" {
-  default = "9.6.6"
+  default = "12.5"
   type    = string
 }
 
 variable "default_parameter_group_family" {
-  default = "postgres9.6"
+  default = "postgres12"
   type    = string
 }
 
@@ -54,7 +54,7 @@ variable "ecs_instance_type" {
 }
 
 variable "concourse_version" {
-  type    = string
+  type = string
 }
 
 variable "concourse_db_username" {
@@ -121,4 +121,3 @@ variable "worker_cpu_credits" {
   default = "standard"
   type    = string
 }
-
