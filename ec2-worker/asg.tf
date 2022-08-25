@@ -1,5 +1,5 @@
 locals {
-  filesystem = var.bagageclaim_driver == "btrfs" ? "btrfs" : "ext4"
+  filesystem = var.baggageclaim_driver == "btrfs" ? "btrfs" : "ext4"
 }
 
 # Get the latest Amazon Linux 2 ami
@@ -159,7 +159,7 @@ data "template_file" "concourse_systemd" {
 
   vars = {
     concourse_hostname  = "${var.concourse_hostname}:${var.worker_tsa_port}"
-    baggageclaim_driver = var.bagageclaim_driver
+    baggageclaim_driver = var.baggageclaim_driver
     tags                = join(" ", formatlist("--tag=%s", var.concourse_tags))
   }
 }

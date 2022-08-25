@@ -189,7 +189,7 @@ The following resources will be created:
 | <a name="input_subnet_ids"></a> [subnet_ids](#input_subnet_ids) | List of subnet ids where to deploy the worker instances | `list(string)` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc_id](#input_vpc_id) | The VPC id where to deploy the worker instances | `string` | n/a | yes |
 | <a name="input_additional_security_group_ids"></a> [additional_security_group_ids](#input_additional_security_group_ids) | Additional security group ids to attach to the worker instances | `list(string)` | `[]` | no |
-| <a name="input_bagageclaim_driver"></a> [bagageclaim_driver](#input_bagageclaim_driver) | Which Concourse Worker bagageclaim driver to use. Supported choices: `btrfs` and `overlay` | `string` | `"overlay"` | no |
+| <a name="input_baggageclaim_driver"></a> [baggageclaim_driver](#input_baggageclaim_driver) | Which Concourse Worker baggageclaim driver to use. Supported choices: `btrfs` and `overlay` | `string` | `"overlay"` | no |
 | <a name="input_concourse_tags"></a> [concourse_tags](#input_concourse_tags) | List of tags to add to the worker to use for assigning jobs and tasks | `list(string)` | `[]` | no |
 | <a name="input_concourse_version"></a> [concourse_version](#input_concourse_version) | Concourse CI version to use. Defaults to the latest tested version | `string` | `"7.7.1"` | no |
 | <a name="input_concourse_version_override"></a> [concourse_version_override](#input_concourse_version_override) | Variable to override the default Concourse version. Leave it empty to fallback to `concourse_version`. Useful if you want to default to the module's default but also give the users the option to override it | `string` | `null` | no |

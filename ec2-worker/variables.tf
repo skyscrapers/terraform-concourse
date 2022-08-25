@@ -169,8 +169,8 @@ variable "public" {
   default     = false
 }
 
-variable "bagageclaim_driver" {
+variable "baggageclaim_driver" {
   type        = string
-  description = "Which Concourse Worker bagageclaim driver to use. Supported choices: `btrfs` and `overlay`"
+  description = "Which Concourse Worker baggageclaim driver to use. Supported choices: `btrfs` and `overlay`"
   default     = "overlay"
 }
