@@ -168,3 +168,9 @@ variable "public" {
   description = "Whether to assign these worker nodes a public IP (when public subnets are defined in `var.subnet_ids`)"
   default     = false
 }
+
+variable "bagageclaim_driver" {
+  type        = string
+  description = "Which Concourse Worker bagageclaim driver to use. Supported choices: `btrfs` and `overlay`"
+  default     = "overlay"
+}

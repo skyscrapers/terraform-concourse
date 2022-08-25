@@ -1,3 +1,7 @@
+locals {
+  filesystem = var.bagageclaim_driver == "btrfs" ? "btrfs" : "ext4"
+}
+
 # Get the latest Amazon Linux 2 ami
 data "aws_ami" "AL2" {
   most_recent = true
@@ -154,8 +158,9 @@ data "template_file" "concourse_systemd" {
   template = file("${path.module}/concourse_systemd.tpl")
 
   vars = {
-    concourse_hostname = "${var.concourse_hostname}:${var.worker_tsa_port}"
-    tags               = join(" ", formatlist("--tag=%s", var.concourse_tags))
+    concourse_hostname  = "${var.concourse_hostname}:${var.worker_tsa_port}"
+    baggageclaim_driver = var.bagageclaim_driver
+    tags                = join(" ", formatlist("--tag=%s", var.concourse_tags))
   }
 }
 
@@ -198,6 +203,7 @@ data "template_cloudinit_config" "concourse_bootstrap" {
 packages:
   - awscli
   - jq
+  - btrfs-progs
 EOF
 
   }
@@ -209,13 +215,13 @@ EOF
     content      = var.work_disk_ephemeral ? "" : data.template_file.check_attachment.rendered
   }
 
-  # Format external volume as ext4 and mount
+  # Format external volume and mount
   part {
     content_type = "text/x-shellscript"
 
     content = <<EOF
 #!/bin/bash
-/usr/sbin/mkfs.ext4 ${var.work_disk_internal_device_name}
+/usr/sbin/mkfs.${local.filesystem} ${var.work_disk_internal_device_name}
 /usr/bin/mount -a
 EOF
   }
@@ -226,7 +232,7 @@ EOF
 
     content = <<EOF
 mounts:
-  - [ ${var.work_disk_internal_device_name}, /opt/concourse, ext4, "defaults", "0", "2" ]
+  - [ ${var.work_disk_internal_device_name}, /opt/concourse, ${local.filesystem}, "defaults", "0", "2" ]
 EOF
 
   }
