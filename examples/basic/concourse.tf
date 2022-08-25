@@ -62,7 +62,7 @@ module "concourse_worker_ephemeral" {
   keys_bucket_id                  = module.concourse_keys.keys_bucket_id
   keys_bucket_arn                 = module.concourse_keys.keys_bucket_arn
   ssh_key_name                    = var.key_name
-  instance_type                   = "m5.large"
+  instance_type                   = "c5ad.large"
   subnet_ids                      = module.vpc.private_management_subnets
   vpc_id                          = module.vpc.vpc_id
   work_disk_ephemeral             = true
@@ -87,4 +87,3 @@ resource "aws_security_group_rule" "workers_ephemeral_access_out" {
   protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
 }
-
