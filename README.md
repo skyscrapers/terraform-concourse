@@ -1,3 +1,5 @@
+**UNMAINTAINED: this project is not being actively maintained anymore. It works as it is, but we won't be working on new features or bug fixes anymore. If you are using this module and are willing to maintain it, open an issue and we'll be more than happy to transfer the repo.**
+
 # terraform-concourse
 
 [![ci.skyscrape.rs](https://ci.skyscrape.rs/api/v1/teams/skyscrapers/pipelines/terraform-modules/jobs/test-terraform-concourse-master/badge)](https://ci.skyscrape.rs/teams/skyscrapers/pipelines/terraform-modules?groups=terraform-concourse)
